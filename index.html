@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIJI COURT — 테니스·배드민턴 커뮤니티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;500;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #1a3d1a;
+    --green-court: #2e6b2e;
+    --green-mid: #3d8b3d;
+    --green-bright: #52b052;
+    --green-light: #d4edda;
+    --orange: #ff6b2b;
+    --orange-hot: #ff8c00;
+    --orange-soft: #fff3e0;
+    --white: #ffffff;
+    --off-white: #f8fdf8;
+    --gray-1: #f0f4f0;
+    --gray-2: #dce8dc;
+    --gray-3: #9cb89c;
+    --text-dark: #1a2e1a;
+    --text-mid: #4a6b4a;
+    --text-light: #7a9a7a;
+    --shadow: 0 4px 20px rgba(30, 80, 30, 0.12);
+    --shadow-lg: 0 8px 40px rgba(30, 80, 30, 0.18);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--off-white);
+    color: var(--text-dark);
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* ── TOP HEADER ── */
+  .app-header {
+    background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-court) 60%, #1e5c1e 100%);
+    padding: 16px 20px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0;
+  }
+  .logo-wrap { display: flex; align-items: center; gap: 8px; }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: var(--orange);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .logo-text {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 22px;
+    color: var(--white);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+  .logo-sub {
+    font-size: 9px;
+    color: var(--green-bright);
+    letter-spacing: 1px;
+    font-weight: 500;
+    display: block;
+    margin-top: 1px;
+  }
+  .header-actions { display: flex; gap: 10px; align-items: center; }
+  .header-btn {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.12);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .header-btn:hover { background: rgba(255,255,255,0.22); }
+  .notif-badge {
+    position: relative;
+  }
+  .notif-badge::after {
+    content: '3';
+    position: absolute;
+    top: -3px; right: -3px;
+    background: var(--orange);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    display: flex;
+    background: var(--white);
+    border-top: 1px solid var(--gray-2);
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    z-index: 100;
+    box-shadow: 0 -2px 20px rgba(0,0,0,0.08);
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px 4px 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    transition: all 0.2s;
+    color: var(--gray-3);
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .tab-btn .tab-icon { font-size: 22px; line-height: 1; }
+  .tab-btn .tab-label { font-size: 10px; font-weight: 500; letter-spacing: -0.3px; }
+  .tab-btn.active { color: var(--green-court); }
+  .tab-btn.active .tab-icon { transform: translateY(-1px); }
+  .tab-btn.active .tab-label { font-weight: 700; }
+
+  /* ── PAGE CONTENT ── */
+  .page { display: none; padding: 16px 16px 90px; animation: fadeIn 0.25s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ── SECTION HEADERS ── */
+  .section-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--green-deep);
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title .dot {
+    width: 6px; height: 20px;
+    background: var(--orange);
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+    margin-bottom: 12px;
+  }
+  .card-sm { padding: 12px 14px; border-radius: var(--radius-sm); }
+
+  /* ── TODAY BANNER ── */
+  .today-banner {
+    background: linear-gradient(135deg, var(--green-court), var(--green-mid));
+    border-radius: var(--radius);
+    padding: 18px;
+    color: white;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .today-banner::before {
+    content: '🎾';
+    position: absolute;
+    right: 16px; bottom: -8px;
+    font-size: 60px;
+    opacity: 0.18;
+  }
+  .today-banner .banner-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--green-bright);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .today-banner h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .banner-meta { display: flex; gap: 14px; flex-wrap: wrap; }
+  .banner-meta span { font-size: 12px; opacity: 0.9; display: flex; align-items: center; gap: 4px; }
+  .banner-action {
+    margin-top: 14px;
+    display: flex; gap: 8px;
+  }
+  .btn {
+    padding: 9px 18px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .btn-orange { background: var(--orange); color: white; }
+  .btn-orange:hover { background: var(--orange-hot); transform: translateY(-1px); }
+  .btn-outline-white { background: transparent; color: white; border: 1.5px solid rgba(255,255,255,0.6); }
+  .btn-outline-white:hover { background: rgba(255,255,255,0.12); }
+  .btn-green { background: var(--green-court); color: white; }
+  .btn-green:hover { background: var(--green-deep); }
+
+  /* ── FLASH MEETS LIST ── */
+  .meet-card {
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: transform 0.18s, box-shadow 0.18s;
+  }
+  .meet-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .meet-sport {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .meet-sport.tennis { background: #e8f5e9; }
+  .meet-sport.badminton { background: #e3f2fd; }
+  .meet-info { flex: 1; min-width: 0; }
+  .meet-title { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 3px; }
+  .meet-detail { font-size: 12px; color: var(--text-light); display: flex; gap: 10px; flex-wrap: wrap; }
+  .meet-badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .badge-green { background: var(--green-light); color: var(--green-court); }
+  .badge-orange { background: #fff3e0; color: var(--orange); }
+  .badge-blue { background: #e3f2fd; color: #1565c0; }
+  .badge-red { background: #ffebee; color: #c62828; }
+
+  /* ── SHOP ITEMS ── */
+  .shop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .shop-item {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.18s;
+  }
+  .shop-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .shop-thumb {
+    height: 100px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 46px;
+    position: relative;
+  }
+  .shop-thumb.green-bg { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
+  .shop-thumb.orange-bg { background: linear-gradient(135deg, #fff3e0, #ffe0b2); }
+  .shop-thumb.blue-bg { background: linear-gradient(135deg, #e3f2fd, #bbdefb); }
+  .shop-thumb.yellow-bg { background: linear-gradient(135deg, #fffde7, #fff9c4); }
+  .shop-hot {
+    position: absolute;
+    top: 8px; right: 8px;
+    background: var(--orange);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+  .shop-info { padding: 10px 12px 12px; }
+  .shop-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; color: var(--text-dark); }
+  .shop-price { font-size: 14px; font-weight: 900; color: var(--orange); }
+  .shop-price .original { font-size: 11px; text-decoration: line-through; color: var(--text-light); font-weight: 400; margin-left: 4px; }
+
+  /* ── RANKING ── */
+  .rank-header {
+    background: linear-gradient(135deg, var(--green-deep), var(--green-court));
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 12px;
+  }
+  .rank-stat {
+    flex: 1;
+    text-align: center;
+    color: white;
+  }
+  .rank-stat .num {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--orange);
+  }
+  .rank-stat .label { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+  .rank-row {
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 8px;
+    transition: transform 0.18s;
+  }
+  .rank-row:hover { transform: translateX(3px); }
+  .rank-row.top1 { border-left: 4px solid #FFD700; }
+  .rank-row.top2 { border-left: 4px solid #C0C0C0; }
+  .rank-row.top3 { border-left: 4px solid #CD7F32; }
+  .rank-num {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 22px;
+    width: 28px;
+    text-align: center;
+    color: var(--text-light);
+    flex-shrink: 0;
+  }
+  .rank-row.top1 .rank-num { color: #FFD700; }
+  .rank-row.top2 .rank-num { color: #999; }
+  .rank-row.top3 .rank-num { color: #CD7F32; }
+  .rank-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .rank-player { flex: 1; min-width: 0; }
+  .rank-name { font-size: 14px; font-weight: 700; }
+  .rank-info { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+  .rank-score {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .rank-win { font-size: 18px; font-weight: 900; color: var(--green-court); }
+  .rank-label { font-size: 10px; color: var(--text-light); }
+
+  /* ── MY BAG ── */
+  .profile-hero {
+    background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+    border-radius: var(--radius);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    color: white;
+  }
+  .profile-avatar {
+    width: 64px; height: 64px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    border: 2px solid rgba(255,255,255,0.3);
+    flex-shrink: 0;
+  }
+  .profile-name { font-size: 20px; font-weight: 900; margin-bottom: 4px; }
+  .profile-level {
+    display: inline-block;
+    background: var(--orange);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+  }
+  .profile-meta { font-size: 12px; opacity: 0.8; display: flex; gap: 12px; flex-wrap: wrap; }
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .stat-box {
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    padding: 14px 10px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .stat-box .val { font-family: 'Bebas Neue', cursive; font-size: 26px; color: var(--green-court); line-height: 1; }
+  .stat-box .lbl { font-size: 11px; color: var(--text-light); margin-top: 4px; }
+
+  .gear-list { }
+  .gear-item {
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 8px;
+  }
+  .gear-icon { font-size: 28px; flex-shrink: 0; }
+  .gear-info { flex: 1; }
+  .gear-name { font-size: 14px; font-weight: 700; }
+  .gear-detail { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+  .gear-date { font-size: 11px; color: var(--text-light); text-align: right; }
+
+  /* ── GIFT SECTION ── */
+  .gift-banner {
+    background: linear-gradient(135deg, #ff6b2b, #ff8c00);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    color: white;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .gift-banner .icon { font-size: 36px; flex-shrink: 0; }
+  .gift-banner h3 { font-size: 16px; font-weight: 900; margin-bottom: 4px; }
+  .gift-banner p { font-size: 12px; opacity: 0.9; }
+
+  /* ── CHAT BUBBLE ── */
+  .chat-wrap {
+    background: var(--gray-1);
+    border-radius: var(--radius);
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .chat-msg { margin-bottom: 10px; display: flex; gap: 8px; align-items: flex-start; }
+  .chat-msg.mine { flex-direction: row-reverse; }
+  .chat-av { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; background: var(--gray-2); flex-shrink: 0; }
+  .chat-bubble { max-width: 70%; }
+  .chat-name { font-size: 10px; color: var(--text-light); margin-bottom: 3px; }
+  .chat-msg.mine .chat-name { text-align: right; }
+  .chat-text {
+    background: white;
+    border-radius: 12px;
+    border-top-left-radius: 4px;
+    padding: 8px 12px;
+    font-size: 13px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+  .chat-msg.mine .chat-text { background: var(--green-court); color: white; border-radius: 12px; border-top-right-radius: 4px; }
+  .chat-input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: white;
+    border-radius: 24px;
+    padding: 6px 6px 6px 14px;
+    box-shadow: var(--shadow);
+  }
+  .chat-input-row input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: transparent;
+  }
+  .chat-send {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--green-court);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+
+  /* ── SPORT TOGGLE ── */
+  .sport-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .sport-chip {
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    border: 2px solid var(--gray-2);
+    background: white;
+    cursor: pointer;
+    transition: all 0.18s;
+    color: var(--text-light);
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .sport-chip.active {
+    background: var(--green-court);
+    border-color: var(--green-court);
+    color: white;
+  }
+
+  /* ── PROMO CARD ── */
+  .promo-card {
+    background: linear-gradient(135deg, #1a3d1a 0%, #2e6b2e 100%);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    color: white;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .promo-card::after {
+    content: '🏸';
+    position: absolute;
+    right: 16px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 48px;
+    opacity: 0.2;
+  }
+  .promo-tag {
+    background: var(--orange);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .promo-card h3 { font-size: 16px; font-weight: 900; margin-bottom: 6px; }
+  .promo-card p { font-size: 12px; opacity: 0.8; max-width: 70%; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; animation: fadeIn 0.2s; }
+  .modal-sheet {
+    background: white;
+    border-radius: 24px 24px 0 0;
+    padding: 20px 20px 40px;
+    width: 100%;
+    max-width: 480px;
+    animation: slideUp 0.3s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  @keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .modal-handle { width: 40px; height: 4px; background: var(--gray-2); border-radius: 2px; margin: 0 auto 16px; }
+  .modal-title { font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: var(--gray-2); margin: 14px 0; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--green-deep);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 300;
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── NEW MEET FAB ── */
+  .fab {
+    position: fixed;
+    bottom: 76px;
+    right: calc(50% - 220px);
+    width: 52px; height: 52px;
+    background: var(--orange);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 4px 20px rgba(255,107,43,0.5);
+    cursor: pointer;
+    border: none;
+    z-index: 99;
+    transition: transform 0.2s;
+  }
+  .fab:hover { transform: scale(1.1) rotate(15deg); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gray-2); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="header-top">
+    <div class="logo-wrap">
+      <div class="logo-icon">🎾</div>
+      <div>
+        <div class="logo-text">NIJI COURT</div>
+        <span class="logo-sub">테니스 · 배드민턴 커뮤니티</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="header-btn notif-badge" onclick="showToast('알림 3개가 있어요!')">🔔</button>
+      <button class="header-btn" onclick="showTab('bag')">👤</button>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════ PAGE: HOME ══════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- 오늘의 번개 배너 -->
+  <div class="today-banner">
+    <div class="banner-label">⚡ 오늘의 번개</div>
+    <h2>강남 실내코트<br>더블스 모집 중!</h2>
+    <div class="banner-meta">
+      <span>🕔 오후 7시</span>
+      <span>📍 강남구 삼성동</span>
+      <span>👥 3/4명</span>
+    </div>
+    <div class="banner-action">
+      <button class="btn btn-orange" onclick="openMeetModal()">지금 참여하기</button>
+      <button class="btn btn-outline-white" onclick="showToast('채팅방으로 이동!')">💬 채팅</button>
+    </div>
+  </div>
+
+  <!-- 번개 모임 리스트 -->
+  <div class="section-title"><div class="dot"></div>📣 번개 모임</div>
+  <div class="sport-toggle">
+    <button class="sport-chip active" onclick="filterSport(this,'all')">전체</button>
+    <button class="sport-chip" onclick="filterSport(this,'tennis')">🎾 테니스</button>
+    <button class="sport-chip" onclick="filterSport(this,'badminton')">🏸 배드민턴</button>
+  </div>
+
+  <div id="meet-list">
+    <div class="meet-card" data-sport="tennis" onclick="openMeetModal()">
+      <div class="meet-sport tennis">🎾</div>
+      <div class="meet-info">
+        <div class="meet-title">혼복 같이 치실 분!</div>
+        <div class="meet-detail"><span>📍 송파구 올림픽공원</span><span>🕖 18:00</span></div>
+      </div>
+      <span class="meet-badge badge-green">2/4명</span>
+    </div>
+    <div class="meet-card" data-sport="badminton" onclick="openMeetModal()">
+      <div class="meet-sport badminton">🏸</div>
+      <div class="meet-info">
+        <div class="meet-title">배드민턴 주3회 정기 모임</div>
+        <div class="meet-detail"><span>📍 마포구 체육관</span><span>🕘 09:00</span></div>
+      </div>
+      <span class="meet-badge badge-blue">정기</span>
+    </div>
+    <div class="meet-card" data-sport="tennis" onclick="openMeetModal()">
+      <div class="meet-sport tennis">🎾</div>
+      <div class="meet-info">
+        <div class="meet-title">단식 스파링 파트너 구해요</div>
+        <div class="meet-detail"><span>📍 서초구 테니스장</span><span>🕔 16:00</span></div>
+      </div>
+      <span class="meet-badge badge-orange">1/2명</span>
+    </div>
+    <div class="meet-card" data-sport="badminton" onclick="openMeetModal()">
+      <div class="meet-sport badminton">🏸</div>
+      <div class="meet-info">
+        <div class="meet-title">초보환영 배드민턴 모임</div>
+        <div class="meet-detail"><span>📍 강동구 실내체육관</span><span>🕗 19:00</span></div>
+      </div>
+      <span class="meet-badge badge-red">마감임박</span>
+    </div>
+  </div>
+
+  <!-- 채팅 미리보기 -->
+  <div class="section-title" style="margin-top:6px"><div class="dot"></div>💬 실시간 채팅</div>
+  <div class="chat-wrap">
+    <div id="chat-messages">
+      <div class="chat-msg">
+        <div class="chat-av">😄</div>
+        <div class="chat-bubble">
+          <div class="chat-name">테니스왕김철수</div>
+          <div class="chat-text">오늘 번개 몇 시예요?</div>
+        </div>
+      </div>
+      <div class="chat-msg mine">
+        <div class="chat-av">🎾</div>
+        <div class="chat-bubble">
+          <div class="chat-name">나</div>
+          <div class="chat-text">7시요! 코트 예약 완료!</div>
+        </div>
+      </div>
+      <div class="chat-msg">
+        <div class="chat-av">🏸</div>
+        <div class="chat-bubble">
+          <div class="chat-name">배드민턴고수이영희</div>
+          <div class="chat-text">저도 참가할게요 😊</div>
+        </div>
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" id="chat-input" placeholder="메시지 보내기..." onkeydown="sendChat(event)">
+      <button class="chat-send" onclick="sendChatBtn()">➤</button>
+    </div>
+  </div>
+
+  <!-- 용품 홍보 -->
+  <div class="section-title"><div class="dot"></div>🛍️ 니지스트링 추천</div>
+  <div class="promo-card" onclick="showTab('shop')">
+    <div class="promo-tag">🔥 공동구매</div>
+    <h3>이번 주 스트링<br>특가 행사!</h3>
+    <p>바볼랏·럭실론·요넥스 스트링 최대 30% 할인</p>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════ PAGE: RANKING ══════════════════════════════════ -->
+<div class="page" id="page-rank">
+
+  <div class="rank-header">
+    <div class="rank-stat"><div class="num">127</div><div class="label">전체 회원</div></div>
+    <div class="rank-stat"><div class="num">34</div><div class="label">이번 달 경기</div></div>
+    <div class="rank-stat"><div class="num">89%</div><div class="label">활동률</div></div>
+  </div>
+
+  <div class="sport-toggle">
+    <button class="sport-chip active" onclick="filterRank(this,'all')">전체</button>
+    <button class="sport-chip" onclick="filterRank(this,'tennis')">🎾 테니스</button>
+    <button class="sport-chip" onclick="filterRank(this,'badminton')">🏸 배드민턴</button>
+  </div>
+
+  <div class="section-title"><div class="dot"></div>🏆 이번 달 랭킹</div>
+
+  <div id="rank-list">
+    <div class="rank-row top1" data-sport="tennis">
+      <div class="rank-num">1</div>
+      <div class="rank-avatar" style="background:#fff9c4">👑</div>
+      <div class="rank-player">
+        <div class="rank-name">테니스고수박지훈</div>
+        <div class="rank-info">🎾 구력 8년 · 주3회 · 강남</div>
+      </div>
+      <div class="rank-score"><div class="rank-win">94%</div><div class="rank-label">승률</div></div>
+    </div>
+    <div class="rank-row top2" data-sport="badminton">
+      <div class="rank-num">2</div>
+      <div class="rank-avatar" style="background:#e3f2fd">🦅</div>
+      <div class="rank-player">
+        <div class="rank-name">스매시퀸이수연</div>
+        <div class="rank-info">🏸 구력 5년 · 주4회 · 마포</div>
+      </div>
+      <div class="rank-score"><div class="rank-win">88%</div><div class="rank-label">승률</div></div>
+    </div>
+    <div class="rank-row top3" data-sport="tennis">
+      <div class="rank-num">3</div>
+      <div class="rank-avatar" style="background:#e8f5e9">🎯</div>
+      <div class="rank-player">
+        <div class="rank-name">서브에이스최민준</div>
+        <div class="rank-info">🎾 구력 6년 · 주2회 · 송파</div>
+      </div>
+      <div class="rank-score"><div class="rank-win">82%</div><div class="rank-label">승률</div></div>
+    </div>
+    <div class="rank-row" data-sport="badminton">
+      <div class="rank-num">4</div>
+      <div class="rank-avatar" style="background:#f3e5f5">🔥</div>
+      <div class="rank-player">
+        <div class="rank-name">드라이브킹정우현</div>
+        <div class="rank-info">🏸 구력 3년 · 주5회 · 강동</div>
+      </div>
+      <div class="rank-score"><div class="rank-win">79%</div><div class="rank-label">승률</div></div>
+    </div>
+    <div class="rank-row" data-sport="tennis">
+      <div class="rank-num">5</div>
+      <div class="rank-avatar" style="background:#fce4ec">🌟</div>
+      <div class="rank-player">
+        <div class="rank-name">네트플레이어한소희</div>
+        <div class="rank-info">🎾 구력 4년 · 주3회 · 서초</div>
+      </div>
+      <div class="rank-score"><div class="rank-win">75%</div><div class="rank-label">승률</div></div>
+    </div>
+    <div class="rank-row" data-sport="badminton">
+      <div class="rank-num">6</div>
+      <div class="rank-avatar" style="background:#e0f2f1">💪</div>
+      <div class="rank-player">
+        <div class="rank-name">풋워크달인강민성</div>
+        <div class="rank-info">🏸 구력 7년 · 주2회 · 노원</div>
+      </div>
+      <div class="rank-score"><div class="rank-win">71%</div><div class="rank-label">승률</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════ PAGE: SHOP ══════════════════════════════════ -->
+<div class="page" id="page-shop">
+
+  <div class="promo-card" style="margin-bottom:16px">
+    <div class="promo-tag">니지스트링 공식 샵</div>
+    <h3>전문가가 추천하는<br>스트링 & 용품</h3>
+    <p>라켓 스트링 시공 + 용품 원스톱 구매</p>
+  </div>
+
+  <div class="section-title"><div class="dot"></div>🎾 인기 스트링</div>
+  <div class="shop-grid">
+    <div class="shop-item" onclick="showToast('럭실론 알루파워 — 장바구니 추가!')">
+      <div class="shop-thumb green-bg"><span>🎾</span><span class="shop-hot">HOT</span></div>
+      <div class="shop-info">
+        <div class="shop-name">럭실론 알루파워</div>
+        <div class="shop-price">15,000원<span class="original">18,000</span></div>
+      </div>
+    </div>
+    <div class="shop-item" onclick="showToast('바볼랏 RPM 블라스트 — 장바구니 추가!')">
+      <div class="shop-thumb orange-bg"><span>🎾</span></div>
+      <div class="shop-info">
+        <div class="shop-name">바볼랏 RPM 블라스트</div>
+        <div class="shop-price">14,000원<span class="original">16,000</span></div>
+      </div>
+    </div>
+    <div class="shop-item" onclick="showToast('요넥스 에어론 — 장바구니 추가!')">
+      <div class="shop-thumb blue-bg"><span>🏸</span><span class="shop-hot">NEW</span></div>
+      <div class="shop-info">
+        <div class="shop-name">요넥스 에어론 파워</div>
+        <div class="shop-price">8,000원<span class="original">9,500</span></div>
+      </div>
+    </div>
+    <div class="shop-item" onclick="showToast('윌슨 내추럴 거트 — 장바구니 추가!')">
+      <div class="shop-thumb yellow-bg"><span>✨</span></div>
+      <div class="shop-info">
+        <div class="shop-name">윌슨 내추럴 거트</div>
+        <div class="shop-price">32,000원<span class="original">38,000</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><div class="dot"></div>🖐️ 그립 & 액세서리</div>
+  <div class="shop-grid">
+    <div class="shop-item" onclick="showToast('오버그립 10개입 — 장바구니 추가!')">
+      <div class="shop-thumb green-bg"><span>🖐️</span></div>
+      <div class="shop-info">
+        <div class="shop-name">오버그립 10개입</div>
+        <div class="shop-price">6,500원</div>
+      </div>
+    </div>
+    <div class="shop-item" onclick="showToast('엘보링 — 장바구니 추가!')">
+      <div class="shop-thumb orange-bg"><span>💪</span><span class="shop-hot">추천</span></div>
+      <div class="shop-info">
+        <div class="shop-name">테니스 엘보링</div>
+        <div class="shop-price">12,000원</div>
+      </div>
+    </div>
+    <div class="shop-item" onclick="showToast('테니스공 3개입 — 장바구니 추가!')">
+      <div class="shop-thumb yellow-bg"><span>🎾</span></div>
+      <div class="shop-info">
+        <div class="shop-name">테니스공 3개입</div>
+        <div class="shop-price">5,000원</div>
+      </div>
+    </div>
+    <div class="shop-item" onclick="showToast('배드민턴 셔틀콕 — 장바구니 추가!')">
+      <div class="shop-thumb blue-bg"><span>🏸</span></div>
+      <div class="shop-info">
+        <div class="shop-name">셔틀콕 12개입</div>
+        <div class="shop-price">9,000원</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 선물하기 -->
+  <div class="section-title"><div class="dot"></div>🎁 선물하기</div>
+  <div class="gift-banner" onclick="openGiftModal()">
+    <div class="icon">🎁</div>
+    <div>
+      <h3>동호인에게 선물 보내기</h3>
+      <p>생일·기념일에 스트링, 그립, 엘보링 등을<br>링크로 간편하게 선물하세요!</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════ PAGE: MY BAG ══════════════════════════════════ -->
+<div class="page" id="page-bag">
+
+  <!-- 프로필 -->
+  <div class="profile-hero">
+    <div class="profile-avatar">😄</div>
+    <div>
+      <div class="profile-name">나의 프로필</div>
+      <span class="profile-level">⭐ 중급 플레이어</span>
+      <div class="profile-meta">
+        <span>🎾 구력 3년</span>
+        <span>📍 강남구</span>
+        <span>🎂 4월 15일</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 통계 -->
+  <div class="stats-row">
+    <div class="stat-box"><div class="val">68%</div><div class="lbl">이번달 승률</div></div>
+    <div class="stat-box"><div class="val">24</div><div class="lbl">총 경기수</div></div>
+    <div class="stat-box"><div class="val">5</div><div class="lbl">선물받음</div></div>
+  </div>
+
+  <!-- 내 장비 -->
+  <div class="section-title"><div class="dot"></div>🎒 내 장비</div>
+  <div class="gear-list">
+    <div class="gear-item">
+      <div class="gear-icon">🎾</div>
+      <div class="gear-info">
+        <div class="gear-name">헤드 스피드 MP</div>
+        <div class="gear-detail">럭실론 알루파워 1.25 / 55파운드</div>
+      </div>
+      <div class="gear-date">스트링<br>2024.03.10</div>
+    </div>
+    <div class="gear-item">
+      <div class="gear-icon">🏸</div>
+      <div class="gear-info">
+        <div class="gear-name">요넥스 아스트록스 88D</div>
+        <div class="gear-detail">요넥스 BG80 / 27파운드</div>
+      </div>
+      <div class="gear-date">스트링<br>2024.02.20</div>
+    </div>
+    <div class="gear-item">
+      <div class="gear-icon">🖐️</div>
+      <div class="gear-info">
+        <div class="gear-name">오버그립 재고</div>
+        <div class="gear-detail">윌슨 프로 오버그립 (흰색)</div>
+      </div>
+      <div class="gear-date">잔여<br>3개</div>
+    </div>
+  </div>
+
+  <button class="btn btn-green" style="width:100%;margin-top:8px;padding:14px;border-radius:12px;font-size:14px" onclick="showToast('장비 추가 기능 — 곧 오픈!')">
+    + 장비 추가하기
+  </button>
+
+  <div class="divider"></div>
+
+  <!-- 받은 선물 -->
+  <div class="section-title"><div class="dot"></div>🎁 받은 선물</div>
+  <div class="meet-card" style="cursor:default">
+    <div class="meet-sport" style="background:#fff3e0">🎁</div>
+    <div class="meet-info">
+      <div class="meet-title">럭실론 알루파워 스트링</div>
+      <div class="meet-detail"><span>보낸 사람: 테니스왕김철수</span></div>
+    </div>
+    <span class="meet-badge badge-orange">수령완료</span>
+  </div>
+  <div class="meet-card" style="cursor:default">
+    <div class="meet-sport" style="background:#e8f5e9">🎁</div>
+    <div class="meet-info">
+      <div class="meet-title">오버그립 3개입</div>
+      <div class="meet-detail"><span>보낸 사람: 스매시퀸이수연</span></div>
+    </div>
+    <span class="meet-badge badge-green">수령완료</span>
+  </div>
+
+</div>
+
+<!-- ══════════ BOTTOM NAV ══════════ -->
+<nav class="nav-tabs">
+  <button class="tab-btn active" id="tab-home" onclick="showTab('home')">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">홈/피드</span>
+  </button>
+  <button class="tab-btn" id="tab-rank" onclick="showTab('rank')">
+    <span class="tab-icon">🏆</span>
+    <span class="tab-label">실력 랭킹</span>
+  </button>
+  <button class="tab-btn" id="tab-shop" onclick="showTab('shop')">
+    <span class="tab-icon">🛍️</span>
+    <span class="tab-label">테니스 샵</span>
+  </button>
+  <button class="tab-btn" id="tab-bag" onclick="showTab('bag')">
+    <span class="tab-icon">🎒</span>
+    <span class="tab-label">내 가방</span>
+  </button>
+</nav>
+
+<!-- FAB -->
+<button class="fab" onclick="openMeetModal()" title="번개 모임 만들기">⚡</button>
+
+<!-- MODAL: 번개 모임 참가 -->
+<div class="modal-overlay" id="modal-meet" onclick="closeModal('meet')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">⚡ 번개 모임 참가</div>
+    <div class="card card-sm" style="margin-bottom:14px">
+      <div style="font-size:13px; color:var(--text-light); margin-bottom:4px">📍 강남구 삼성동 실내코트</div>
+      <div style="font-size:16px; font-weight:900">강남 더블스 — 오후 7시</div>
+      <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
+        <span class="meet-badge badge-green">🎾 테니스</span>
+        <span class="meet-badge badge-orange">더블스</span>
+        <span class="meet-badge badge-blue">중급</span>
+      </div>
+    </div>
+    <div class="chat-wrap" style="margin-bottom:14px">
+      <div class="chat-msg">
+        <div class="chat-av">😄</div>
+        <div class="chat-bubble">
+          <div class="chat-name">모임장</div>
+          <div class="chat-text">안녕하세요! 더블스 한 자리 남았어요 😊</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-orange" style="width:100%; padding:14px; border-radius:12px; font-size:15px"
+      onclick="joinMeet()">참가 신청하기 ✅</button>
+    <button class="btn" style="width:100%; padding:12px; border-radius:12px; font-size:14px; margin-top:8px; background:var(--gray-1); color:var(--text-mid)"
+      onclick="closeModal('meet')">닫기</button>
+  </div>
+</div>
+
+<!-- MODAL: 선물하기 -->
+<div class="modal-overlay" id="modal-gift" onclick="closeModal('gift')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🎁 선물하기</div>
+    <p style="font-size:13px; color:var(--text-light); margin-bottom:16px">동호인에게 용품을 선물하세요!</p>
+    <div class="card card-sm" style="display:flex;gap:12px;align-items:center;margin-bottom:10px;cursor:pointer" onclick="showToast('선물 링크 복사됨! 카카오톡으로 공유하세요 🎁')">
+      <div style="font-size:28px">🎾</div>
+      <div>
+        <div style="font-size:14px;font-weight:700">럭실론 알루파워 스트링</div>
+        <div style="font-size:13px;color:var(--orange);font-weight:700">15,000원</div>
+      </div>
+      <button class="btn btn-orange" style="margin-left:auto;padding:7px 14px;font-size:12px">선물하기</button>
+    </div>
+    <div class="card card-sm" style="display:flex;gap:12px;align-items:center;margin-bottom:10px;cursor:pointer" onclick="showToast('선물 링크 복사됨! 카카오톡으로 공유하세요 🎁')">
+      <div style="font-size:28px">🖐️</div>
+      <div>
+        <div style="font-size:14px;font-weight:700">오버그립 10개입</div>
+        <div style="font-size:13px;color:var(--orange);font-weight:700">6,500원</div>
+      </div>
+      <button class="btn btn-orange" style="margin-left:auto;padding:7px 14px;font-size:12px">선물하기</button>
+    </div>
+    <div class="card card-sm" style="display:flex;gap:12px;align-items:center;margin-bottom:16px;cursor:pointer" onclick="showToast('선물 링크 복사됨! 카카오톡으로 공유하세요 🎁')">
+      <div style="font-size:28px">💪</div>
+      <div>
+        <div style="font-size:14px;font-weight:700">테니스 엘보링</div>
+        <div style="font-size:13px;color:var(--orange);font-weight:700">12,000원</div>
+      </div>
+      <button class="btn btn-orange" style="margin-left:auto;padding:7px 14px;font-size:12px">선물하기</button>
+    </div>
+    <button class="btn" style="width:100%; padding:12px; border-radius:12px; font-size:14px; background:var(--gray-1); color:var(--text-mid)"
+      onclick="closeModal('gift')">닫기</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── TAB NAVIGATION ──
+  function showTab(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+
+    // FAB only on home
+    document.querySelector('.fab').style.display = name === 'home' ? 'flex' : 'none';
+  }
+
+  // ── FILTER MEETS ──
+  function filterSport(el, sport) {
+    el.closest('.sport-toggle').querySelectorAll('.sport-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('#meet-list .meet-card').forEach(card => {
+      card.style.display = (sport === 'all' || card.dataset.sport === sport) ? 'flex' : 'none';
+    });
+  }
+
+  // ── FILTER RANK ──
+  function filterRank(el, sport) {
+    el.closest('.sport-toggle').querySelectorAll('.sport-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('#rank-list .rank-row').forEach(row => {
+      row.style.display = (sport === 'all' || row.dataset.sport === sport) ? 'flex' : 'none';
+    });
+  }
+
+  // ── MODALS ──
+  function openMeetModal() { document.getElementById('modal-meet').classList.add('open'); }
+  function openGiftModal() { document.getElementById('modal-gift').classList.add('open'); }
+  function closeModal(name) { document.getElementById('modal-' + name).classList.remove('open'); }
+
+  function joinMeet() {
+    closeModal('meet');
+    showToast('🎉 참가 신청 완료! 모임장이 확인 중이에요');
+  }
+
+  // ── TOAST ──
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // ── CHAT ──
+  function sendChat(e) { if (e.key === 'Enter') sendChatBtn(); }
+  function sendChatBtn() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+    const div = document.createElement('div');
+    div.className = 'chat-msg mine';
+    div.innerHTML = `<div class="chat-av">🎾</div><div class="chat-bubble"><div class="chat-name">나</div><div class="chat-text">${text}</div></div>`;
+    document.getElementById('chat-messages').appendChild(div);
+    input.value = '';
+    setTimeout(() => div.scrollIntoView({ behavior: 'smooth' }), 50);
+    // 자동 응답 (데모)
+    const replies = ['ㅋㅋ 맞아요!', '좋아요 저도 갈게요!', '오늘 날씨 좋다~', '코트 어디예요?', '스트링 새로 했어요?'];
+    setTimeout(() => {
+      const r = document.createElement('div');
+      r.className = 'chat-msg';
+      r.innerHTML = `<div class="chat-av">😄</div><div class="chat-bubble"><div class="chat-name">테니스왕김철수</div><div class="chat-text">${replies[Math.floor(Math.random()*replies.length)]}</div></div>`;
+      document.getElementById('chat-messages').appendChild(r);
+      r.scrollIntoView({ behavior: 'smooth' });
+    }, 1000 + Math.random()*800);
+  }
+</script>
+</body>
+</html>
