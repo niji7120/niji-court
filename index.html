@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NIJI COURT — 테니스·배드민턴 커뮤니티</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;500;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
@@ -19,7 +18,9 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   body{font-family:'Noto Sans KR',sans-serif;background:var(--off-white);color:var(--text-dark);min-height:100vh;max-width:480px;margin:0 auto;overflow-x:hidden;}
-  .app-header{background:linear-gradient(135deg,var(--green-deep) 0%,var(--green-court) 60%,#1e5c1e 100%);padding:16px 20px 20px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.25);}
+
+  /* HEADER */
+  .app-header{background:linear-gradient(135deg,var(--green-deep) 0%,var(--green-court) 60%,#1e5c1e 100%);padding:16px 20px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.25);}
   .header-top{display:flex;align-items:center;justify-content:space-between;}
   .logo-wrap{display:flex;align-items:center;gap:8px;}
   .logo-icon{width:36px;height:36px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;}
@@ -28,27 +29,41 @@
   .online-dot{display:flex;align-items:center;gap:5px;color:var(--green-bright);font-size:11px;font-weight:600;}
   .dot-blink{width:7px;height:7px;background:var(--green-bright);border-radius:50%;animation:blink 1.4s infinite;}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+  /* NAV */
   .nav-tabs{display:flex;background:var(--white);border-top:1px solid var(--gray-2);position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;box-shadow:0 -2px 20px rgba(0,0,0,0.08);}
   .tab-btn{flex:1;padding:10px 4px 8px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all 0.2s;color:var(--gray-3);font-family:'Noto Sans KR',sans-serif;}
   .tab-btn .tab-icon{font-size:22px;line-height:1;} .tab-btn .tab-label{font-size:10px;font-weight:500;}
   .tab-btn.active{color:var(--green-court);} .tab-btn.active .tab-icon{transform:translateY(-1px);} .tab-btn.active .tab-label{font-weight:700;}
+
+  /* PAGES */
   .page{display:none;padding:16px 16px 90px;animation:fadeIn 0.25s ease;} .page.active{display:block;}
   @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
   .section-title{font-family:'Oswald',sans-serif;font-size:17px;font-weight:600;color:var(--green-deep);letter-spacing:0.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
   .section-title .dot{width:6px;height:20px;background:var(--orange);border-radius:3px;flex-shrink:0;}
+
   .card{background:var(--white);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:12px;}
   .card-sm{padding:12px 14px;border-radius:var(--radius-sm);}
+
+  /* BUTTONS */
+  .btn{padding:9px 18px;border-radius:24px;font-size:13px;font-weight:700;border:none;cursor:pointer;transition:all 0.18s;font-family:'Noto Sans KR',sans-serif;}
+  .btn-orange{background:var(--orange);color:white;} .btn-orange:hover{background:var(--orange-hot);}
+  .btn-outline-white{background:transparent;color:white;border:1.5px solid rgba(255,255,255,0.6);}
+  .btn-green{background:var(--green-court);color:white;} .btn-green:hover{background:var(--green-deep);}
+  .btn-gray{background:var(--gray-1);color:var(--text-mid);}
+  .btn-red{background:#ffebee;color:#c62828;}
+
+  /* TODAY BANNER */
   .today-banner{background:linear-gradient(135deg,var(--green-court),var(--green-mid));border-radius:var(--radius);padding:18px;color:white;margin-bottom:12px;position:relative;overflow:hidden;}
   .today-banner::before{content:'🎾';position:absolute;right:16px;bottom:-8px;font-size:60px;opacity:0.18;}
   .today-banner .banner-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--green-bright);margin-bottom:4px;}
   .today-banner h2{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;margin-bottom:10px;line-height:1.2;}
   .banner-meta{display:flex;gap:14px;flex-wrap:wrap;} .banner-meta span{font-size:12px;opacity:0.9;}
   .banner-action{margin-top:14px;display:flex;gap:8px;}
-  .btn{padding:9px 18px;border-radius:24px;font-size:13px;font-weight:700;border:none;cursor:pointer;transition:all 0.18s;font-family:'Noto Sans KR',sans-serif;}
-  .btn-orange{background:var(--orange);color:white;} .btn-orange:hover{background:var(--orange-hot);}
-  .btn-outline-white{background:transparent;color:white;border:1.5px solid rgba(255,255,255,0.6);}
-  .btn-green{background:var(--green-court);color:white;}
-  .meet-card{background:var(--white);border-radius:var(--radius-sm);padding:14px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);margin-bottom:10px;cursor:pointer;transition:transform 0.18s;}
+
+  /* MEET CARDS */
+  .meet-card{background:var(--white);border-radius:var(--radius-sm);padding:14px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);margin-bottom:10px;transition:transform 0.18s;}
   .meet-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
   .meet-sport{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
   .meet-sport.tennis{background:#e8f5e9;} .meet-sport.badminton{background:#e3f2fd;}
@@ -57,6 +72,16 @@
   .meet-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
   .badge-green{background:var(--green-light);color:var(--green-court);} .badge-orange{background:#fff3e0;color:var(--orange);}
   .badge-blue{background:#e3f2fd;color:#1565c0;} .badge-red{background:#ffebee;color:#c62828;}
+
+  .empty-state{text-align:center;padding:32px 16px;color:var(--text-light);}
+  .empty-state .empty-icon{font-size:48px;margin-bottom:12px;}
+  .empty-state p{font-size:14px;}
+
+  /* SPORT TOGGLE */
+  .sport-toggle{display:flex;gap:8px;margin-bottom:14px;}
+  .sport-chip{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:700;border:2px solid var(--gray-2);background:white;cursor:pointer;transition:all 0.18s;color:var(--text-light);font-family:'Noto Sans KR',sans-serif;}
+  .sport-chip.active{background:var(--green-court);border-color:var(--green-court);color:white;}
+
   /* CHAT */
   .chat-section{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:16px;}
   .chat-header{background:linear-gradient(135deg,var(--green-deep),var(--green-court));padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
@@ -80,9 +105,10 @@
   .chat-nick-row input:focus{border-color:var(--green-court);}
   .chat-input-row{display:flex;gap:8px;align-items:center;background:var(--gray-1);border-radius:24px;padding:6px 6px 6px 14px;}
   .chat-input-row input{flex:1;border:none;outline:none;font-size:13px;font-family:'Noto Sans KR',sans-serif;background:transparent;}
-  .chat-send{width:34px;height:34px;border-radius:50%;background:var(--green-court);border:none;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+  .chat-send{width:34px;height:34px;border-radius:50%;background:var(--green-court);border:none;color:white;cursor:pointer;font-size:14px;flex-shrink:0;}
   .firebase-status{font-size:11px;padding:3px 10px;border-radius:10px;font-weight:600;}
   .status-connecting{background:#fff3e0;color:var(--orange);} .status-connected{background:var(--green-light);color:var(--green-court);} .status-error{background:#ffebee;color:#c62828;}
+
   /* SHOP */
   .shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
   .shop-item{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform 0.18s;}
@@ -94,18 +120,19 @@
   .shop-info{padding:10px 12px 12px;} .shop-name{font-size:13px;font-weight:700;margin-bottom:4px;}
   .shop-price{font-size:14px;font-weight:900;color:var(--orange);}
   .shop-price .original{font-size:11px;text-decoration:line-through;color:var(--text-light);font-weight:400;margin-left:4px;}
+
   /* RANK */
   .rank-header{background:linear-gradient(135deg,var(--green-deep),var(--green-court));border-radius:var(--radius);padding:16px;margin-bottom:16px;display:flex;gap:12px;}
   .rank-stat{flex:1;text-align:center;color:white;} .rank-stat .num{font-family:'Bebas Neue',cursive;font-size:32px;line-height:1;color:var(--orange);} .rank-stat .label{font-size:11px;opacity:0.8;margin-top:2px;}
-  .rank-row{background:var(--white);border-radius:var(--radius-sm);padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);margin-bottom:8px;transition:transform 0.18s;}
-  .rank-row:hover{transform:translateX(3px);}
+  .rank-row{background:var(--white);border-radius:var(--radius-sm);padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);margin-bottom:8px;}
   .rank-row.top1{border-left:4px solid #FFD700;} .rank-row.top2{border-left:4px solid #C0C0C0;} .rank-row.top3{border-left:4px solid #CD7F32;}
   .rank-num{font-family:'Bebas Neue',cursive;font-size:22px;width:28px;text-align:center;color:var(--text-light);flex-shrink:0;}
   .rank-row.top1 .rank-num{color:#FFD700;} .rank-row.top2 .rank-num{color:#999;} .rank-row.top3 .rank-num{color:#CD7F32;}
   .rank-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
   .rank-player{flex:1;} .rank-name{font-size:14px;font-weight:700;} .rank-info{font-size:11px;color:var(--text-light);margin-top:2px;}
   .rank-score{text-align:right;flex-shrink:0;} .rank-win{font-size:18px;font-weight:900;color:var(--green-court);} .rank-label{font-size:10px;color:var(--text-light);}
-  /* BAG */
+
+  /* MY BAG */
   .profile-hero{background:linear-gradient(135deg,var(--green-deep),var(--green-mid));border-radius:var(--radius);padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:16px;color:white;}
   .profile-avatar{width:64px;height:64px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;border:2px solid rgba(255,255,255,0.3);flex-shrink:0;}
   .profile-name{font-size:20px;font-weight:900;margin-bottom:4px;}
@@ -117,15 +144,31 @@
   .gear-item{background:var(--white);border-radius:var(--radius-sm);padding:14px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);margin-bottom:8px;}
   .gear-icon{font-size:28px;flex-shrink:0;} .gear-info{flex:1;} .gear-name{font-size:14px;font-weight:700;} .gear-detail{font-size:12px;color:var(--text-light);margin-top:2px;}
   .gear-date{font-size:11px;color:var(--text-light);text-align:right;}
-  .gift-banner{background:linear-gradient(135deg,#ff6b2b,#ff8c00);border-radius:var(--radius);padding:16px 18px;color:white;margin-bottom:12px;display:flex;align-items:center;gap:14px;cursor:pointer;}
-  .gift-banner .icon{font-size:36px;flex-shrink:0;} .gift-banner h3{font-size:16px;font-weight:900;margin-bottom:4px;} .gift-banner p{font-size:12px;opacity:0.9;}
+
+  /* PROMO */
   .promo-card{background:linear-gradient(135deg,#1a3d1a,#2e6b2e);border-radius:var(--radius);padding:16px 18px;color:white;margin-bottom:12px;position:relative;overflow:hidden;cursor:pointer;}
   .promo-card::after{content:'🏸';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:48px;opacity:0.2;}
   .promo-tag{background:var(--orange);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:6px;}
   .promo-card h3{font-size:16px;font-weight:900;margin-bottom:6px;} .promo-card p{font-size:12px;opacity:0.8;max-width:70%;}
-  .sport-toggle{display:flex;gap:8px;margin-bottom:14px;}
-  .sport-chip{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:700;border:2px solid var(--gray-2);background:white;cursor:pointer;transition:all 0.18s;color:var(--text-light);font-family:'Noto Sans KR',sans-serif;}
-  .sport-chip.active{background:var(--green-court);border-color:var(--green-court);color:white;}
+
+  .gift-banner{background:linear-gradient(135deg,#ff6b2b,#ff8c00);border-radius:var(--radius);padding:16px 18px;color:white;margin-bottom:12px;display:flex;align-items:center;gap:14px;cursor:pointer;}
+  .gift-banner .icon{font-size:36px;flex-shrink:0;} .gift-banner h3{font-size:16px;font-weight:900;margin-bottom:4px;} .gift-banner p{font-size:12px;opacity:0.9;}
+
+  /* ── 관리자 패널 ── */
+  .admin-btn{display:flex;align-items:center;gap:6px;background:var(--gray-1);border:1.5px dashed var(--gray-2);border-radius:var(--radius-sm);padding:12px 16px;color:var(--text-mid);font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-bottom:14px;font-family:'Noto Sans KR',sans-serif;transition:all 0.18s;}
+  .admin-btn:hover{background:var(--green-light);border-color:var(--green-court);color:var(--green-court);}
+  .admin-panel{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:14px;border:2px solid var(--green-light);}
+  .admin-panel-title{font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;color:var(--green-deep);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+  .form-row{margin-bottom:10px;}
+  .form-label{font-size:12px;font-weight:700;color:var(--text-mid);margin-bottom:4px;display:block;}
+  .form-input{width:100%;border:1.5px solid var(--gray-2);border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;transition:border 0.18s;}
+  .form-input:focus{border-color:var(--green-court);}
+  .form-select{width:100%;border:1.5px solid var(--gray-2);border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;background:white;appearance:none;}
+  .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .delete-btn{background:none;border:none;font-size:18px;cursor:pointer;color:#c62828;padding:4px;border-radius:6px;flex-shrink:0;transition:background 0.18s;}
+  .delete-btn:hover{background:#ffebee;}
+
+  /* MODAL */
   .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-end;justify-content:center;}
   .modal-overlay.open{display:flex;animation:fadeIn 0.2s;}
   .modal-sheet{background:white;border-radius:24px 24px 0 0;padding:20px 20px 40px;width:100%;max-width:480px;animation:slideUp 0.3s ease;max-height:90vh;overflow-y:auto;}
@@ -133,8 +176,12 @@
   .modal-handle{width:40px;height:4px;background:var(--gray-2);border-radius:2px;margin:0 auto 16px;}
   .modal-title{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;margin-bottom:16px;}
   .divider{height:1px;background:var(--gray-2);margin:14px 0;}
+
+  /* FAB */
   .fab{position:fixed;bottom:76px;right:calc(50% - 220px);width:52px;height:52px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 4px 20px rgba(255,107,43,0.5);cursor:pointer;border:none;z-index:99;transition:transform 0.2s;}
   .fab:hover{transform:scale(1.1) rotate(15deg);}
+
+  /* TOAST */
   .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--green-deep);color:white;padding:10px 22px;border-radius:24px;font-size:13px;font-weight:600;z-index:300;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
   ::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-thumb{background:var(--gray-2);border-radius:2px;}
@@ -152,18 +199,56 @@
   </div>
 </header>
 
-<!-- HOME -->
+<!-- ══════ HOME ══════ -->
 <div class="page active" id="page-home">
-  <div class="today-banner">
-    <div class="banner-label">⚡ 오늘의 번개</div>
-    <h2>강남 실내코트<br>더블스 모집 중!</h2>
-    <div class="banner-meta"><span>🕔 오후 7시</span><span>📍 강남구 삼성동</span><span>👥 3/4명</span></div>
-    <div class="banner-action">
-      <button class="btn btn-orange" onclick="openMeetModal()">지금 참여하기</button>
-      <button class="btn btn-outline-white" onclick="document.querySelector('.chat-section').scrollIntoView({behavior:'smooth'})">💬 채팅</button>
+
+  <!-- 번개 추가 버튼 -->
+  <button class="admin-btn" onclick="toggleAdminPanel()">
+    ⚡ 번개 모임 추가하기 (관리자)
+  </button>
+
+  <!-- 관리자 입력 패널 (숨김) -->
+  <div class="admin-panel" id="admin-panel" style="display:none">
+    <div class="admin-panel-title">⚡ 새 번개 모임 등록</div>
+    <div class="form-row">
+      <label class="form-label">모임 제목 *</label>
+      <input class="form-input" id="f-title" placeholder="예: 강남 더블스 같이 치실 분!">
+    </div>
+    <div class="form-row form-row-2">
+      <div>
+        <label class="form-label">종목</label>
+        <select class="form-select" id="f-sport">
+          <option value="tennis">🎾 테니스</option>
+          <option value="badminton">🏸 배드민턴</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">모집 상태</label>
+        <select class="form-select" id="f-status">
+          <option value="모집중">모집중</option>
+          <option value="마감임박">마감임박</option>
+          <option value="정기">정기</option>
+          <option value="마감">마감</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row form-row-2">
+      <div>
+        <label class="form-label">📍 장소</label>
+        <input class="form-input" id="f-place" placeholder="예: 강남구 삼성동">
+      </div>
+      <div>
+        <label class="form-label">🕔 시간</label>
+        <input class="form-input" id="f-time" placeholder="예: 오후 7시">
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-green" style="flex:1;padding:12px;border-radius:12px" onclick="addMeet()">✅ 등록하기</button>
+      <button class="btn btn-gray" style="padding:12px 16px;border-radius:12px" onclick="toggleAdminPanel()">취소</button>
     </div>
   </div>
 
+  <!-- 번개 모임 목록 -->
   <div class="section-title"><div class="dot"></div>📣 번개 모임</div>
   <div class="sport-toggle">
     <button class="sport-chip active" onclick="filterSport(this,'all')">전체</button>
@@ -171,12 +256,13 @@
     <button class="sport-chip" onclick="filterSport(this,'badminton')">🏸 배드민턴</button>
   </div>
   <div id="meet-list">
-    <div class="meet-card" data-sport="tennis" onclick="openMeetModal()"><div class="meet-sport tennis">🎾</div><div class="meet-info"><div class="meet-title">혼복 같이 치실 분!</div><div class="meet-detail"><span>📍 송파구 올림픽공원</span><span>🕖 18:00</span></div></div><span class="meet-badge badge-green">2/4명</span></div>
-    <div class="meet-card" data-sport="badminton" onclick="openMeetModal()"><div class="meet-sport badminton">🏸</div><div class="meet-info"><div class="meet-title">배드민턴 주3회 정기 모임</div><div class="meet-detail"><span>📍 마포구 체육관</span><span>🕘 09:00</span></div></div><span class="meet-badge badge-blue">정기</span></div>
-    <div class="meet-card" data-sport="tennis" onclick="openMeetModal()"><div class="meet-sport tennis">🎾</div><div class="meet-info"><div class="meet-title">단식 스파링 파트너 구해요</div><div class="meet-detail"><span>📍 서초구 테니스장</span><span>🕔 16:00</span></div></div><span class="meet-badge badge-orange">1/2명</span></div>
-    <div class="meet-card" data-sport="badminton" onclick="openMeetModal()"><div class="meet-sport badminton">🏸</div><div class="meet-info"><div class="meet-title">초보환영 배드민턴 모임</div><div class="meet-detail"><span>📍 강동구 실내체육관</span><span>🕗 19:00</span></div></div><span class="meet-badge badge-red">마감임박</span></div>
+    <div class="empty-state">
+      <div class="empty-icon">⚡</div>
+      <p>번개 모임을 불러오는 중...</p>
+    </div>
   </div>
 
+  <!-- 채팅 -->
   <div class="section-title"><div class="dot"></div>💬 실시간 채팅</div>
   <div class="chat-section">
     <div class="chat-header">
@@ -204,7 +290,7 @@
   </div>
 </div>
 
-<!-- RANKING -->
+<!-- ══════ RANKING ══════ -->
 <div class="page" id="page-rank">
   <div class="rank-header">
     <div class="rank-stat"><div class="num">127</div><div class="label">전체 회원</div></div>
@@ -223,11 +309,10 @@
     <div class="rank-row top3" data-sport="tennis"><div class="rank-num">3</div><div class="rank-avatar" style="background:#e8f5e9">🎯</div><div class="rank-player"><div class="rank-name">서브에이스최민준</div><div class="rank-info">🎾 구력 6년 · 주2회 · 송파</div></div><div class="rank-score"><div class="rank-win">82%</div><div class="rank-label">승률</div></div></div>
     <div class="rank-row" data-sport="badminton"><div class="rank-num">4</div><div class="rank-avatar" style="background:#f3e5f5">🔥</div><div class="rank-player"><div class="rank-name">드라이브킹정우현</div><div class="rank-info">🏸 구력 3년 · 주5회 · 강동</div></div><div class="rank-score"><div class="rank-win">79%</div><div class="rank-label">승률</div></div></div>
     <div class="rank-row" data-sport="tennis"><div class="rank-num">5</div><div class="rank-avatar" style="background:#fce4ec">🌟</div><div class="rank-player"><div class="rank-name">네트플레이어한소희</div><div class="rank-info">🎾 구력 4년 · 주3회 · 서초</div></div><div class="rank-score"><div class="rank-win">75%</div><div class="rank-label">승률</div></div></div>
-    <div class="rank-row" data-sport="badminton"><div class="rank-num">6</div><div class="rank-avatar" style="background:#e0f2f1">💪</div><div class="rank-player"><div class="rank-name">풋워크달인강민성</div><div class="rank-info">🏸 구력 7년 · 주2회 · 노원</div></div><div class="rank-score"><div class="rank-win">71%</div><div class="rank-label">승률</div></div></div>
   </div>
 </div>
 
-<!-- SHOP -->
+<!-- ══════ SHOP ══════ -->
 <div class="page" id="page-shop">
   <div class="promo-card" style="margin-bottom:16px"><div class="promo-tag">니지스트링 공식 샵</div><h3>전문가가 추천하는<br>스트링 & 용품</h3><p>라켓 스트링 시공 + 용품 원스톱 구매</p></div>
   <div class="section-title"><div class="dot"></div>🎾 인기 스트링</div>
@@ -245,44 +330,26 @@
     <div class="shop-item" onclick="showToast('셔틀콕 — 장바구니 추가!')"><div class="shop-thumb blue-bg"><span>🏸</span></div><div class="shop-info"><div class="shop-name">셔틀콕 12개입</div><div class="shop-price">9,000원</div></div></div>
   </div>
   <div class="section-title"><div class="dot"></div>🎁 선물하기</div>
-  <div class="gift-banner" onclick="openGiftModal()"><div class="icon">🎁</div><div><h3>동호인에게 선물 보내기</h3><p>생일·기념일에 스트링, 그립 등을<br>링크로 간편하게 선물하세요!</p></div></div>
+  <div class="gift-banner" onclick="openGiftModal()"><div class="icon">🎁</div><div><h3>동호인에게 선물 보내기</h3><p>생일·기념일에 스트링, 그립 등을 선물하세요!</p></div></div>
 </div>
 
-<!-- MY BAG -->
+<!-- ══════ MY BAG ══════ -->
 <div class="page" id="page-bag">
   <div class="profile-hero"><div class="profile-avatar">😄</div><div><div class="profile-name">나의 프로필</div><span class="profile-level">⭐ 중급 플레이어</span><div class="profile-meta"><span>🎾 구력 3년</span><span>📍 강남구</span><span>🎂 4월 15일</span></div></div></div>
   <div class="stats-row"><div class="stat-box"><div class="val">68%</div><div class="lbl">이번달 승률</div></div><div class="stat-box"><div class="val">24</div><div class="lbl">총 경기수</div></div><div class="stat-box"><div class="val">5</div><div class="lbl">선물받음</div></div></div>
   <div class="section-title"><div class="dot"></div>🎒 내 장비</div>
-  <div class="gear-item"><div class="gear-icon">🎾</div><div class="gear-info"><div class="gear-name">헤드 스피드 MP</div><div class="gear-detail">럭실론 알루파워 1.25 / 55파운드</div></div><div class="gear-date">스트링<br>2024.03.10</div></div>
-  <div class="gear-item"><div class="gear-icon">🏸</div><div class="gear-info"><div class="gear-name">요넥스 아스트록스 88D</div><div class="gear-detail">요넥스 BG80 / 27파운드</div></div><div class="gear-date">스트링<br>2024.02.20</div></div>
+  <div class="gear-item"><div class="gear-icon">🎾</div><div class="gear-info"><div class="gear-name">헤드 스피드 MP</div><div class="gear-detail">럭실론 알루파워 1.25 / 55파운드</div></div><div class="gear-date">2024.03.10</div></div>
+  <div class="gear-item"><div class="gear-icon">🏸</div><div class="gear-info"><div class="gear-name">요넥스 아스트록스 88D</div><div class="gear-detail">요넥스 BG80 / 27파운드</div></div><div class="gear-date">2024.02.20</div></div>
   <button class="btn btn-green" style="width:100%;margin-top:8px;padding:14px;border-radius:12px;font-size:14px" onclick="showToast('장비 추가 기능 — 곧 오픈!')">+ 장비 추가하기</button>
-  <div class="divider"></div>
-  <div class="section-title"><div class="dot"></div>🎁 받은 선물</div>
-  <div class="meet-card" style="cursor:default"><div class="meet-sport" style="background:#fff3e0">🎁</div><div class="meet-info"><div class="meet-title">럭실론 알루파워 스트링</div><div class="meet-detail"><span>보낸 사람: 테니스왕김철수</span></div></div><span class="meet-badge badge-orange">수령완료</span></div>
 </div>
 
+<!-- NAV -->
 <nav class="nav-tabs">
   <button class="tab-btn active" id="tab-home" onclick="showTab('home')"><span class="tab-icon">🏠</span><span class="tab-label">홈/피드</span></button>
   <button class="tab-btn" id="tab-rank" onclick="showTab('rank')"><span class="tab-icon">🏆</span><span class="tab-label">실력 랭킹</span></button>
   <button class="tab-btn" id="tab-shop" onclick="showTab('shop')"><span class="tab-icon">🛍️</span><span class="tab-label">테니스 샵</span></button>
   <button class="tab-btn" id="tab-bag" onclick="showTab('bag')"><span class="tab-icon">🎒</span><span class="tab-label">내 가방</span></button>
 </nav>
-<button class="fab" onclick="openMeetModal()">⚡</button>
-
-<!-- MODAL: 번개 -->
-<div class="modal-overlay" id="modal-meet" onclick="closeModal('meet')">
-  <div class="modal-sheet" onclick="event.stopPropagation()">
-    <div class="modal-handle"></div>
-    <div class="modal-title">⚡ 번개 모임 참가</div>
-    <div class="card card-sm" style="margin-bottom:14px">
-      <div style="font-size:13px;color:var(--text-light);margin-bottom:4px">📍 강남구 삼성동 실내코트</div>
-      <div style="font-size:16px;font-weight:900">강남 더블스 — 오후 7시</div>
-      <div style="margin-top:10px;display:flex;gap:8px"><span class="meet-badge badge-green">🎾 테니스</span><span class="meet-badge badge-orange">더블스</span><span class="meet-badge badge-blue">중급</span></div>
-    </div>
-    <button class="btn btn-orange" style="width:100%;padding:14px;border-radius:12px;font-size:15px" onclick="joinMeet()">참가 신청하기 ✅</button>
-    <button class="btn" style="width:100%;padding:12px;border-radius:12px;font-size:14px;margin-top:8px;background:var(--gray-1);color:var(--text-mid)" onclick="closeModal('meet')">닫기</button>
-  </div>
-</div>
 
 <!-- MODAL: 선물 -->
 <div class="modal-overlay" id="modal-gift" onclick="closeModal('gift')">
@@ -291,14 +358,14 @@
     <div class="modal-title">🎁 선물하기</div>
     <div class="card card-sm" style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div style="font-size:28px">🎾</div><div><div style="font-size:14px;font-weight:700">럭실론 알루파워</div><div style="font-size:13px;color:var(--orange);font-weight:700">15,000원</div></div><button class="btn btn-orange" style="margin-left:auto;padding:7px 14px;font-size:12px" onclick="showToast('🎁 선물 링크 복사!')">선물하기</button></div>
     <div class="card card-sm" style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div style="font-size:28px">🖐️</div><div><div style="font-size:14px;font-weight:700">오버그립 10개입</div><div style="font-size:13px;color:var(--orange);font-weight:700">6,500원</div></div><button class="btn btn-orange" style="margin-left:auto;padding:7px 14px;font-size:12px" onclick="showToast('🎁 선물 링크 복사!')">선물하기</button></div>
-    <button class="btn" style="width:100%;padding:12px;border-radius:12px;font-size:14px;background:var(--gray-1);color:var(--text-mid)" onclick="closeModal('gift')">닫기</button>
+    <button class="btn btn-gray" style="width:100%;padding:12px;border-radius:12px;font-size:14px;margin-top:4px" onclick="closeModal('gift')">닫기</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ✅ Firebase 설정값 (캡처 화면에서 확인 완료)
+// ✅ Firebase 설정
 const firebaseConfig = {
   apiKey: "AIzaSyB2BnWZ1Y2Iq43M1KlWrZ3CM3DNQu-YHYc",
   authDomain: "niji-court.firebaseapp.com",
@@ -310,37 +377,135 @@ const firebaseConfig = {
   measurementId: "G-94KDJKV599"
 };
 
-let db=null, chatRef=null, isReady=false;
+let db=null, chatRef=null, meetRef=null, isReady=false;
+let currentFilter = 'all';
 
+// ── Firebase 초기화 ──
 function initFirebase() {
   try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.database();
     chatRef = db.ref('chat/global');
+    meetRef = db.ref('meets');
     isReady = true;
     setStatus('connected','🟢 실시간 연결됨');
-    document.getElementById('online-count').textContent = '실시간 채팅 연결됨';
+    document.getElementById('online-count').textContent = '실시간 연결됨';
     listenMessages();
+    listenMeets();
   } catch(e) {
-    console.error(e);
     setStatus('error','연결 오류');
-    addDemoMessages();
   }
 }
 
-function setStatus(type,text) {
-  const el=document.getElementById('firebase-status');
-  el.className='firebase-status status-'+type;
-  el.textContent=text;
-}
-
-function listenMessages() {
-  chatRef.limitToLast(50).on('child_added', snap => {
-    const msg=snap.val();
-    if(msg) renderMessage(msg);
+// ── 번개 모임 실시간 수신 ──
+function listenMeets() {
+  meetRef.on('value', snap => {
+    const container = document.getElementById('meet-list');
+    container.innerHTML = '';
+    const data = snap.val();
+    if (!data) {
+      container.innerHTML = `<div class="empty-state"><div class="empty-icon">⚡</div><p>아직 번개 모임이 없어요!<br>위 버튼으로 첫 모임을 만들어보세요 😊</p></div>`;
+      return;
+    }
+    // 최신순 정렬
+    const meets = Object.entries(data).reverse();
+    meets.forEach(([key, meet]) => {
+      if (currentFilter !== 'all' && meet.sport !== currentFilter) return;
+      renderMeet(key, meet, container);
+    });
+    if (container.innerHTML === '') {
+      container.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>해당 종목 모임이 없어요!</p></div>`;
+    }
   });
 }
 
+// ── 번개 모임 카드 그리기 ──
+function renderMeet(key, meet, container) {
+  const sportIcon = meet.sport === 'tennis' ? '🎾' : '🏸';
+  const badgeClass = meet.status === '마감임박' ? 'badge-red' : meet.status === '정기' ? 'badge-blue' : meet.status === '마감' ? 'badge-red' : 'badge-green';
+  const div = document.createElement('div');
+  div.className = 'meet-card';
+  div.dataset.sport = meet.sport;
+  div.innerHTML = `
+    <div class="meet-sport ${meet.sport}">${sportIcon}</div>
+    <div class="meet-info">
+      <div class="meet-title">${escapeHtml(meet.title)}</div>
+      <div class="meet-detail">
+        ${meet.place ? `<span>📍 ${escapeHtml(meet.place)}</span>` : ''}
+        ${meet.time ? `<span>🕔 ${escapeHtml(meet.time)}</span>` : ''}
+      </div>
+    </div>
+    <span class="meet-badge ${badgeClass}">${escapeHtml(meet.status)}</span>
+    <button class="delete-btn" onclick="deleteMeet('${key}')" title="삭제">🗑️</button>`;
+  container.appendChild(div);
+}
+
+// ── 번개 모임 추가 ──
+function addMeet() {
+  const title = document.getElementById('f-title').value.trim();
+  const sport = document.getElementById('f-sport').value;
+  const status = document.getElementById('f-status').value;
+  const place = document.getElementById('f-place').value.trim();
+  const time = document.getElementById('f-time').value.trim();
+
+  if (!title) { showToast('⚠️ 모임 제목을 입력해주세요!'); return; }
+  if (!place) { showToast('⚠️ 장소를 입력해주세요!'); return; }
+  if (!time) { showToast('⚠️ 시간을 입력해주세요!'); return; }
+
+  meetRef.push({ title, sport, status, place, time, createdAt: Date.now() });
+
+  // 입력 초기화
+  document.getElementById('f-title').value = '';
+  document.getElementById('f-place').value = '';
+  document.getElementById('f-time').value = '';
+  document.getElementById('admin-panel').style.display = 'none';
+  showToast('✅ 번개 모임이 등록됐어요!');
+}
+
+// ── 번개 모임 삭제 ──
+function deleteMeet(key) {
+  if (confirm('이 번개 모임을 삭제할까요?')) {
+    meetRef.child(key).remove();
+    showToast('🗑️ 삭제됐어요!');
+  }
+}
+
+// ── 관리자 패널 토글 ──
+function toggleAdminPanel() {
+  const panel = document.getElementById('admin-panel');
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+// ── 종목 필터 ──
+function filterSport(el, sport) {
+  currentFilter = sport;
+  el.closest('.sport-toggle').querySelectorAll('.sport-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  // 현재 목록 다시 렌더링
+  if (meetRef) meetRef.once('value', snap => {
+    const container = document.getElementById('meet-list');
+    container.innerHTML = '';
+    const data = snap.val();
+    if (!data) { container.innerHTML = `<div class="empty-state"><div class="empty-icon">⚡</div><p>아직 번개 모임이 없어요!</p></div>`; return; }
+    const meets = Object.entries(data).reverse();
+    meets.forEach(([key, meet]) => {
+      if (sport !== 'all' && meet.sport !== sport) return;
+      renderMeet(key, meet, container);
+    });
+    if (container.innerHTML === '') container.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>해당 종목 모임이 없어요!</p></div>`;
+  });
+}
+
+// ── 채팅 ──
+function setStatus(type,text) {
+  const el=document.getElementById('firebase-status');
+  el.className='firebase-status status-'+type; el.textContent=text;
+}
+function listenMessages() {
+  chatRef.limitToLast(50).on('child_added', snap => {
+    const msg=snap.val(); if(msg) renderMessage(msg);
+  });
+}
 function renderMessage(msg) {
   const container=document.getElementById('chat-messages');
   const myNick=document.getElementById('nickname-input').value.trim()||'나';
@@ -354,54 +519,32 @@ function renderMessage(msg) {
   container.appendChild(div);
   container.scrollTop=container.scrollHeight;
 }
-
 function sendChatBtn() {
   const input=document.getElementById('chat-input');
   const nick=document.getElementById('nickname-input').value.trim()||'익명';
   const text=input.value.trim();
-  if(!text) return;
-  input.value='';
-  if(isReady&&chatRef) {
-    chatRef.push({nickname:nick,text:text,timestamp:Date.now()});
-  } else {
-    renderMessage({nickname:nick,text:text,timestamp:Date.now()});
-  }
+  if(!text) return; input.value='';
+  if(isReady&&chatRef) chatRef.push({nickname:nick,text:text,timestamp:Date.now()});
+  else renderMessage({nickname:nick,text:text,timestamp:Date.now()});
 }
-
 function sendChat(e){if(e.key==='Enter')sendChatBtn();}
 
-function addDemoMessages(){
-  [{nickname:'테니스왕김철수',text:'안녕하세요! 오늘 번개 몇 시예요? 😊',timestamp:Date.now()-300000},
-   {nickname:'스매시퀸이수연',text:'저도 참가할게요! 🏸',timestamp:Date.now()-180000},
-   {nickname:'서브에이스최민준',text:'코트 예약 완료했어요 ✅',timestamp:Date.now()-60000}
-  ].forEach(m=>renderMessage(m));
-  setStatus('connecting','⚡ 데모 모드');
-}
-
-function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+// ── 유틸 ──
+function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function hashCode(s){let h=0;for(let i=0;i<s.length;i++)h=Math.imul(31,h)+s.charCodeAt(i)|0;return h;}
-
 function showTab(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   document.getElementById('tab-'+name).classList.add('active');
-  document.querySelector('.fab').style.display=name==='home'?'flex':'none';
-}
-function filterSport(el,sport){
-  el.closest('.sport-toggle').querySelectorAll('.sport-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('#meet-list .meet-card').forEach(c=>{c.style.display=(sport==='all'||c.dataset.sport===sport)?'flex':'none';});
 }
 function filterRank(el,sport){
   el.closest('.sport-toggle').querySelectorAll('.sport-chip').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('#rank-list .rank-row').forEach(r=>{r.style.display=(sport==='all'||r.dataset.sport===sport)?'flex':'none';});
 }
-function openMeetModal(){document.getElementById('modal-meet').classList.add('open');}
 function openGiftModal(){document.getElementById('modal-gift').classList.add('open');}
 function closeModal(name){document.getElementById('modal-'+name).classList.remove('open');}
-function joinMeet(){closeModal('meet');showToast('🎉 참가 신청 완료!');}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 
 window.addEventListener('load',initFirebase);
