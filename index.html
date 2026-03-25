@@ -8,183 +8,178 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
-  :root {
-    --green-deep:#1a3d1a; --green-court:#2e6b2e; --green-mid:#3d8b3d; --green-bright:#52b052; --green-light:#d4edda;
-    --orange:#ff6b2b; --orange-hot:#ff8c00; --white:#ffffff; --off-white:#f8fdf8;
-    --gray-1:#f0f4f0; --gray-2:#dce8dc; --gray-3:#9cb89c;
-    --text-dark:#1a2e1a; --text-mid:#4a6b4a; --text-light:#7a9a7a;
-    --shadow:0 4px 20px rgba(30,80,30,0.12); --shadow-lg:0 8px 40px rgba(30,80,30,0.18);
-    --radius:16px; --radius-sm:10px;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  body{font-family:'Noto Sans KR',sans-serif;background:var(--off-white);color:var(--text-dark);min-height:100vh;max-width:480px;margin:0 auto;overflow-x:hidden;}
+:root {
+  --green-deep:#1a3d1a; --green-court:#2e6b2e; --green-mid:#3d8b3d; --green-bright:#52b052; --green-light:#d4edda;
+  --orange:#ff6b2b; --orange-hot:#ff8c00; --white:#fff; --off-white:#f8fdf8;
+  --gray-1:#f0f4f0; --gray-2:#dce8dc; --gray-3:#9cb89c;
+  --text-dark:#1a2e1a; --text-mid:#4a6b4a; --text-light:#7a9a7a;
+  --shadow:0 4px 20px rgba(30,80,30,0.12); --shadow-lg:0 8px 40px rgba(30,80,30,0.18);
+  --radius:16px; --radius-sm:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--off-white);color:var(--text-dark);min-height:100vh;max-width:480px;margin:0 auto;overflow-x:hidden;}
 
-  /* HEADER */
-  .app-header{background:linear-gradient(135deg,var(--green-deep) 0%,var(--green-court) 60%,#1e5c1e 100%);padding:16px 20px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.25);}
-  .header-top{display:flex;align-items:center;justify-content:space-between;}
-  .logo-wrap{display:flex;align-items:center;gap:8px;}
-  .logo-icon{width:36px;height:36px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;}
-  .logo-text{font-family:'Bebas Neue',cursive;font-size:22px;color:var(--white);letter-spacing:2px;line-height:1;}
-  .logo-sub{font-size:9px;color:var(--green-bright);letter-spacing:1px;font-weight:500;display:block;margin-top:1px;}
-  .online-dot{display:flex;align-items:center;gap:5px;color:var(--green-bright);font-size:11px;font-weight:600;}
-  .dot-blink{width:7px;height:7px;background:var(--green-bright);border-radius:50%;animation:blink 1.4s infinite;}
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+/* HEADER */
+.app-header{background:linear-gradient(135deg,var(--green-deep),var(--green-court),#1e5c1e);padding:14px 20px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.25);}
+.header-top{display:flex;align-items:center;justify-content:space-between;}
+.logo-wrap{display:flex;align-items:center;gap:8px;}
+.logo-icon{width:34px;height:34px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;}
+.logo-text{font-family:'Bebas Neue',cursive;font-size:21px;color:#fff;letter-spacing:2px;line-height:1;}
+.logo-sub{font-size:9px;color:var(--green-bright);letter-spacing:1px;font-weight:500;display:block;margin-top:1px;}
+.online-dot{display:flex;align-items:center;gap:5px;color:var(--green-bright);font-size:11px;font-weight:600;}
+.dot-blink{width:7px;height:7px;background:var(--green-bright);border-radius:50%;animation:blink 1.4s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 
-  /* NAV */
-  .nav-tabs{display:flex;background:var(--white);border-top:1px solid var(--gray-2);position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;box-shadow:0 -2px 20px rgba(0,0,0,0.08);}
-  .tab-btn{flex:1;padding:10px 4px 8px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all 0.2s;color:var(--gray-3);font-family:'Noto Sans KR',sans-serif;}
-  .tab-btn .tab-icon{font-size:22px;line-height:1;} .tab-btn .tab-label{font-size:10px;font-weight:500;}
-  .tab-btn.active{color:var(--green-court);} .tab-btn.active .tab-icon{transform:translateY(-1px);} .tab-btn.active .tab-label{font-weight:700;}
+/* NAV */
+.nav-tabs{display:flex;background:#fff;border-top:1px solid var(--gray-2);position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;box-shadow:0 -2px 20px rgba(0,0,0,0.08);}
+.tab-btn{flex:1;padding:10px 4px 8px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--gray-3);font-family:'Noto Sans KR',sans-serif;transition:color 0.2s;}
+.tab-btn .ti{font-size:21px;line-height:1;} .tab-btn .tl{font-size:10px;font-weight:500;}
+.tab-btn.active{color:var(--green-court);} .tab-btn.active .ti{transform:translateY(-1px);} .tab-btn.active .tl{font-weight:700;}
 
-  /* PAGES */
-  .page{display:none;padding:16px 16px 90px;animation:fadeIn 0.25s ease;} .page.active{display:block;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* PAGES */
+.page{display:none;padding:14px 14px 88px;animation:fadeUp 0.22s ease;} .page.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-  .section-title{font-family:'Oswald',sans-serif;font-size:17px;font-weight:600;color:var(--green-deep);letter-spacing:0.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-  .section-title .dot{width:6px;height:20px;background:var(--orange);border-radius:3px;flex-shrink:0;}
+/* COMMON */
+.sec-title{font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;color:var(--green-deep);margin-bottom:11px;display:flex;align-items:center;gap:7px;}
+.sec-title .dot{width:5px;height:18px;background:var(--orange);border-radius:3px;flex-shrink:0;}
+.btn{padding:9px 16px;border-radius:22px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all 0.18s;}
+.btn-orange{background:var(--orange);color:#fff;} .btn-orange:active{background:var(--orange-hot);}
+.btn-green{background:var(--green-court);color:#fff;} .btn-green:active{background:var(--green-deep);}
+.btn-gray{background:var(--gray-1);color:var(--text-mid);}
+.btn-red{background:#ffebee;color:#c62828;}
+.card{background:#fff;border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);margin-bottom:11px;}
+.empty-box{text-align:center;padding:28px 16px;color:var(--text-light);}
+.empty-box .ei{font-size:44px;margin-bottom:10px;} .empty-box p{font-size:13px;line-height:1.6;}
 
-  .card{background:var(--white);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:12px;}
-  .card-sm{padding:12px 14px;border-radius:var(--radius-sm);}
+/* FORM */
+.form-row{margin-bottom:9px;}
+.f-label{font-size:12px;font-weight:700;color:var(--text-mid);margin-bottom:4px;display:block;}
+.f-input{width:100%;border:1.5px solid var(--gray-2);border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;transition:border 0.18s;background:#fff;}
+.f-input:focus{border-color:var(--green-court);}
+.f-select{width:100%;border:1.5px solid var(--gray-2);border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;background:#fff;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 
-  /* BUTTONS */
-  .btn{padding:9px 18px;border-radius:24px;font-size:13px;font-weight:700;border:none;cursor:pointer;transition:all 0.18s;font-family:'Noto Sans KR',sans-serif;}
-  .btn-orange{background:var(--orange);color:white;} .btn-orange:hover{background:var(--orange-hot);}
-  .btn-outline-white{background:transparent;color:white;border:1.5px solid rgba(255,255,255,0.6);}
-  .btn-green{background:var(--green-court);color:white;} .btn-green:hover{background:var(--green-deep);}
-  .btn-gray{background:var(--gray-1);color:var(--text-mid);}
-  .btn-red{background:#ffebee;color:#c62828;}
+/* ADMIN PANEL */
+.admin-btn{display:flex;align-items:center;gap:6px;background:var(--gray-1);border:1.5px dashed var(--gray-2);border-radius:var(--radius-sm);padding:11px 14px;color:var(--text-mid);font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-bottom:12px;font-family:'Noto Sans KR',sans-serif;transition:all 0.18s;}
+.admin-btn:hover{background:var(--green-light);border-color:var(--green-court);color:var(--green-court);}
+.admin-panel{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin-bottom:12px;border:2px solid var(--green-light);}
+.admin-title{font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;color:var(--green-deep);margin-bottom:12px;}
+.btn-row{display:flex;gap:8px;margin-top:6px;}
 
-  /* TODAY BANNER */
-  .today-banner{background:linear-gradient(135deg,var(--green-court),var(--green-mid));border-radius:var(--radius);padding:18px;color:white;margin-bottom:12px;position:relative;overflow:hidden;}
-  .today-banner::before{content:'🎾';position:absolute;right:16px;bottom:-8px;font-size:60px;opacity:0.18;}
-  .today-banner .banner-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--green-bright);margin-bottom:4px;}
-  .today-banner h2{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;margin-bottom:10px;line-height:1.2;}
-  .banner-meta{display:flex;gap:14px;flex-wrap:wrap;} .banner-meta span{font-size:12px;opacity:0.9;}
-  .banner-action{margin-top:14px;display:flex;gap:8px;}
+/* MEET */
+.meet-card{background:#fff;border-radius:var(--radius-sm);padding:13px;display:flex;align-items:center;gap:11px;box-shadow:var(--shadow);margin-bottom:9px;transition:transform 0.18s;}
+.meet-card:hover{transform:translateY(-2px);}
+.ms{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;}
+.ms.tennis{background:#e8f5e9;} .ms.badminton{background:#e3f2fd;}
+.mi{flex:1;min-width:0;} .mt{font-size:14px;font-weight:700;margin-bottom:3px;}
+.md{font-size:11px;color:var(--text-light);display:flex;gap:8px;flex-wrap:wrap;}
+.badge{padding:3px 9px;border-radius:18px;font-size:11px;font-weight:700;white-space:nowrap;}
+.bg{background:var(--green-light);color:var(--green-court);} .bo{background:#fff3e0;color:var(--orange);}
+.bb{background:#e3f2fd;color:#1565c0;} .br{background:#ffebee;color:#c62828;}
+.del-btn{background:none;border:none;font-size:17px;cursor:pointer;padding:4px;border-radius:6px;flex-shrink:0;color:#c62828;transition:background 0.18s;}
+.del-btn:hover{background:#ffebee;}
 
-  /* MEET CARDS */
-  .meet-card{background:var(--white);border-radius:var(--radius-sm);padding:14px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);margin-bottom:10px;transition:transform 0.18s;}
-  .meet-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
-  .meet-sport{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
-  .meet-sport.tennis{background:#e8f5e9;} .meet-sport.badminton{background:#e3f2fd;}
-  .meet-info{flex:1;min-width:0;} .meet-title{font-size:14px;font-weight:700;margin-bottom:3px;}
-  .meet-detail{font-size:12px;color:var(--text-light);display:flex;gap:10px;flex-wrap:wrap;}
-  .meet-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
-  .badge-green{background:var(--green-light);color:var(--green-court);} .badge-orange{background:#fff3e0;color:var(--orange);}
-  .badge-blue{background:#e3f2fd;color:#1565c0;} .badge-red{background:#ffebee;color:#c62828;}
+/* SPORT TOGGLE */
+.sport-toggle{display:flex;gap:7px;margin-bottom:12px;}
+.chip{padding:6px 14px;border-radius:18px;font-size:13px;font-weight:700;border:2px solid var(--gray-2);background:#fff;cursor:pointer;color:var(--text-light);font-family:'Noto Sans KR',sans-serif;transition:all 0.18s;}
+.chip.active{background:var(--green-court);border-color:var(--green-court);color:#fff;}
 
-  .empty-state{text-align:center;padding:32px 16px;color:var(--text-light);}
-  .empty-state .empty-icon{font-size:48px;margin-bottom:12px;}
-  .empty-state p{font-size:14px;}
+/* CHAT */
+.chat-wrap{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:14px;}
+.chat-hd{background:linear-gradient(135deg,var(--green-deep),var(--green-court));padding:11px 14px;display:flex;align-items:center;justify-content:space-between;}
+.chat-hd-left{display:flex;align-items:center;gap:7px;color:#fff;font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;}
+.chat-body{padding:12px;height:240px;overflow-y:auto;background:var(--gray-1);}
+.cmsg{margin-bottom:9px;display:flex;gap:7px;align-items:flex-start;}
+.cmsg.mine{flex-direction:row-reverse;}
+.cav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--gray-2);flex-shrink:0;}
+.cbub{max-width:72%;}
+.cnm{font-size:10px;color:var(--text-light);margin-bottom:3px;}
+.cmsg.mine .cnm{text-align:right;}
+.ctxt{background:#fff;border-radius:13px;border-top-left-radius:3px;padding:7px 11px;font-size:13px;word-break:break-word;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+.cmsg.mine .ctxt{background:var(--green-court);color:#fff;border-radius:13px;border-top-right-radius:3px;}
+.ctm{font-size:9px;color:var(--text-light);margin-top:2px;}
+.cmsg.mine .ctm{text-align:right;}
+.chat-ft{padding:9px 11px;background:#fff;border-top:1px solid var(--gray-2);}
+.nick-row{display:flex;gap:7px;margin-bottom:7px;align-items:center;}
+.nick-row label{font-size:12px;color:var(--text-light);white-space:nowrap;}
+.nick-row input{flex:1;border:1.5px solid var(--gray-2);border-radius:9px;padding:7px 11px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;}
+.nick-row input:focus{border-color:var(--green-court);}
+.cin-row{display:flex;gap:7px;align-items:center;background:var(--gray-1);border-radius:22px;padding:5px 5px 5px 13px;}
+.cin-row input{flex:1;border:none;outline:none;font-size:13px;font-family:'Noto Sans KR',sans-serif;background:transparent;}
+.csend{width:32px;height:32px;border-radius:50%;background:var(--green-court);border:none;color:#fff;cursor:pointer;font-size:13px;flex-shrink:0;}
+.fb-status{font-size:11px;padding:3px 9px;border-radius:9px;font-weight:600;}
+.fs-ok{background:var(--green-light);color:var(--green-court);} .fs-wait{background:#fff3e0;color:var(--orange);} .fs-err{background:#ffebee;color:#c62828;}
 
-  /* SPORT TOGGLE */
-  .sport-toggle{display:flex;gap:8px;margin-bottom:14px;}
-  .sport-chip{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:700;border:2px solid var(--gray-2);background:white;cursor:pointer;transition:all 0.18s;color:var(--text-light);font-family:'Noto Sans KR',sans-serif;}
-  .sport-chip.active{background:var(--green-court);border-color:var(--green-court);color:white;}
+/* PROMO */
+.promo{background:linear-gradient(135deg,#1a3d1a,#2e6b2e);border-radius:var(--radius);padding:15px 17px;color:#fff;margin-bottom:11px;position:relative;overflow:hidden;cursor:pointer;}
+.promo::after{content:'🏸';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:44px;opacity:0.2;}
+.promo-tag{background:var(--orange);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:9px;display:inline-block;margin-bottom:5px;}
+.promo h3{font-size:15px;font-weight:900;margin-bottom:5px;} .promo p{font-size:12px;opacity:0.8;max-width:72%;}
 
-  /* CHAT */
-  .chat-section{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:16px;}
-  .chat-header{background:linear-gradient(135deg,var(--green-deep),var(--green-court));padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
-  .chat-header-left{display:flex;align-items:center;gap:8px;color:white;}
-  .chat-header-title{font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;}
-  .chat-body{padding:14px;height:260px;overflow-y:auto;background:var(--gray-1);}
-  .chat-msg{margin-bottom:10px;display:flex;gap:8px;align-items:flex-start;}
-  .chat-msg.mine{flex-direction:row-reverse;}
-  .chat-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;background:var(--gray-2);flex-shrink:0;}
-  .chat-bubble{max-width:72%;}
-  .chat-name{font-size:10px;color:var(--text-light);margin-bottom:3px;}
-  .chat-msg.mine .chat-name{text-align:right;}
-  .chat-text{background:white;border-radius:14px;border-top-left-radius:4px;padding:8px 12px;font-size:13px;box-shadow:0 1px 4px rgba(0,0,0,0.07);word-break:break-word;}
-  .chat-msg.mine .chat-text{background:var(--green-court);color:white;border-radius:14px;border-top-right-radius:4px;}
-  .chat-time{font-size:9px;color:var(--text-light);margin-top:3px;}
-  .chat-msg.mine .chat-time{text-align:right;}
-  .chat-footer{padding:10px 12px;background:white;border-top:1px solid var(--gray-2);}
-  .chat-nick-row{display:flex;gap:8px;margin-bottom:8px;align-items:center;}
-  .chat-nick-row label{font-size:12px;color:var(--text-light);white-space:nowrap;}
-  .chat-nick-row input{flex:1;border:1.5px solid var(--gray-2);border-radius:10px;padding:7px 12px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;}
-  .chat-nick-row input:focus{border-color:var(--green-court);}
-  .chat-input-row{display:flex;gap:8px;align-items:center;background:var(--gray-1);border-radius:24px;padding:6px 6px 6px 14px;}
-  .chat-input-row input{flex:1;border:none;outline:none;font-size:13px;font-family:'Noto Sans KR',sans-serif;background:transparent;}
-  .chat-send{width:34px;height:34px;border-radius:50%;background:var(--green-court);border:none;color:white;cursor:pointer;font-size:14px;flex-shrink:0;}
-  .firebase-status{font-size:11px;padding:3px 10px;border-radius:10px;font-weight:600;}
-  .status-connecting{background:#fff3e0;color:var(--orange);} .status-connected{background:var(--green-light);color:var(--green-court);} .status-error{background:#ffebee;color:#c62828;}
+/* ── RANKING ── */
+.rank-hero{background:linear-gradient(135deg,var(--green-deep),var(--green-court));border-radius:var(--radius);padding:14px;margin-bottom:14px;display:flex;gap:0;}
+.rs{flex:1;text-align:center;color:#fff;}
+.rs .rn{font-family:'Bebas Neue',cursive;font-size:30px;line-height:1;color:var(--orange);}
+.rs .rl{font-size:10px;opacity:0.8;margin-top:2px;}
+.rs+.rs{border-left:1px solid rgba(255,255,255,0.15);}
 
-  /* SHOP */
-  .shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
-  .shop-item{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform 0.18s;}
-  .shop-item:hover{transform:translateY(-3px);}
-  .shop-thumb{height:100px;display:flex;align-items:center;justify-content:center;font-size:46px;position:relative;}
-  .shop-thumb.green-bg{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);} .shop-thumb.orange-bg{background:linear-gradient(135deg,#fff3e0,#ffe0b2);}
-  .shop-thumb.blue-bg{background:linear-gradient(135deg,#e3f2fd,#bbdefb);} .shop-thumb.yellow-bg{background:linear-gradient(135deg,#fffde7,#fff9c4);}
-  .shop-hot{position:absolute;top:8px;right:8px;background:var(--orange);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;}
-  .shop-info{padding:10px 12px 12px;} .shop-name{font-size:13px;font-weight:700;margin-bottom:4px;}
-  .shop-price{font-size:14px;font-weight:900;color:var(--orange);}
-  .shop-price .original{font-size:11px;text-decoration:line-through;color:var(--text-light);font-weight:400;margin-left:4px;}
+.rank-card{background:#fff;border-radius:var(--radius-sm);padding:12px 13px;display:flex;align-items:center;gap:11px;box-shadow:var(--shadow);margin-bottom:8px;transition:transform 0.18s;}
+.rank-card:hover{transform:translateX(3px);}
+.rank-card.r1{border-left:4px solid #FFD700;} .rank-card.r2{border-left:4px solid #C0C0C0;} .rank-card.r3{border-left:4px solid #CD7F32;}
+.rnum{font-family:'Bebas Neue',cursive;font-size:20px;width:24px;text-align:center;color:var(--text-light);flex-shrink:0;}
+.rank-card.r1 .rnum{color:#FFD700;} .rank-card.r2 .rnum{color:#999;} .rank-card.r3 .rnum{color:#CD7F32;}
+.rav{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.rinfo{flex:1;min-width:0;} .rname{font-size:13px;font-weight:700;} .rdet{font-size:11px;color:var(--text-light);margin-top:2px;}
+.rscore{text-align:right;flex-shrink:0;} .rwin{font-size:17px;font-weight:900;color:var(--green-court);} .rlb{font-size:10px;color:var(--text-light);}
 
-  /* RANK */
-  .rank-header{background:linear-gradient(135deg,var(--green-deep),var(--green-court));border-radius:var(--radius);padding:16px;margin-bottom:16px;display:flex;gap:12px;}
-  .rank-stat{flex:1;text-align:center;color:white;} .rank-stat .num{font-family:'Bebas Neue',cursive;font-size:32px;line-height:1;color:var(--orange);} .rank-stat .label{font-size:11px;opacity:0.8;margin-top:2px;}
-  .rank-row{background:var(--white);border-radius:var(--radius-sm);padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);margin-bottom:8px;}
-  .rank-row.top1{border-left:4px solid #FFD700;} .rank-row.top2{border-left:4px solid #C0C0C0;} .rank-row.top3{border-left:4px solid #CD7F32;}
-  .rank-num{font-family:'Bebas Neue',cursive;font-size:22px;width:28px;text-align:center;color:var(--text-light);flex-shrink:0;}
-  .rank-row.top1 .rank-num{color:#FFD700;} .rank-row.top2 .rank-num{color:#999;} .rank-row.top3 .rank-num{color:#CD7F32;}
-  .rank-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-  .rank-player{flex:1;} .rank-name{font-size:14px;font-weight:700;} .rank-info{font-size:11px;color:var(--text-light);margin-top:2px;}
-  .rank-score{text-align:right;flex-shrink:0;} .rank-win{font-size:18px;font-weight:900;color:var(--green-court);} .rank-label{font-size:10px;color:var(--text-light);}
+/* ── SHOP ── */
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px;}
+.shop-item{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform 0.18s;}
+.shop-item:hover{transform:translateY(-3px);}
+.sthumb{height:95px;display:flex;align-items:center;justify-content:center;font-size:42px;position:relative;}
+.sthumb.g{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);} .sthumb.o{background:linear-gradient(135deg,#fff3e0,#ffe0b2);}
+.sthumb.b{background:linear-gradient(135deg,#e3f2fd,#bbdefb);} .sthumb.y{background:linear-gradient(135deg,#fffde7,#fff9c4);}
+.shop-hot{position:absolute;top:7px;right:7px;background:var(--orange);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:9px;}
+.sinfo{padding:9px 11px 11px;} .sname{font-size:13px;font-weight:700;margin-bottom:3px;}
+.sprice{font-size:14px;font-weight:900;color:var(--orange);}
+.sprice .orig{font-size:11px;text-decoration:line-through;color:var(--text-light);font-weight:400;margin-left:3px;}
+.sdel{display:block;width:100%;padding:5px;background:#ffebee;color:#c62828;font-size:11px;font-weight:700;border:none;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:background 0.18s;}
+.sdel:hover{background:#ffcdd2;}
 
-  /* MY BAG */
-  .profile-hero{background:linear-gradient(135deg,var(--green-deep),var(--green-mid));border-radius:var(--radius);padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:16px;color:white;}
-  .profile-avatar{width:64px;height:64px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;border:2px solid rgba(255,255,255,0.3);flex-shrink:0;}
-  .profile-name{font-size:20px;font-weight:900;margin-bottom:4px;}
-  .profile-level{display:inline-block;background:var(--orange);color:white;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:6px;}
-  .profile-meta{font-size:12px;opacity:0.8;display:flex;gap:12px;flex-wrap:wrap;}
-  .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
-  .stat-box{background:var(--white);border-radius:var(--radius-sm);padding:14px 10px;text-align:center;box-shadow:var(--shadow);}
-  .stat-box .val{font-family:'Bebas Neue',cursive;font-size:26px;color:var(--green-court);line-height:1;} .stat-box .lbl{font-size:11px;color:var(--text-light);margin-top:4px;}
-  .gear-item{background:var(--white);border-radius:var(--radius-sm);padding:14px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);margin-bottom:8px;}
-  .gear-icon{font-size:28px;flex-shrink:0;} .gear-info{flex:1;} .gear-name{font-size:14px;font-weight:700;} .gear-detail{font-size:12px;color:var(--text-light);margin-top:2px;}
-  .gear-date{font-size:11px;color:var(--text-light);text-align:right;}
+/* ── MY BAG ── */
+.profile-card{background:linear-gradient(135deg,var(--green-deep),var(--green-mid));border-radius:var(--radius);padding:18px;display:flex;align-items:center;gap:14px;margin-bottom:14px;color:#fff;}
+.pav{width:60px;height:60px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;border:2px solid rgba(255,255,255,0.3);flex-shrink:0;cursor:pointer;}
+.pname{font-size:19px;font-weight:900;margin-bottom:3px;}
+.plevel{display:inline-block;background:var(--orange);color:#fff;font-size:11px;font-weight:700;padding:2px 9px;border-radius:18px;margin-bottom:5px;}
+.pmeta{font-size:11px;opacity:0.8;display:flex;gap:10px;flex-wrap:wrap;}
+.pstats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px;}
+.pstat{background:#fff;border-radius:var(--radius-sm);padding:12px 8px;text-align:center;box-shadow:var(--shadow);}
+.pstat .pv{font-family:'Bebas Neue',cursive;font-size:24px;color:var(--green-court);line-height:1;}
+.pstat .pl{font-size:10px;color:var(--text-light);margin-top:3px;}
 
-  /* PROMO */
-  .promo-card{background:linear-gradient(135deg,#1a3d1a,#2e6b2e);border-radius:var(--radius);padding:16px 18px;color:white;margin-bottom:12px;position:relative;overflow:hidden;cursor:pointer;}
-  .promo-card::after{content:'🏸';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:48px;opacity:0.2;}
-  .promo-tag{background:var(--orange);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:6px;}
-  .promo-card h3{font-size:16px;font-weight:900;margin-bottom:6px;} .promo-card p{font-size:12px;opacity:0.8;max-width:70%;}
+.gear-item{background:#fff;border-radius:var(--radius-sm);padding:13px;display:flex;align-items:center;gap:11px;box-shadow:var(--shadow);margin-bottom:8px;}
+.gi{font-size:26px;flex-shrink:0;} .ginfo{flex:1;min-width:0;} .gname{font-size:13px;font-weight:700;} .gdet{font-size:11px;color:var(--text-light);margin-top:2px;}
+.gdate{font-size:10px;color:var(--text-light);text-align:right;white-space:nowrap;flex-shrink:0;}
 
-  .gift-banner{background:linear-gradient(135deg,#ff6b2b,#ff8c00);border-radius:var(--radius);padding:16px 18px;color:white;margin-bottom:12px;display:flex;align-items:center;gap:14px;cursor:pointer;}
-  .gift-banner .icon{font-size:36px;flex-shrink:0;} .gift-banner h3{font-size:16px;font-weight:900;margin-bottom:4px;} .gift-banner p{font-size:12px;opacity:0.9;}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;animation:fadeUp 0.2s;}
+.modal-sheet{background:#fff;border-radius:22px 22px 0 0;padding:18px 18px 38px;width:100%;max-width:480px;animation:slideUp 0.3s ease;max-height:90vh;overflow-y:auto;}
+@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+.mhandle{width:38px;height:4px;background:var(--gray-2);border-radius:2px;margin:0 auto 14px;}
+.mtitle{font-family:'Oswald',sans-serif;font-size:19px;font-weight:700;margin-bottom:14px;}
+.divider{height:1px;background:var(--gray-2);margin:12px 0;}
 
-  /* ── 관리자 패널 ── */
-  .admin-btn{display:flex;align-items:center;gap:6px;background:var(--gray-1);border:1.5px dashed var(--gray-2);border-radius:var(--radius-sm);padding:12px 16px;color:var(--text-mid);font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-bottom:14px;font-family:'Noto Sans KR',sans-serif;transition:all 0.18s;}
-  .admin-btn:hover{background:var(--green-light);border-color:var(--green-court);color:var(--green-court);}
-  .admin-panel{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:14px;border:2px solid var(--green-light);}
-  .admin-panel-title{font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;color:var(--green-deep);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
-  .form-row{margin-bottom:10px;}
-  .form-label{font-size:12px;font-weight:700;color:var(--text-mid);margin-bottom:4px;display:block;}
-  .form-input{width:100%;border:1.5px solid var(--gray-2);border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;transition:border 0.18s;}
-  .form-input:focus{border-color:var(--green-court);}
-  .form-select{width:100%;border:1.5px solid var(--gray-2);border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;background:white;appearance:none;}
-  .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .delete-btn{background:none;border:none;font-size:18px;cursor:pointer;color:#c62828;padding:4px;border-radius:6px;flex-shrink:0;transition:background 0.18s;}
-  .delete-btn:hover{background:#ffebee;}
+/* GIFT */
+.gift-banner{background:linear-gradient(135deg,#ff6b2b,#ff8c00);border-radius:var(--radius);padding:15px 17px;color:#fff;margin-bottom:11px;display:flex;align-items:center;gap:13px;cursor:pointer;}
+.gift-banner .gi2{font-size:34px;flex-shrink:0;} .gift-banner h3{font-size:15px;font-weight:900;margin-bottom:3px;} .gift-banner p{font-size:11px;opacity:0.9;}
 
-  /* MODAL */
-  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-end;justify-content:center;}
-  .modal-overlay.open{display:flex;animation:fadeIn 0.2s;}
-  .modal-sheet{background:white;border-radius:24px 24px 0 0;padding:20px 20px 40px;width:100%;max-width:480px;animation:slideUp 0.3s ease;max-height:90vh;overflow-y:auto;}
-  @keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
-  .modal-handle{width:40px;height:4px;background:var(--gray-2);border-radius:2px;margin:0 auto 16px;}
-  .modal-title{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;margin-bottom:16px;}
-  .divider{height:1px;background:var(--gray-2);margin:14px 0;}
-
-  /* FAB */
-  .fab{position:fixed;bottom:76px;right:calc(50% - 220px);width:52px;height:52px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 4px 20px rgba(255,107,43,0.5);cursor:pointer;border:none;z-index:99;transition:transform 0.2s;}
-  .fab:hover{transform:scale(1.1) rotate(15deg);}
-
-  /* TOAST */
-  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--green-deep);color:white;padding:10px 22px;border-radius:24px;font-size:13px;font-weight:600;z-index:300;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-  ::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-thumb{background:var(--gray-2);border-radius:2px;}
+/* TOAST */
+.toast{position:fixed;bottom:78px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--green-deep);color:#fff;padding:9px 20px;border-radius:22px;font-size:13px;font-weight:600;z-index:300;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-thumb{background:var(--gray-2);border-radius:2px;}
 </style>
 </head>
 <body>
@@ -199,173 +194,280 @@
   </div>
 </header>
 
-<!-- ══════ HOME ══════ -->
+<!-- ════════════════ HOME ════════════════ -->
 <div class="page active" id="page-home">
 
-  <!-- 번개 추가 버튼 -->
-  <button class="admin-btn" onclick="toggleAdminPanel()">
-    ⚡ 번개 모임 추가하기 (관리자)
-  </button>
-
-  <!-- 관리자 입력 패널 (숨김) -->
-  <div class="admin-panel" id="admin-panel" style="display:none">
-    <div class="admin-panel-title">⚡ 새 번개 모임 등록</div>
+  <!-- 번개 추가 -->
+  <button class="admin-btn" onclick="togglePanel('panel-meet')">⚡ 번개 모임 추가하기</button>
+  <div class="admin-panel" id="panel-meet" style="display:none">
+    <div class="admin-title">⚡ 새 번개 모임 등록</div>
     <div class="form-row">
-      <label class="form-label">모임 제목 *</label>
-      <input class="form-input" id="f-title" placeholder="예: 강남 더블스 같이 치실 분!">
+      <label class="f-label">모임 제목 *</label>
+      <input class="f-input" id="m-title" placeholder="예: 강남 더블스 같이 치실 분!">
     </div>
-    <div class="form-row form-row-2">
-      <div>
-        <label class="form-label">종목</label>
-        <select class="form-select" id="f-sport">
-          <option value="tennis">🎾 테니스</option>
-          <option value="badminton">🏸 배드민턴</option>
-        </select>
+    <div class="row2">
+      <div class="form-row">
+        <label class="f-label">종목</label>
+        <select class="f-select" id="m-sport"><option value="tennis">🎾 테니스</option><option value="badminton">🏸 배드민턴</option></select>
       </div>
-      <div>
-        <label class="form-label">모집 상태</label>
-        <select class="form-select" id="f-status">
-          <option value="모집중">모집중</option>
-          <option value="마감임박">마감임박</option>
-          <option value="정기">정기</option>
-          <option value="마감">마감</option>
-        </select>
+      <div class="form-row">
+        <label class="f-label">상태</label>
+        <select class="f-select" id="m-status"><option>모집중</option><option>마감임박</option><option>정기</option><option>마감</option></select>
       </div>
     </div>
-    <div class="form-row form-row-2">
-      <div>
-        <label class="form-label">📍 장소</label>
-        <input class="form-input" id="f-place" placeholder="예: 강남구 삼성동">
-      </div>
-      <div>
-        <label class="form-label">🕔 시간</label>
-        <input class="form-input" id="f-time" placeholder="예: 오후 7시">
-      </div>
+    <div class="row2">
+      <div class="form-row"><label class="f-label">📍 장소</label><input class="f-input" id="m-place" placeholder="예: 강남구 삼성동"></div>
+      <div class="form-row"><label class="f-label">🕔 시간</label><input class="f-input" id="m-time" placeholder="예: 오후 7시"></div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:4px">
-      <button class="btn btn-green" style="flex:1;padding:12px;border-radius:12px" onclick="addMeet()">✅ 등록하기</button>
-      <button class="btn btn-gray" style="padding:12px 16px;border-radius:12px" onclick="toggleAdminPanel()">취소</button>
+    <div class="btn-row">
+      <button class="btn btn-green" style="flex:1;padding:11px;border-radius:11px" onclick="addMeet()">✅ 등록</button>
+      <button class="btn btn-gray" style="padding:11px 14px;border-radius:11px" onclick="togglePanel('panel-meet')">취소</button>
     </div>
   </div>
 
-  <!-- 번개 모임 목록 -->
-  <div class="section-title"><div class="dot"></div>📣 번개 모임</div>
+  <div class="sec-title"><div class="dot"></div>📣 번개 모임</div>
   <div class="sport-toggle">
-    <button class="sport-chip active" onclick="filterSport(this,'all')">전체</button>
-    <button class="sport-chip" onclick="filterSport(this,'tennis')">🎾 테니스</button>
-    <button class="sport-chip" onclick="filterSport(this,'badminton')">🏸 배드민턴</button>
+    <button class="chip active" onclick="filterMeet(this,'all')">전체</button>
+    <button class="chip" onclick="filterMeet(this,'tennis')">🎾 테니스</button>
+    <button class="chip" onclick="filterMeet(this,'badminton')">🏸 배드민턴</button>
   </div>
-  <div id="meet-list">
-    <div class="empty-state">
-      <div class="empty-icon">⚡</div>
-      <p>번개 모임을 불러오는 중...</p>
-    </div>
-  </div>
+  <div id="meet-list"><div class="empty-box"><div class="ei">⚡</div><p>불러오는 중...</p></div></div>
 
   <!-- 채팅 -->
-  <div class="section-title"><div class="dot"></div>💬 실시간 채팅</div>
-  <div class="chat-section">
-    <div class="chat-header">
-      <div class="chat-header-left"><span>💬</span><span class="chat-header-title">NIJI COURT 오픈 채팅</span></div>
-      <span class="firebase-status status-connecting" id="firebase-status">연결 중...</span>
+  <div class="sec-title" style="margin-top:4px"><div class="dot"></div>💬 실시간 채팅</div>
+  <div class="chat-wrap">
+    <div class="chat-hd">
+      <div class="chat-hd-left">💬 NIJI COURT 오픈 채팅</div>
+      <span class="fb-status fs-wait" id="fb-status">연결 중...</span>
     </div>
-    <div class="chat-body" id="chat-messages"></div>
-    <div class="chat-footer">
-      <div class="chat-nick-row">
-        <label>닉네임</label>
-        <input type="text" id="nickname-input" placeholder="예: 테니스왕" maxlength="10">
-      </div>
-      <div class="chat-input-row">
-        <input type="text" id="chat-input" placeholder="메시지를 입력하세요..." maxlength="200" onkeydown="sendChat(event)">
-        <button class="chat-send" onclick="sendChatBtn()">➤</button>
-      </div>
+    <div class="chat-body" id="chat-msgs"></div>
+    <div class="chat-ft">
+      <div class="nick-row"><label>닉네임</label><input type="text" id="nick-in" placeholder="예: 테니스왕" maxlength="10"></div>
+      <div class="cin-row"><input type="text" id="chat-in" placeholder="메시지 입력..." maxlength="200" onkeydown="sendChat(event)"><button class="csend" onclick="sendChatBtn()">➤</button></div>
     </div>
   </div>
 
-  <div class="section-title"><div class="dot"></div>🛍️ 니지스트링 추천</div>
-  <div class="promo-card" onclick="showTab('shop')">
+  <div class="sec-title"><div class="dot"></div>🛍️ 니지스트링 추천</div>
+  <div class="promo" onclick="showTab('shop')">
     <div class="promo-tag">🔥 공동구매</div>
-    <h3>이번 주 스트링<br>특가 행사!</h3>
+    <h3>이번 주 스트링 특가!</h3>
     <p>바볼랏·럭실론·요넥스 최대 30% 할인</p>
   </div>
 </div>
 
-<!-- ══════ RANKING ══════ -->
+<!-- ════════════════ RANKING ════════════════ -->
 <div class="page" id="page-rank">
-  <div class="rank-header">
-    <div class="rank-stat"><div class="num">127</div><div class="label">전체 회원</div></div>
-    <div class="rank-stat"><div class="num">34</div><div class="label">이번 달 경기</div></div>
-    <div class="rank-stat"><div class="num">89%</div><div class="label">활동률</div></div>
+
+  <div class="rank-hero" id="rank-hero">
+    <div class="rs"><div class="rn" id="r-total">0</div><div class="rl">전체 회원</div></div>
+    <div class="rs"><div class="rn" id="r-tennis">0</div><div class="rl">테니스</div></div>
+    <div class="rs"><div class="rn" id="r-badminton">0</div><div class="rl">배드민턴</div></div>
   </div>
+
+  <!-- 랭킹 등록 -->
+  <button class="admin-btn" onclick="togglePanel('panel-rank')">👤 내 정보 등록/수정하기</button>
+  <div class="admin-panel" id="panel-rank" style="display:none">
+    <div class="admin-title">👤 랭킹 정보 등록</div>
+    <div class="form-row"><label class="f-label">닉네임 *</label><input class="f-input" id="r-nick" placeholder="예: 테니스왕김철수"></div>
+    <div class="row2">
+      <div class="form-row">
+        <label class="f-label">종목</label>
+        <select class="f-select" id="r-sport"><option value="tennis">🎾 테니스</option><option value="badminton">🏸 배드민턴</option></select>
+      </div>
+      <div class="form-row">
+        <label class="f-label">실력</label>
+        <select class="f-select" id="r-level"><option>초급</option><option>중하급</option><option selected>중급</option><option>중상급</option><option>고급</option></select>
+      </div>
+    </div>
+    <div class="row3">
+      <div class="form-row"><label class="f-label">승 횟수</label><input class="f-input" id="r-win" type="number" placeholder="0" min="0"></div>
+      <div class="form-row"><label class="f-label">패 횟수</label><input class="f-input" id="r-lose" type="number" placeholder="0" min="0"></div>
+      <div class="form-row"><label class="f-label">구력(년)</label><input class="f-input" id="r-years" type="number" placeholder="0" min="0"></div>
+    </div>
+    <div class="row2">
+      <div class="form-row"><label class="f-label">📍 지역</label><input class="f-input" id="r-area" placeholder="예: 강남구"></div>
+      <div class="form-row"><label class="f-label">주 운동 횟수</label><input class="f-input" id="r-freq" placeholder="예: 주3회"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-green" style="flex:1;padding:11px;border-radius:11px" onclick="addRank()">✅ 등록</button>
+      <button class="btn btn-gray" style="padding:11px 14px;border-radius:11px" onclick="togglePanel('panel-rank')">취소</button>
+    </div>
+  </div>
+
+  <div class="sec-title"><div class="dot"></div>🏆 실력 랭킹</div>
   <div class="sport-toggle">
-    <button class="sport-chip active" onclick="filterRank(this,'all')">전체</button>
-    <button class="sport-chip" onclick="filterRank(this,'tennis')">🎾 테니스</button>
-    <button class="sport-chip" onclick="filterRank(this,'badminton')">🏸 배드민턴</button>
+    <button class="chip active" onclick="filterRank(this,'all')">전체</button>
+    <button class="chip" onclick="filterRank(this,'tennis')">🎾 테니스</button>
+    <button class="chip" onclick="filterRank(this,'badminton')">🏸 배드민턴</button>
   </div>
-  <div class="section-title"><div class="dot"></div>🏆 이번 달 랭킹</div>
-  <div id="rank-list">
-    <div class="rank-row top1" data-sport="tennis"><div class="rank-num">1</div><div class="rank-avatar" style="background:#fff9c4">👑</div><div class="rank-player"><div class="rank-name">테니스고수박지훈</div><div class="rank-info">🎾 구력 8년 · 주3회 · 강남</div></div><div class="rank-score"><div class="rank-win">94%</div><div class="rank-label">승률</div></div></div>
-    <div class="rank-row top2" data-sport="badminton"><div class="rank-num">2</div><div class="rank-avatar" style="background:#e3f2fd">🦅</div><div class="rank-player"><div class="rank-name">스매시퀸이수연</div><div class="rank-info">🏸 구력 5년 · 주4회 · 마포</div></div><div class="rank-score"><div class="rank-win">88%</div><div class="rank-label">승률</div></div></div>
-    <div class="rank-row top3" data-sport="tennis"><div class="rank-num">3</div><div class="rank-avatar" style="background:#e8f5e9">🎯</div><div class="rank-player"><div class="rank-name">서브에이스최민준</div><div class="rank-info">🎾 구력 6년 · 주2회 · 송파</div></div><div class="rank-score"><div class="rank-win">82%</div><div class="rank-label">승률</div></div></div>
-    <div class="rank-row" data-sport="badminton"><div class="rank-num">4</div><div class="rank-avatar" style="background:#f3e5f5">🔥</div><div class="rank-player"><div class="rank-name">드라이브킹정우현</div><div class="rank-info">🏸 구력 3년 · 주5회 · 강동</div></div><div class="rank-score"><div class="rank-win">79%</div><div class="rank-label">승률</div></div></div>
-    <div class="rank-row" data-sport="tennis"><div class="rank-num">5</div><div class="rank-avatar" style="background:#fce4ec">🌟</div><div class="rank-player"><div class="rank-name">네트플레이어한소희</div><div class="rank-info">🎾 구력 4년 · 주3회 · 서초</div></div><div class="rank-score"><div class="rank-win">75%</div><div class="rank-label">승률</div></div></div>
-  </div>
+  <div id="rank-list"><div class="empty-box"><div class="ei">🏆</div><p>아직 등록된 회원이 없어요!<br>위 버튼으로 첫 번째로 등록해보세요 😊</p></div></div>
 </div>
 
-<!-- ══════ SHOP ══════ -->
+<!-- ════════════════ SHOP ════════════════ -->
 <div class="page" id="page-shop">
-  <div class="promo-card" style="margin-bottom:16px"><div class="promo-tag">니지스트링 공식 샵</div><h3>전문가가 추천하는<br>스트링 & 용품</h3><p>라켓 스트링 시공 + 용품 원스톱 구매</p></div>
-  <div class="section-title"><div class="dot"></div>🎾 인기 스트링</div>
-  <div class="shop-grid">
-    <div class="shop-item" onclick="showToast('럭실론 알루파워 — 장바구니 추가!')"><div class="shop-thumb green-bg"><span>🎾</span><span class="shop-hot">HOT</span></div><div class="shop-info"><div class="shop-name">럭실론 알루파워</div><div class="shop-price">15,000원<span class="original">18,000</span></div></div></div>
-    <div class="shop-item" onclick="showToast('바볼랏 RPM — 장바구니 추가!')"><div class="shop-thumb orange-bg"><span>🎾</span></div><div class="shop-info"><div class="shop-name">바볼랏 RPM 블라스트</div><div class="shop-price">14,000원<span class="original">16,000</span></div></div></div>
-    <div class="shop-item" onclick="showToast('요넥스 에어론 — 장바구니 추가!')"><div class="shop-thumb blue-bg"><span>🏸</span><span class="shop-hot">NEW</span></div><div class="shop-info"><div class="shop-name">요넥스 에어론 파워</div><div class="shop-price">8,000원<span class="original">9,500</span></div></div></div>
-    <div class="shop-item" onclick="showToast('윌슨 내추럴 거트 — 장바구니 추가!')"><div class="shop-thumb yellow-bg"><span>✨</span></div><div class="shop-info"><div class="shop-name">윌슨 내추럴 거트</div><div class="shop-price">32,000원<span class="original">38,000</span></div></div></div>
+
+  <!-- 관리자 상품 등록 -->
+  <button class="admin-btn" onclick="togglePanel('panel-shop')">🛍️ 상품 등록하기 (관리자)</button>
+  <div class="admin-panel" id="panel-shop" style="display:none">
+    <div class="admin-title">🛍️ 새 상품 등록</div>
+    <div class="form-row"><label class="f-label">상품명 *</label><input class="f-input" id="s-name" placeholder="예: 럭실론 알루파워 1.25"></div>
+    <div class="row2">
+      <div class="form-row"><label class="f-label">판매가 (원) *</label><input class="f-input" id="s-price" type="number" placeholder="15000"></div>
+      <div class="form-row"><label class="f-label">정가 (원, 선택)</label><input class="f-input" id="s-orig" type="number" placeholder="18000"></div>
+    </div>
+    <div class="row2">
+      <div class="form-row">
+        <label class="f-label">카테고리</label>
+        <select class="f-select" id="s-cat">
+          <option value="string">🎾 스트링</option>
+          <option value="grip">🖐️ 그립</option>
+          <option value="acc">💡 액세서리</option>
+          <option value="ball">🟡 공/셔틀콕</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="f-label">뱃지</label>
+        <select class="f-select" id="s-badge">
+          <option value="">없음</option>
+          <option value="HOT">HOT</option>
+          <option value="NEW">NEW</option>
+          <option value="추천">추천</option>
+          <option value="SALE">SALE</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row"><label class="f-label">상품 설명 (선택)</label><input class="f-input" id="s-desc" placeholder="예: 폴리 계열 / 내구성 최고"></div>
+    <div class="btn-row">
+      <button class="btn btn-green" style="flex:1;padding:11px;border-radius:11px" onclick="addShopItem()">✅ 등록</button>
+      <button class="btn btn-gray" style="padding:11px 14px;border-radius:11px" onclick="togglePanel('panel-shop')">취소</button>
+    </div>
   </div>
-  <div class="section-title"><div class="dot"></div>🖐️ 그립 & 액세서리</div>
-  <div class="shop-grid">
-    <div class="shop-item" onclick="showToast('오버그립 — 장바구니 추가!')"><div class="shop-thumb green-bg"><span>🖐️</span></div><div class="shop-info"><div class="shop-name">오버그립 10개입</div><div class="shop-price">6,500원</div></div></div>
-    <div class="shop-item" onclick="showToast('엘보링 — 장바구니 추가!')"><div class="shop-thumb orange-bg"><span>💪</span><span class="shop-hot">추천</span></div><div class="shop-info"><div class="shop-name">테니스 엘보링</div><div class="shop-price">12,000원</div></div></div>
-    <div class="shop-item" onclick="showToast('테니스공 — 장바구니 추가!')"><div class="shop-thumb yellow-bg"><span>🎾</span></div><div class="shop-info"><div class="shop-name">테니스공 3개입</div><div class="shop-price">5,000원</div></div></div>
-    <div class="shop-item" onclick="showToast('셔틀콕 — 장바구니 추가!')"><div class="shop-thumb blue-bg"><span>🏸</span></div><div class="shop-info"><div class="shop-name">셔틀콕 12개입</div><div class="shop-price">9,000원</div></div></div>
+
+  <div class="sec-title"><div class="dot"></div>🛒 상품 목록</div>
+  <div class="sport-toggle">
+    <button class="chip active" onclick="filterShop(this,'all')">전체</button>
+    <button class="chip" onclick="filterShop(this,'string')">스트링</button>
+    <button class="chip" onclick="filterShop(this,'grip')">그립</button>
+    <button class="chip" onclick="filterShop(this,'acc')">액세서리</button>
+    <button class="chip" onclick="filterShop(this,'ball')">공/셔틀</button>
   </div>
-  <div class="section-title"><div class="dot"></div>🎁 선물하기</div>
-  <div class="gift-banner" onclick="openGiftModal()"><div class="icon">🎁</div><div><h3>동호인에게 선물 보내기</h3><p>생일·기념일에 스트링, 그립 등을 선물하세요!</p></div></div>
+  <div class="shop-grid" id="shop-list"></div>
+  <div id="shop-empty" class="empty-box" style="display:none"><div class="ei">🛍️</div><p>아직 등록된 상품이 없어요!<br>위 버튼으로 상품을 등록해보세요 😊</p></div>
+
+  <div class="sec-title"><div class="dot"></div>🎁 선물하기</div>
+  <div class="gift-banner" onclick="openModal('gift')">
+    <div class="gi2">🎁</div>
+    <div><h3>동호인에게 선물 보내기</h3><p>생일·기념일에 스트링, 그립 등을<br>링크로 간편하게 선물하세요!</p></div>
+  </div>
 </div>
 
-<!-- ══════ MY BAG ══════ -->
+<!-- ════════════════ MY BAG ════════════════ -->
 <div class="page" id="page-bag">
-  <div class="profile-hero"><div class="profile-avatar">😄</div><div><div class="profile-name">나의 프로필</div><span class="profile-level">⭐ 중급 플레이어</span><div class="profile-meta"><span>🎾 구력 3년</span><span>📍 강남구</span><span>🎂 4월 15일</span></div></div></div>
-  <div class="stats-row"><div class="stat-box"><div class="val">68%</div><div class="lbl">이번달 승률</div></div><div class="stat-box"><div class="val">24</div><div class="lbl">총 경기수</div></div><div class="stat-box"><div class="val">5</div><div class="lbl">선물받음</div></div></div>
-  <div class="section-title"><div class="dot"></div>🎒 내 장비</div>
-  <div class="gear-item"><div class="gear-icon">🎾</div><div class="gear-info"><div class="gear-name">헤드 스피드 MP</div><div class="gear-detail">럭실론 알루파워 1.25 / 55파운드</div></div><div class="gear-date">2024.03.10</div></div>
-  <div class="gear-item"><div class="gear-icon">🏸</div><div class="gear-info"><div class="gear-name">요넥스 아스트록스 88D</div><div class="gear-detail">요넥스 BG80 / 27파운드</div></div><div class="gear-date">2024.02.20</div></div>
-  <button class="btn btn-green" style="width:100%;margin-top:8px;padding:14px;border-radius:12px;font-size:14px" onclick="showToast('장비 추가 기능 — 곧 오픈!')">+ 장비 추가하기</button>
+
+  <!-- 프로필 카드 -->
+  <div class="profile-card" id="profile-card">
+    <div class="pav" onclick="openModal('edit-profile')" title="수정">😄</div>
+    <div>
+      <div class="pname" id="p-name">내 닉네임</div>
+      <span class="plevel" id="p-level">중급</span>
+      <div class="pmeta">
+        <span id="p-sport">🎾 테니스</span>
+        <span id="p-years">구력 0년</span>
+        <span id="p-area">📍 지역 미설정</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pstats">
+    <div class="pstat"><div class="pv" id="p-winrate">0%</div><div class="pl">승률</div></div>
+    <div class="pstat"><div class="pv" id="p-games">0</div><div class="pl">총 경기</div></div>
+    <div class="pstat"><div class="pv" id="p-gear-cnt">0</div><div class="pl">내 장비</div></div>
+  </div>
+
+  <!-- 장비 추가 -->
+  <button class="admin-btn" onclick="togglePanel('panel-gear')">🎒 장비 추가하기</button>
+  <div class="admin-panel" id="panel-gear" style="display:none">
+    <div class="admin-title">🎒 장비 등록</div>
+    <div class="row2">
+      <div class="form-row">
+        <label class="f-label">종류</label>
+        <select class="f-select" id="g-type">
+          <option value="🎾">🎾 테니스 라켓</option>
+          <option value="🏸">🏸 배드민턴 라켓</option>
+          <option value="🖐️">🖐️ 그립/오버그립</option>
+          <option value="👟">👟 운동화</option>
+          <option value="👜">👜 가방</option>
+          <option value="💪">💪 기타</option>
+        </select>
+      </div>
+      <div class="form-row"><label class="f-label">장비명 *</label><input class="f-input" id="g-name" placeholder="예: 헤드 스피드 MP"></div>
+    </div>
+    <div class="form-row"><label class="f-label">세부 정보</label><input class="f-input" id="g-detail" placeholder="예: 럭실론 알루파워 / 55파운드"></div>
+    <div class="form-row"><label class="f-label">스트링 교체일 (선택)</label><input class="f-input" id="g-date" type="date"></div>
+    <div class="btn-row">
+      <button class="btn btn-green" style="flex:1;padding:11px;border-radius:11px" onclick="addGear()">✅ 등록</button>
+      <button class="btn btn-gray" style="padding:11px 14px;border-radius:11px" onclick="togglePanel('panel-gear')">취소</button>
+    </div>
+  </div>
+
+  <div class="sec-title"><div class="dot"></div>🎒 내 장비</div>
+  <div id="gear-list"><div class="empty-box"><div class="ei">🎒</div><p>장비를 추가해보세요!</p></div></div>
 </div>
 
 <!-- NAV -->
 <nav class="nav-tabs">
-  <button class="tab-btn active" id="tab-home" onclick="showTab('home')"><span class="tab-icon">🏠</span><span class="tab-label">홈/피드</span></button>
-  <button class="tab-btn" id="tab-rank" onclick="showTab('rank')"><span class="tab-icon">🏆</span><span class="tab-label">실력 랭킹</span></button>
-  <button class="tab-btn" id="tab-shop" onclick="showTab('shop')"><span class="tab-icon">🛍️</span><span class="tab-label">테니스 샵</span></button>
-  <button class="tab-btn" id="tab-bag" onclick="showTab('bag')"><span class="tab-icon">🎒</span><span class="tab-label">내 가방</span></button>
+  <button class="tab-btn active" id="tab-home" onclick="showTab('home')"><span class="ti">🏠</span><span class="tl">홈/피드</span></button>
+  <button class="tab-btn" id="tab-rank" onclick="showTab('rank')"><span class="ti">🏆</span><span class="tl">실력 랭킹</span></button>
+  <button class="tab-btn" id="tab-shop" onclick="showTab('shop')"><span class="ti">🛍️</span><span class="tl">테니스 샵</span></button>
+  <button class="tab-btn" id="tab-bag" onclick="showTab('bag')"><span class="tl" style="font-size:21px">🎒</span><span class="tl">내 가방</span></button>
 </nav>
+
+<!-- MODAL: 프로필 수정 -->
+<div class="modal-overlay" id="modal-edit-profile" onclick="closeModal('edit-profile')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="mhandle"></div>
+    <div class="mtitle">👤 프로필 수정</div>
+    <div class="form-row"><label class="f-label">닉네임</label><input class="f-input" id="ep-name" placeholder="예: 테니스왕"></div>
+    <div class="row2">
+      <div class="form-row"><label class="f-label">종목</label>
+        <select class="f-select" id="ep-sport"><option value="tennis">🎾 테니스</option><option value="badminton">🏸 배드민턴</option></select>
+      </div>
+      <div class="form-row"><label class="f-label">실력</label>
+        <select class="f-select" id="ep-level"><option>초급</option><option>중하급</option><option>중급</option><option>중상급</option><option>고급</option></select>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="form-row"><label class="f-label">구력 (년)</label><input class="f-input" id="ep-years" type="number" placeholder="0" min="0"></div>
+      <div class="form-row"><label class="f-label">📍 지역</label><input class="f-input" id="ep-area" placeholder="예: 강남구"></div>
+    </div>
+    <div class="row2">
+      <div class="form-row"><label class="f-label">승 횟수</label><input class="f-input" id="ep-win" type="number" placeholder="0" min="0"></div>
+      <div class="form-row"><label class="f-label">패 횟수</label><input class="f-input" id="ep-lose" type="number" placeholder="0" min="0"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-green" style="flex:1;padding:12px;border-radius:11px" onclick="saveProfile()">저장하기</button>
+      <button class="btn btn-gray" style="padding:12px 14px;border-radius:11px" onclick="closeModal('edit-profile')">취소</button>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL: 선물 -->
 <div class="modal-overlay" id="modal-gift" onclick="closeModal('gift')">
   <div class="modal-sheet" onclick="event.stopPropagation()">
-    <div class="modal-handle"></div>
-    <div class="modal-title">🎁 선물하기</div>
-    <div class="card card-sm" style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div style="font-size:28px">🎾</div><div><div style="font-size:14px;font-weight:700">럭실론 알루파워</div><div style="font-size:13px;color:var(--orange);font-weight:700">15,000원</div></div><button class="btn btn-orange" style="margin-left:auto;padding:7px 14px;font-size:12px" onclick="showToast('🎁 선물 링크 복사!')">선물하기</button></div>
-    <div class="card card-sm" style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div style="font-size:28px">🖐️</div><div><div style="font-size:14px;font-weight:700">오버그립 10개입</div><div style="font-size:13px;color:var(--orange);font-weight:700">6,500원</div></div><button class="btn btn-orange" style="margin-left:auto;padding:7px 14px;font-size:12px" onclick="showToast('🎁 선물 링크 복사!')">선물하기</button></div>
-    <button class="btn btn-gray" style="width:100%;padding:12px;border-radius:12px;font-size:14px;margin-top:4px" onclick="closeModal('gift')">닫기</button>
+    <div class="mhandle"></div>
+    <div class="mtitle">🎁 선물하기</div>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:14px">동호인에게 상품 링크를 공유하세요!</p>
+    <div id="gift-list"><div class="empty-box"><div class="ei">🎁</div><p>상품을 등록하면<br>여기서 선물할 수 있어요!</p></div></div>
+    <button class="btn btn-gray" style="width:100%;padding:11px;border-radius:11px;margin-top:8px" onclick="closeModal('gift')">닫기</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ✅ Firebase 설정
+// ══════════════════════════════════
+//  Firebase 설정
+// ══════════════════════════════════
 const firebaseConfig = {
   apiKey: "AIzaSyB2BnWZ1Y2Iq43M1KlWrZ3CM3DNQu-YHYc",
   authDomain: "niji-court.firebaseapp.com",
@@ -377,175 +479,268 @@ const firebaseConfig = {
   measurementId: "G-94KDJKV599"
 };
 
-let db=null, chatRef=null, meetRef=null, isReady=false;
-let currentFilter = 'all';
+let db, refs = {}, isReady = false;
+let filters = { meet:'all', rank:'all', shop:'all' };
+let profile = JSON.parse(localStorage.getItem('niji_profile') || '{}');
+let gears = JSON.parse(localStorage.getItem('niji_gears') || '[]');
 
-// ── Firebase 초기화 ──
+// ── 초기화 ──
 function initFirebase() {
   try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.database();
-    chatRef = db.ref('chat/global');
-    meetRef = db.ref('meets');
+    refs.chat  = db.ref('chat/global');
+    refs.meets = db.ref('meets');
+    refs.ranks = db.ref('ranks');
+    refs.shop  = db.ref('shop');
     isReady = true;
-    setStatus('connected','🟢 실시간 연결됨');
+    setFbStatus('ok','🟢 실시간 연결됨');
     document.getElementById('online-count').textContent = '실시간 연결됨';
-    listenMessages();
-    listenMeets();
+    listenChat(); listenMeets(); listenRanks(); listenShop();
   } catch(e) {
-    setStatus('error','연결 오류');
+    setFbStatus('err','연결 오류');
   }
+  loadProfile();
+  loadGears();
 }
 
-// ── 번개 모임 실시간 수신 ──
+// ══════════════════════════════════
+//  번개 모임
+// ══════════════════════════════════
 function listenMeets() {
-  meetRef.on('value', snap => {
-    const container = document.getElementById('meet-list');
-    container.innerHTML = '';
-    const data = snap.val();
-    if (!data) {
-      container.innerHTML = `<div class="empty-state"><div class="empty-icon">⚡</div><p>아직 번개 모임이 없어요!<br>위 버튼으로 첫 모임을 만들어보세요 😊</p></div>`;
-      return;
-    }
-    // 최신순 정렬
-    const meets = Object.entries(data).reverse();
-    meets.forEach(([key, meet]) => {
-      if (currentFilter !== 'all' && meet.sport !== currentFilter) return;
-      renderMeet(key, meet, container);
-    });
-    if (container.innerHTML === '') {
-      container.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>해당 종목 모임이 없어요!</p></div>`;
-    }
+  refs.meets.on('value', snap => renderMeetList(snap.val()));
+}
+function renderMeetList(data) {
+  const el = document.getElementById('meet-list');
+  el.innerHTML = '';
+  if (!data) { el.innerHTML = `<div class="empty-box"><div class="ei">⚡</div><p>번개 모임이 없어요!<br>위 버튼으로 첫 모임을 만들어보세요 😊</p></div>`; return; }
+  let entries = Object.entries(data).reverse();
+  let shown = 0;
+  entries.forEach(([key, m]) => {
+    if (filters.meet !== 'all' && m.sport !== filters.meet) return;
+    shown++;
+    const si = m.sport === 'tennis' ? '🎾' : '🏸';
+    const bc = m.status === '마감임박' || m.status === '마감' ? 'br' : m.status === '정기' ? 'bb' : m.status === '모집중' ? 'bg' : 'bo';
+    const div = document.createElement('div');
+    div.className = 'meet-card'; div.dataset.sport = m.sport;
+    div.innerHTML = `<div class="ms ${m.sport}">${si}</div><div class="mi"><div class="mt">${esc(m.title)}</div><div class="md">${m.place?`<span>📍${esc(m.place)}</span>`:''} ${m.time?`<span>🕔${esc(m.time)}</span>`:''}</div></div><span class="badge ${bc}">${esc(m.status)}</span><button class="del-btn" onclick="delMeet('${key}')">🗑️</button>`;
+    el.appendChild(div);
   });
+  if (!shown) el.innerHTML = `<div class="empty-box"><div class="ei">🔍</div><p>해당 종목 모임이 없어요!</p></div>`;
 }
-
-// ── 번개 모임 카드 그리기 ──
-function renderMeet(key, meet, container) {
-  const sportIcon = meet.sport === 'tennis' ? '🎾' : '🏸';
-  const badgeClass = meet.status === '마감임박' ? 'badge-red' : meet.status === '정기' ? 'badge-blue' : meet.status === '마감' ? 'badge-red' : 'badge-green';
-  const div = document.createElement('div');
-  div.className = 'meet-card';
-  div.dataset.sport = meet.sport;
-  div.innerHTML = `
-    <div class="meet-sport ${meet.sport}">${sportIcon}</div>
-    <div class="meet-info">
-      <div class="meet-title">${escapeHtml(meet.title)}</div>
-      <div class="meet-detail">
-        ${meet.place ? `<span>📍 ${escapeHtml(meet.place)}</span>` : ''}
-        ${meet.time ? `<span>🕔 ${escapeHtml(meet.time)}</span>` : ''}
-      </div>
-    </div>
-    <span class="meet-badge ${badgeClass}">${escapeHtml(meet.status)}</span>
-    <button class="delete-btn" onclick="deleteMeet('${key}')" title="삭제">🗑️</button>`;
-  container.appendChild(div);
-}
-
-// ── 번개 모임 추가 ──
 function addMeet() {
-  const title = document.getElementById('f-title').value.trim();
-  const sport = document.getElementById('f-sport').value;
-  const status = document.getElementById('f-status').value;
-  const place = document.getElementById('f-place').value.trim();
-  const time = document.getElementById('f-time').value.trim();
-
-  if (!title) { showToast('⚠️ 모임 제목을 입력해주세요!'); return; }
-  if (!place) { showToast('⚠️ 장소를 입력해주세요!'); return; }
-  if (!time) { showToast('⚠️ 시간을 입력해주세요!'); return; }
-
-  meetRef.push({ title, sport, status, place, time, createdAt: Date.now() });
-
-  // 입력 초기화
-  document.getElementById('f-title').value = '';
-  document.getElementById('f-place').value = '';
-  document.getElementById('f-time').value = '';
-  document.getElementById('admin-panel').style.display = 'none';
-  showToast('✅ 번개 모임이 등록됐어요!');
+  const t=v('m-title'), s=v('m-sport'), st=v('m-status'), p=v('m-place'), ti=v('m-time');
+  if (!t) { toast('⚠️ 제목을 입력해주세요!'); return; }
+  if (!p) { toast('⚠️ 장소를 입력해주세요!'); return; }
+  if (!ti) { toast('⚠️ 시간을 입력해주세요!'); return; }
+  refs.meets.push({title:t,sport:s,status:st,place:p,time:ti,createdAt:Date.now()});
+  ['m-title','m-place','m-time'].forEach(id=>document.getElementById(id).value='');
+  togglePanel('panel-meet'); toast('✅ 번개 모임 등록 완료!');
 }
+function delMeet(key) { if(confirm('삭제할까요?')) { refs.meets.child(key).remove(); toast('🗑️ 삭제됐어요!'); } }
+function filterMeet(el, f) { filters.meet=f; setChip(el); refs.meets.once('value',s=>renderMeetList(s.val())); }
 
-// ── 번개 모임 삭제 ──
-function deleteMeet(key) {
-  if (confirm('이 번개 모임을 삭제할까요?')) {
-    meetRef.child(key).remove();
-    showToast('🗑️ 삭제됐어요!');
-  }
+// ══════════════════════════════════
+//  실력 랭킹
+// ══════════════════════════════════
+function listenRanks() {
+  refs.ranks.on('value', snap => renderRankList(snap.val()));
 }
+function renderRankList(data) {
+  const el = document.getElementById('rank-list');
+  el.innerHTML = '';
+  if (!data) { el.innerHTML = `<div class="empty-box"><div class="ei">🏆</div><p>아직 등록된 회원이 없어요!<br>위 버튼으로 첫 번째로 등록해보세요 😊</p></div>`; updateRankHero([]); return; }
+  let entries = Object.entries(data);
+  // 승률 계산 후 정렬
+  entries = entries.map(([k,m]) => {
+    const total = (m.win||0)+(m.lose||0);
+    m.winrate = total > 0 ? Math.round((m.win||0)/total*100) : 0;
+    m.total = total;
+    return [k,m];
+  }).sort((a,b) => b[1].winrate - a[1].winrate);
 
-// ── 관리자 패널 토글 ──
-function toggleAdminPanel() {
-  const panel = document.getElementById('admin-panel');
-  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+  updateRankHero(entries.map(e=>e[1]));
+
+  let shown = 0;
+  entries.forEach(([key,m],i) => {
+    if (filters.rank !== 'all' && m.sport !== filters.rank) return;
+    shown++;
+    const num = shown;
+    const rc = num===1?'r1':num===2?'r2':num===3?'r3':'';
+    const si = m.sport==='tennis'?'🎾':'🏸';
+    const avs = ['😄','🎾','🏸','🌟','👑','💪','🔥','🦅','🎯','🦁'];
+    const av = avs[Math.abs(hashCode(m.nick||'?'))%avs.length];
+    const div = document.createElement('div');
+    div.className=`rank-card ${rc}`; div.dataset.sport=m.sport;
+    div.innerHTML=`<div class="rnum">${num}</div><div class="rav" style="background:${avbg(num)}">${av}</div><div class="rinfo"><div class="rname">${esc(m.nick)}</div><div class="rdet">${si} 구력 ${m.years||0}년 · ${m.freq||''} · ${m.area||''} · ${esc(m.level||'')}</div></div><div class="rscore"><div class="rwin">${m.winrate}%</div><div class="rlb">${m.win||0}승 ${m.lose||0}패</div></div><button class="del-btn" onclick="delRank('${key}')" style="font-size:14px">🗑️</button>`;
+    el.appendChild(div);
+  });
+  if (!shown) el.innerHTML = `<div class="empty-box"><div class="ei">🔍</div><p>해당 종목 회원이 없어요!</p></div>`;
 }
+function avbg(n) { const cs=['#fff9c4','#e3f2fd','#e8f5e9','#f3e5f5','#fce4ec','#e0f2f1']; return cs[(n-1)%cs.length]; }
+function updateRankHero(list) {
+  document.getElementById('r-total').textContent = list.length;
+  document.getElementById('r-tennis').textContent = list.filter(m=>m.sport==='tennis').length;
+  document.getElementById('r-badminton').textContent = list.filter(m=>m.sport==='badminton').length;
+}
+function addRank() {
+  const nick=v('r-nick');
+  if(!nick){toast('⚠️ 닉네임을 입력해주세요!');return;}
+  refs.ranks.push({nick,sport:v('r-sport'),level:v('r-level'),win:parseInt(v('r-win'))||0,lose:parseInt(v('r-lose'))||0,years:parseInt(v('r-years'))||0,area:v('r-area'),freq:v('r-freq'),createdAt:Date.now()});
+  ['r-nick','r-win','r-lose','r-years','r-area','r-freq'].forEach(id=>document.getElementById(id).value='');
+  togglePanel('panel-rank'); toast('✅ 랭킹 등록 완료!');
+}
+function delRank(key){if(confirm('삭제할까요?')){refs.ranks.child(key).remove();toast('🗑️ 삭제됐어요!');}}
+function filterRank(el,f){filters.rank=f;setChip(el);refs.ranks.once('value',s=>renderRankList(s.val()));}
 
-// ── 종목 필터 ──
-function filterSport(el, sport) {
-  currentFilter = sport;
-  el.closest('.sport-toggle').querySelectorAll('.sport-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  // 현재 목록 다시 렌더링
-  if (meetRef) meetRef.once('value', snap => {
-    const container = document.getElementById('meet-list');
-    container.innerHTML = '';
-    const data = snap.val();
-    if (!data) { container.innerHTML = `<div class="empty-state"><div class="empty-icon">⚡</div><p>아직 번개 모임이 없어요!</p></div>`; return; }
-    const meets = Object.entries(data).reverse();
-    meets.forEach(([key, meet]) => {
-      if (sport !== 'all' && meet.sport !== sport) return;
-      renderMeet(key, meet, container);
-    });
-    if (container.innerHTML === '') container.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>해당 종목 모임이 없어요!</p></div>`;
+// ══════════════════════════════════
+//  테니스 샵
+// ══════════════════════════════════
+function listenShop() {
+  refs.shop.on('value', snap => renderShop(snap.val()));
+}
+function renderShop(data) {
+  const grid = document.getElementById('shop-list');
+  const empty = document.getElementById('shop-empty');
+  grid.innerHTML = '';
+  if (!data) { empty.style.display='block'; return; }
+  const entries = Object.entries(data).reverse();
+  const catColors = {string:'g',grip:'o',acc:'b',ball:'y'};
+  const catIcons  = {string:'🎾',grip:'🖐️',acc:'💡',ball:'🟡'};
+  let shown = 0;
+  entries.forEach(([key,s])=>{
+    if(filters.shop!=='all' && s.cat!==filters.shop) return;
+    shown++;
+    const col = catColors[s.cat]||'g';
+    const ico = catIcons[s.cat]||'📦';
+    const div = document.createElement('div');
+    div.className='shop-item';
+    div.innerHTML=`<div class="sthumb ${col}">${ico}${s.badge?`<span class="shop-hot">${esc(s.badge)}</span>`:''}</div><div class="sinfo"><div class="sname">${esc(s.name)}</div>${s.desc?`<div style="font-size:11px;color:var(--text-light);margin-bottom:4px">${esc(s.desc)}</div>`:''}<div class="sprice">${Number(s.price).toLocaleString()}원${s.orig?`<span class="orig">${Number(s.orig).toLocaleString()}</span>`:''}</div></div><button class="sdel" onclick="delShop('${key}')">🗑️ 삭제</button>`;
+    grid.appendChild(div);
+  });
+  empty.style.display = shown?'none':'block';
+  // 선물 목록도 업데이트
+  renderGiftList(data);
+}
+function renderGiftList(data) {
+  const el = document.getElementById('gift-list');
+  if(!data) { el.innerHTML=`<div class="empty-box"><div class="ei">🎁</div><p>상품을 먼저 등록해주세요!</p></div>`; return; }
+  el.innerHTML='';
+  Object.entries(data).slice(0,5).forEach(([key,s])=>{
+    const div=document.createElement('div');
+    div.className='card';
+    div.style='display:flex;align-items:center;gap:12px;margin-bottom:9px;';
+    div.innerHTML=`<div style="font-size:26px">${{string:'🎾',grip:'🖐️',acc:'💡',ball:'🟡'}[s.cat]||'📦'}</div><div style="flex:1"><div style="font-size:14px;font-weight:700">${esc(s.name)}</div><div style="font-size:13px;color:var(--orange);font-weight:700">${Number(s.price).toLocaleString()}원</div></div><button class="btn btn-orange" style="padding:6px 13px;font-size:12px" onclick="toast('🎁 링크 복사! 카톡으로 공유하세요')">선물하기</button>`;
+    el.appendChild(div);
   });
 }
-
-// ── 채팅 ──
-function setStatus(type,text) {
-  const el=document.getElementById('firebase-status');
-  el.className='firebase-status status-'+type; el.textContent=text;
+function addShopItem() {
+  const name=v('s-name'), price=v('s-price');
+  if(!name){toast('⚠️ 상품명을 입력해주세요!');return;}
+  if(!price){toast('⚠️ 판매가를 입력해주세요!');return;}
+  refs.shop.push({name,price:parseInt(price),orig:parseInt(v('s-orig'))||0,cat:v('s-cat'),badge:v('s-badge'),desc:v('s-desc'),createdAt:Date.now()});
+  ['s-name','s-price','s-orig','s-desc'].forEach(id=>document.getElementById(id).value='');
+  togglePanel('panel-shop'); toast('✅ 상품 등록 완료!');
 }
-function listenMessages() {
-  chatRef.limitToLast(50).on('child_added', snap => {
-    const msg=snap.val(); if(msg) renderMessage(msg);
+function delShop(key){if(confirm('상품을 삭제할까요?')){refs.shop.child(key).remove();toast('🗑️ 삭제됐어요!');}}
+function filterShop(el,f){filters.shop=f;setChip(el);refs.shop.once('value',s=>renderShop(s.val()));}
+
+// ══════════════════════════════════
+//  내 가방
+// ══════════════════════════════════
+function loadProfile() {
+  document.getElementById('p-name').textContent = profile.name || '내 닉네임';
+  document.getElementById('p-level').textContent = profile.level || '중급';
+  document.getElementById('p-sport').textContent = profile.sport==='badminton'?'🏸 배드민턴':'🎾 테니스';
+  document.getElementById('p-years').textContent = `구력 ${profile.years||0}년`;
+  document.getElementById('p-area').textContent = `📍 ${profile.area||'지역 미설정'}`;
+  const total = (profile.win||0)+(profile.lose||0);
+  const wr = total>0?Math.round((profile.win||0)/total*100):0;
+  document.getElementById('p-winrate').textContent = wr+'%';
+  document.getElementById('p-games').textContent = total;
+  // 프로필 수정 폼에도 미리 채우기
+  setVal('ep-name', profile.name||'');
+  setVal('ep-years', profile.years||0);
+  setVal('ep-area', profile.area||'');
+  setVal('ep-win', profile.win||0);
+  setVal('ep-lose', profile.lose||0);
+  if(profile.level) document.getElementById('ep-level').value=profile.level;
+  if(profile.sport) document.getElementById('ep-sport').value=profile.sport;
+}
+function saveProfile() {
+  profile = {name:v('ep-name')||'나',sport:v('ep-sport'),level:v('ep-level'),years:parseInt(v('ep-years'))||0,area:v('ep-area'),win:parseInt(v('ep-win'))||0,lose:parseInt(v('ep-lose'))||0};
+  localStorage.setItem('niji_profile', JSON.stringify(profile));
+  loadProfile(); closeModal('edit-profile'); toast('✅ 프로필 저장됐어요!');
+}
+
+function loadGears() {
+  const el = document.getElementById('gear-list');
+  el.innerHTML = '';
+  document.getElementById('p-gear-cnt').textContent = gears.length;
+  if(!gears.length){el.innerHTML=`<div class="empty-box"><div class="ei">🎒</div><p>장비를 추가해보세요!</p></div>`;return;}
+  gears.forEach((g,i)=>{
+    const div=document.createElement('div');
+    div.className='gear-item';
+    div.innerHTML=`<div class="gi">${g.type||'🎾'}</div><div class="ginfo"><div class="gname">${esc(g.name)}</div><div class="gdet">${esc(g.detail||'')}</div></div><div style="text-align:right;flex-shrink:0">${g.date?`<div class="gdate">교체일<br>${g.date}</div>`:''}<button class="del-btn" onclick="delGear(${i})" style="font-size:14px">🗑️</button></div>`;
+    el.appendChild(div);
   });
 }
-function renderMessage(msg) {
-  const container=document.getElementById('chat-messages');
-  const myNick=document.getElementById('nickname-input').value.trim()||'나';
+function addGear() {
+  const name=v('g-name');
+  if(!name){toast('⚠️ 장비명을 입력해주세요!');return;}
+  gears.push({type:v('g-type'),name,detail:v('g-detail'),date:v('g-date')});
+  localStorage.setItem('niji_gears',JSON.stringify(gears));
+  ['g-name','g-detail','g-date'].forEach(id=>document.getElementById(id).value='');
+  loadGears(); togglePanel('panel-gear'); toast('✅ 장비 등록 완료!');
+}
+function delGear(i){if(confirm('장비를 삭제할까요?')){gears.splice(i,1);localStorage.setItem('niji_gears',JSON.stringify(gears));loadGears();toast('🗑️ 삭제됐어요!');}}
+
+// ══════════════════════════════════
+//  채팅
+// ══════════════════════════════════
+function listenChat() {
+  refs.chat.limitToLast(50).on('child_added', snap=>{const m=snap.val();if(m)renderMsg(m);});
+}
+function renderMsg(msg) {
+  const c=document.getElementById('chat-msgs');
+  const myNick=document.getElementById('nick-in').value.trim()||'나';
   const isMe=msg.nickname===myNick;
-  const avatars=['😄','🎾','🏸','🌟','👑','💪','🔥','🦅'];
-  const av=avatars[Math.abs(hashCode(msg.nickname||'?'))%avatars.length];
-  const time=msg.timestamp?new Date(msg.timestamp).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}):'';
-  const div=document.createElement('div');
-  div.className='chat-msg'+(isMe?' mine':'');
-  div.innerHTML=`<div class="chat-av">${av}</div><div class="chat-bubble"><div class="chat-name">${escapeHtml(msg.nickname||'익명')}</div><div class="chat-text">${escapeHtml(msg.text||'')}</div><div class="chat-time">${time}</div></div>`;
-  container.appendChild(div);
-  container.scrollTop=container.scrollHeight;
+  const avs=['😄','🎾','🏸','🌟','👑','💪','🔥','🦅'];
+  const av=avs[Math.abs(hashCode(msg.nickname||'?'))%avs.length];
+  const tm=msg.timestamp?new Date(msg.timestamp).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}):'';
+  const d=document.createElement('div');
+  d.className='cmsg'+(isMe?' mine':'');
+  d.innerHTML=`<div class="cav">${av}</div><div class="cbub"><div class="cnm">${esc(msg.nickname||'익명')}</div><div class="ctxt">${esc(msg.text||'')}</div><div class="ctm">${tm}</div></div>`;
+  c.appendChild(d); c.scrollTop=c.scrollHeight;
 }
 function sendChatBtn() {
-  const input=document.getElementById('chat-input');
-  const nick=document.getElementById('nickname-input').value.trim()||'익명';
-  const text=input.value.trim();
-  if(!text) return; input.value='';
-  if(isReady&&chatRef) chatRef.push({nickname:nick,text:text,timestamp:Date.now()});
-  else renderMessage({nickname:nick,text:text,timestamp:Date.now()});
+  const inp=document.getElementById('chat-in');
+  const nick=document.getElementById('nick-in').value.trim()||'익명';
+  const text=inp.value.trim(); if(!text)return; inp.value='';
+  if(isReady&&refs.chat) refs.chat.push({nickname:nick,text,timestamp:Date.now()});
+  else renderMsg({nickname:nick,text,timestamp:Date.now()});
 }
 function sendChat(e){if(e.key==='Enter')sendChatBtn();}
+function setFbStatus(t,tx){const el=document.getElementById('fb-status');el.className='fb-status '+(t==='ok'?'fs-ok':t==='err'?'fs-err':'fs-wait');el.textContent=tx;}
 
-// ── 유틸 ──
-function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function hashCode(s){let h=0;for(let i=0;i<s.length;i++)h=Math.imul(31,h)+s.charCodeAt(i)|0;return h;}
+// ══════════════════════════════════
+//  유틸
+// ══════════════════════════════════
 function showTab(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   document.getElementById('tab-'+name).classList.add('active');
 }
-function filterRank(el,sport){
-  el.closest('.sport-toggle').querySelectorAll('.sport-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('#rank-list .rank-row').forEach(r=>{r.style.display=(sport==='all'||r.dataset.sport===sport)?'flex':'none';});
-}
-function openGiftModal(){document.getElementById('modal-gift').classList.add('open');}
-function closeModal(name){document.getElementById('modal-'+name).classList.remove('open');}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+function togglePanel(id){const el=document.getElementById(id);el.style.display=el.style.display==='none'?'block':'none';}
+function setChip(el){el.closest('.sport-toggle').querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');}
+function openModal(n){document.getElementById('modal-'+n).classList.add('open');}
+function closeModal(n){document.getElementById('modal-'+n).classList.remove('open');}
+function v(id){return document.getElementById(id).value;}
+function setVal(id,val){document.getElementById(id).value=val;}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function hashCode(s){let h=0;for(let i=0;i<s.length;i++)h=Math.imul(31,h)+s.charCodeAt(i)|0;return h;}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
 
 window.addEventListener('load',initFirebase);
 </script>
