@@ -1,168 +1,154 @@
+<!-- 🔥 NIJI COURT 업그레이드 버전 (채팅방 + 선물하기 포함) -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NIJI COURT — 테니스·배드민턴 커뮤니티</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;500;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<title>NIJI COURT UPGRADE</title>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
 <style>
-:root{
-  --gd:#1a3d1a;--gc:#2e6b2e;--gm:#3d8b3d;--gb:#52b052;--gl:#d4edda;
-  --or:#ff6b2b;--oh:#ff8c00;--wh:#fff;--ow:#f8fdf8;
-  --g1:#f0f4f0;--g2:#dce8dc;--g3:#9cb89c;
-  --td:#1a2e1a;--tm:#4a6b4a;--tl:#7a9a7a;
-  --sh:0 4px 20px rgba(0,0,0,0.08);
-}
-/* 기존 스타일 그대로 유지 */
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{margin:0;padding:0;font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);overflow-x:hidden;line-height:1.5;}
-.pg{display:none;padding-bottom:100px;min-height:100vh;animation:fade 0.3s ease-out;}
-.pg.active{display:block;}
-@keyframes fade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-
-/* 채팅 스타일 보강 */
-.msg{margin-bottom:12px;display:flex;flex-direction:column;}
-.msg.me{align-items:flex-end;}
-.msg-bubble{padding:10px 14px;border-radius:18px;max-width:80%;font-size:14px;box-shadow:0 2px 5px rgba(0,0,0,0.05);position:relative;}
-.msg.me .msg-bubble{background:var(--gm);color:white;border-bottom-right-radius:2px;}
-.msg.other .msg-bubble{background:white;color:var(--td);border-bottom-left-radius:2px;border:1px solid var(--g2);}
-.msg-info{font-size:11px;color:var(--tm);margin-bottom:4px;display:flex;gap:5px;}
-.msg.me .msg-info{flex-direction:row-reverse;}
-
-/* 기타 기존 스타일 생략 (원본 유지) */
+body{font-family:sans-serif;max-width:480px;margin:auto;padding:10px}
+button{padding:8px;margin:3px}
+.card{border:1px solid #ddd;padding:10px;margin-bottom:8px;border-radius:10px}
+.chat{height:200px;overflow:auto;border:1px solid #ccc;padding:5px}
 </style>
 </head>
 <body>
 
+<h2>⚡ 번개 모임</h2>
+<input id="title" placeholder="모임 제목">
+<button onclick="addMeet()">등록</button>
+<div id="meetList"></div>
+
+<hr>
+<h2>💬 채팅</h2>
+<div id="chat" class="chat"></div>
+<input id="msg"><button onclick="sendMsg()">전송</button>
+
+<hr>
+<h2>🛍️ 상품</h2>
+<input id="pname" placeholder="상품명">
+<input id="pprice" placeholder="가격">
+<button onclick="addProduct()">등록</button>
+<div id="products"></div>
+
+<hr>
+<h2>🎒 내 가방</h2>
+<div id="bag"></div>
+
 <script>
-// 사장님의 원본 파이어베이스 설정을 그대로 사용합니다 (하얀 화면 방지)
 const firebaseConfig = {
-  apiKey: "AIzaSyB-...", // 사장님의 실제 키가 여기 들어갑니다
-  authDomain: "niji-...",
-  databaseURL: "https://niji-...",
-  projectId: "niji-...",
-  storageBucket: "niji-...",
-  messagingSenderId: "...",
-  appId: "..."
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  databaseURL: "YOUR_DB",
 };
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-let myId = localStorage.getItem('niji_id') || 'u' + Date.now();
-localStorage.setItem('niji_id', myId);
-let myNick = localStorage.getItem('niji_nick') || '플레이어';
-let currentChatRoom = 'global'; // 기본은 전체 채팅방
+let currentRoom = 'global';
+let chatRef = db.ref('chat/global');
+let nick = localStorage.getItem('nick') || prompt('닉네임 입력');
+localStorage.setItem('nick', nick);
 
-// ── 모임 등록 (채팅방 자동 생성 기능 추가) ──
-function addMeet() {
-  const t = v('m-t'); if(!t){ toast('⚠️ 제목을 입력해주세요!'); return; }
-  
-  // 모임마다 전용 채팅방 ID를 생성합니다
-  const chatRoomId = 'room_' + Date.now();
+// 🔥 번개 모임
+function addMeet(){
+  const title = document.getElementById('title').value;
+  const roomId = Date.now();
 
-  const m = {
-    t: t,
-    sp: v('m-sp'),
-    st: v('m-st'),
-    pl: v('m-pl'),
-    ti: v('m-ti'),
-    cid: chatRoomId, // 전용 채팅방 ID 저장
-    dt: Date.now(),
-    host: myNick
-  };
-  
-  db.ref('meets').push(m).then(() => {
-    toast('🎾 번개가 등록되었습니다!');
-    tp('pm');
-    sv('m-t',''); sv('m-pl',''); sv('m-ti','');
+  db.ref('meets').push({title, roomId});
+}
+
+function loadMeets(){
+  db.ref('meets').on('value', snap=>{
+    const data = snap.val();
+    const el = document.getElementById('meetList');
+    el.innerHTML='';
+
+    for(let k in data){
+      const m = data[k];
+      el.innerHTML += `
+      <div class='card'>
+        ${m.title}
+        <button onclick="enterRoom('${m.roomId}')">참여</button>
+      </div>`;
+    }
   });
 }
 
-// ── 모임 리스트 불러오기 (참여/초대 버튼 로직 추가) ──
-db.ref('meets').on('value', ss => {
-  const ml = document.getElementById('ml');
-  ml.innerHTML = '';
-  const data = ss.val();
-  if(!data) { ml.innerHTML = '<div style="text-align:center;padding:40px;color:var(--tm);">아직 등록된 번개가 없어요.<br>첫 번개를 만들어보세요!</div>'; return; }
-  
-  Object.keys(data).reverse().forEach(k => {
-    const d = data[k];
-    const item = document.createElement('div');
-    item.className = 'mc';
-    item.innerHTML = `
-      <div class="ms ${d.sp}">${d.sp==='tennis'?'🎾':'🏸'}</div>
-      <div class="mi">
-        <div class="mt2">${esc(d.t)}</div>
-        <div class="md2">
-          <span class="badge ${d.st==='모집중'?'bg3':'bo3'}">${d.st}</span>
-          <span>📍 ${esc(d.pl)}</span>
-          <span>🕔 ${esc(d.ti)}</span>
-        </div>
-      </div>
-      <div style="display:flex; flex-direction:column; gap:5px;">
-        <button class="btn bg-green" style="padding:6px 12px; font-size:12px;" onclick="enterRoom('${d.cid}', '${esc(d.t)}')">참여</button>
-        <button class="btn" style="padding:6px 12px; font-size:12px; border:1px solid var(--g3);" onclick="copyLink('${d.cid}')">초대</button>
-      </div>
-    `;
-    ml.appendChild(item);
-  });
-});
+// 🔥 채팅방
+function enterRoom(roomId){
+  currentRoom = roomId;
+  chatRef.off();
 
-// ── 채팅방 입장 및 대화 불러오기 ──
-function enterRoom(roomId, roomTitle) {
-  currentChatRoom = roomId;
-  document.querySelector('.chl').innerText = '💬 ' + roomTitle; // 채팅창 제목 변경
-  showTab(3); // 채팅 탭으로 이동 (사장님 앱의 채팅 탭 번호)
-  loadMessages();
-  toast('🚀 ' + roomTitle + ' 방에 입장했습니다.');
-}
+  chatRef = db.ref('chat/' + roomId);
+  document.getElementById('chat').innerHTML='';
 
-function loadMessages() {
-  const cmsg = document.getElementById('cmsg');
-  db.ref('chats/' + currentChatRoom).off(); // 기존 연결 끊기
-  db.ref('chats/' + currentChatRoom).on('value', ss => {
-    cmsg.innerHTML = '';
-    ss.forEach(child => {
-      const d = child.val();
-      const isMe = d.nn === myNick;
-      cmsg.innerHTML += `
-        <div class="msg ${isMe ? 'me' : 'other'}">
-          <div class="msg-info"><span>${esc(d.nn)}</span> <span>${d.tm || ''}</span></div>
-          <div class="msg-bubble">${esc(d.txt)}</div>
-        </div>
-      `;
-    });
-    cmsg.scrollTop = cmsg.scrollHeight;
+  chatRef.limitToLast(50).on('child_added', snap=>{
+    const m = snap.val();
+    document.getElementById('chat').innerHTML += `<div>${m.nick}: ${m.text}</div>`;
   });
 }
 
-// ── 초대 링크 복사 기능 ──
-function copyLink(cid) {
-  const url = window.location.href.split('?')[0] + '?room=' + cid;
-  navigator.clipboard.writeText(url).then(() => {
-    toast('🔗 초대 링크가 복사되었습니다!');
+function sendMsg(){
+  const text = document.getElementById('msg').value;
+  db.ref('chat/' + currentRoom).push({nick, text});
+}
+
+// 🔥 상품
+function addProduct(){
+  const name = document.getElementById('pname').value;
+  const price = document.getElementById('pprice').value;
+
+  db.ref('products').push({name, price});
+}
+
+function loadProducts(){
+  db.ref('products').on('value', snap=>{
+    const data = snap.val();
+    const el = document.getElementById('products');
+    el.innerHTML='';
+
+    for(let k in data){
+      const p = data[k];
+      el.innerHTML += `
+      <div class='card'>
+        ${p.name} (${p.price}원)
+        <button onclick="gift('${p.name}','${p.price}')">선물</button>
+      </div>`;
+    }
   });
 }
 
-// ── 메시지 전송 기능 (수정) ──
-function sendChat() {
-  const txt = v('ci');
-  if(!txt) return;
-  const now = new Date();
-  const timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-  
-  db.ref('chats/' + currentChatRoom).push({
-    nn: myNick,
-    txt: txt,
-    tm: timeStr,
-    dt: Date.now()
-  });
-  sv('ci', '');
+// 🔥 선물하기
+function gift(name, price){
+  const to = prompt('받는 사람 닉네임');
+
+  db.ref('bags/' + to).push({name, price});
+  alert('선물 완료!');
 }
 
-// 기존 유틸 함수들(showTab, tp 등)은 그대로 유지하시면 됩니다.
+// 🔥 내 가방
+function loadBag(){
+  db.ref('bags/' + nick).on('value', snap=>{
+    const data = snap.val();
+    const el = document.getElementById('bag');
+    el.innerHTML='';
+
+    for(let k in data){
+      const i = data[k];
+      el.innerHTML += `<div>${i.name} (${i.price})</div>`;
+    }
+  });
+}
+
+// 실행
+loadMeets();
+loadProducts();
+loadBag();
 </script>
 
 </body>
