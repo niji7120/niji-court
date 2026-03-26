@@ -1,25 +1,26 @@
-<!-- 🔥 NIJI COURT 업그레이드 버전 (채팅방 + 선물하기 포함) -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NIJI COURT UPGRADE</title>
+<title>NIJI COURT</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 
 <style>
 body{font-family:sans-serif;max-width:480px;margin:auto;padding:10px}
-button{padding:8px;margin:3px}
-.card{border:1px solid #ddd;padding:10px;margin-bottom:8px;border-radius:10px}
-.chat{height:200px;overflow:auto;border:1px solid #ccc;padding:5px}
+.card{border:1px solid #ddd;border-radius:10px;padding:10px;margin-bottom:8px}
+button{padding:6px 10px;margin-top:5px}
+.chat{height:200px;overflow:auto;border:1px solid #ccc;padding:5px;margin-bottom:5px}
 </style>
 </head>
 <body>
 
 <h2>⚡ 번개 모임</h2>
-<input id="title" placeholder="모임 제목">
+<input id="mt" placeholder="제목">
+<input id="mp" placeholder="장소">
+<input id="mtime" placeholder="시간">
 <button onclick="addMeet()">등록</button>
 <div id="meetList"></div>
 
@@ -30,8 +31,8 @@ button{padding:8px;margin:3px}
 
 <hr>
 <h2>🛍️ 상품</h2>
-<input id="pname" placeholder="상품명">
-<input id="pprice" placeholder="가격">
+<input id="pn" placeholder="상품명">
+<input id="pp" placeholder="가격">
 <button onclick="addProduct()">등록</button>
 <div id="products"></div>
 
@@ -43,65 +44,77 @@ button{padding:8px;margin:3px}
 const firebaseConfig = {
   apiKey: "YOUR_KEY",
   authDomain: "YOUR_DOMAIN",
-  databaseURL: "YOUR_DB",
+  databaseURL: "YOUR_DB"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-let currentRoom = 'global';
-let chatRef = db.ref('chat/global');
-let nick = localStorage.getItem('nick') || prompt('닉네임 입력');
+let nick = localStorage.getItem('nick') || prompt('닉네임');
 localStorage.setItem('nick', nick);
 
-// 🔥 번개 모임
+let currentRoom = 'global';
+let chatRef = db.ref('chat/global');
+
+function getChatRef(roomId){
+  return db.ref('chat/' + roomId);
+}
+
+// 모임
 function addMeet(){
-  const title = document.getElementById('title').value;
+  const title = mt.value;
+  const place = mp.value;
+  const time = mtime.value;
+
   const roomId = Date.now();
 
-  db.ref('meets').push({title, roomId});
+  db.ref('meets').push({title, place, time, roomId});
 }
 
 function loadMeets(){
   db.ref('meets').on('value', snap=>{
     const data = snap.val();
-    const el = document.getElementById('meetList');
-    el.innerHTML='';
+    meetList.innerHTML='';
 
     for(let k in data){
       const m = data[k];
-      el.innerHTML += `
+      meetList.innerHTML += `
       <div class='card'>
-        ${m.title}
+        ${m.title}<br>
+        ${m.place} / ${m.time}
         <button onclick="enterRoom('${m.roomId}')">참여</button>
       </div>`;
     }
   });
 }
 
-// 🔥 채팅방
+// 채팅
 function enterRoom(roomId){
   currentRoom = roomId;
-  chatRef.off();
 
-  chatRef = db.ref('chat/' + roomId);
-  document.getElementById('chat').innerHTML='';
+  chatRef.off();
+  chatRef = getChatRef(roomId);
+
+  chat.innerHTML='';
 
   chatRef.limitToLast(50).on('child_added', snap=>{
     const m = snap.val();
-    document.getElementById('chat').innerHTML += `<div>${m.nick}: ${m.text}</div>`;
+    chat.innerHTML += `<div>${m.nick}: ${m.text}</div>`;
   });
 }
 
 function sendMsg(){
-  const text = document.getElementById('msg').value;
-  db.ref('chat/' + currentRoom).push({nick, text});
+  const text = msg.value;
+
+  getChatRef(currentRoom).push({nick, text});
+
+  msg.value='';
 }
 
-// 🔥 상품
+// 상품
 function addProduct(){
-  const name = document.getElementById('pname').value;
-  const price = document.getElementById('pprice').value;
+  const name = pn.value;
+  const price = pp.value;
 
   db.ref('products').push({name, price});
 }
@@ -109,43 +122,40 @@ function addProduct(){
 function loadProducts(){
   db.ref('products').on('value', snap=>{
     const data = snap.val();
-    const el = document.getElementById('products');
-    el.innerHTML='';
+    products.innerHTML='';
 
     for(let k in data){
       const p = data[k];
-      el.innerHTML += `
+      products.innerHTML += `
       <div class='card'>
-        ${p.name} (${p.price}원)
-        <button onclick="gift('${p.name}','${p.price}')">선물</button>
+        ${p.name} (${p.price})
+        <button onclick="sendGift('${p.name}','${p.price}')">선물</button>
       </div>`;
     }
   });
 }
 
-// 🔥 선물하기
-function gift(name, price){
-  const to = prompt('받는 사람 닉네임');
+// 선물
+function sendGift(name, price){
+  const to = prompt('닉네임');
 
   db.ref('bags/' + to).push({name, price});
-  alert('선물 완료!');
+  alert('선물 완료');
 }
 
-// 🔥 내 가방
+// 가방
 function loadBag(){
   db.ref('bags/' + nick).on('value', snap=>{
     const data = snap.val();
-    const el = document.getElementById('bag');
-    el.innerHTML='';
+    bag.innerHTML='';
 
     for(let k in data){
       const i = data[k];
-      el.innerHTML += `<div>${i.name} (${i.price})</div>`;
+      bag.innerHTML += `<div>${i.name} (${i.price})</div>`;
     }
   });
 }
 
-// 실행
 loadMeets();
 loadProducts();
 loadBag();
