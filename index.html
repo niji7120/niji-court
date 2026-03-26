@@ -3,163 +3,899 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NIJI COURT</title>
-
+<title>NIJI COURT — 테니스·배드민턴 커뮤니티</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;500;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
-
 <style>
-body{font-family:sans-serif;max-width:480px;margin:auto;padding:10px}
-.card{border:1px solid #ddd;border-radius:10px;padding:10px;margin-bottom:8px}
-button{padding:6px 10px;margin-top:5px}
-.chat{height:200px;overflow:auto;border:1px solid #ccc;padding:5px;margin-bottom:5px}
+:root{
+  --gd:#1a3d1a;--gc:#2e6b2e;--gm:#3d8b3d;--gb:#52b052;--gl:#d4edda;
+  --or:#ff6b2b;--oh:#ff8c00;--wh:#fff;--ow:#f8fdf8;
+  --g1:#f0f4f0;--g2:#dce8dc;--g3:#9cb89c;
+  --td:#1a2e1a;--tm:#4a6b4a;--tl:#7a9a7a;
+  --sh:0 4px 20px rgba(30,80,30,0.12);--shl:0 8px 40px rgba(30,80,30,0.18);
+  --r:16px;--rs:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);min-height:100vh;max-width:480px;margin:0 auto;overflow-x:hidden;}
+.hd{background:linear-gradient(135deg,var(--gd),var(--gc),#1e5c1e);padding:13px 18px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.25);}
+.ht{display:flex;align-items:center;justify-content:space-between;}
+.lw{display:flex;align-items:center;gap:8px;}
+.li{width:33px;height:33px;background:var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.lt{font-family:'Bebas Neue',cursive;font-size:20px;color:#fff;letter-spacing:2px;line-height:1;}
+.ls{font-size:9px;color:var(--gb);letter-spacing:1px;font-weight:500;display:block;margin-top:1px;}
+.od{display:flex;align-items:center;gap:5px;color:var(--gb);font-size:11px;font-weight:600;}
+.db{width:7px;height:7px;background:var(--gb);border-radius:50%;animation:blink 1.4s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.nav{display:flex;background:#fff;border-top:1px solid var(--g2);position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;box-shadow:0 -2px 20px rgba(0,0,0,0.08);}
+.tb{flex:1;padding:10px 4px 8px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--g3);font-family:'Noto Sans KR',sans-serif;transition:color 0.2s;}
+.tb .ti{font-size:21px;line-height:1;} .tb .tl{font-size:10px;font-weight:500;}
+.tb.active{color:var(--gc);} .tb.active .ti{transform:translateY(-1px);} .tb.active .tl{font-weight:700;}
+.pg{display:none;padding:13px 13px 86px;animation:fu 0.22s ease;} .pg.active{display:block;}
+@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.stl{font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;color:var(--gd);margin-bottom:11px;display:flex;align-items:center;gap:7px;}
+.stl .dot{width:5px;height:18px;background:var(--or);border-radius:3px;flex-shrink:0;}
+.btn{padding:9px 16px;border-radius:22px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all 0.18s;}
+.bg2{background:var(--gc);color:#fff;} .bo2{background:var(--or);color:#fff;} .bgr{background:var(--g1);color:var(--tm);}
+.card{background:#fff;border-radius:var(--r);padding:13px;box-shadow:var(--sh);margin-bottom:10px;}
+.eb{text-align:center;padding:26px 14px;color:var(--tl);}
+.eb .ei{font-size:42px;margin-bottom:9px;} .eb p{font-size:13px;line-height:1.6;}
+.fr{margin-bottom:9px;}
+.fl{font-size:12px;font-weight:700;color:var(--tm);margin-bottom:4px;display:block;}
+.fi{width:100%;border:1.5px solid var(--g2);border-radius:var(--rs);padding:9px 12px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;transition:border 0.18s;background:#fff;}
+.fi:focus{border-color:var(--gc);}
+.fs{width:100%;border:1.5px solid var(--g2);border-radius:var(--rs);padding:9px 12px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;background:#fff;}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.br2{display:flex;gap:8px;margin-top:6px;}
+.ab{display:flex;align-items:center;gap:6px;background:var(--g1);border:1.5px dashed var(--g2);border-radius:var(--rs);padding:11px 13px;color:var(--tm);font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-bottom:11px;font-family:'Noto Sans KR',sans-serif;transition:all 0.18s;}
+.ab:hover{background:var(--gl);border-color:var(--gc);color:var(--gc);}
+.ap{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:13px;margin-bottom:11px;border:2px solid var(--gl);}
+.at{font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;color:var(--gd);margin-bottom:11px;}
+.mc{background:#fff;border-radius:var(--rs);padding:12px;display:flex;align-items:center;gap:10px;box-shadow:var(--sh);margin-bottom:8px;transition:transform 0.18s;}
+.mc:hover{transform:translateY(-2px);}
+.ms{width:41px;height:41px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.ms.tennis{background:#e8f5e9;} .ms.badminton{background:#e3f2fd;}
+.mi{flex:1;min-width:0;} .mt2{font-size:13px;font-weight:700;margin-bottom:3px;}
+.md2{font-size:11px;color:var(--tl);display:flex;gap:8px;flex-wrap:wrap;}
+.badge{padding:3px 9px;border-radius:17px;font-size:11px;font-weight:700;white-space:nowrap;}
+.bg3{background:var(--gl);color:var(--gc);} .bo3{background:#fff3e0;color:var(--or);}
+.bb3{background:#e3f2fd;color:#1565c0;} .br3{background:#ffebee;color:#c62828;}
+.db2{background:none;border:none;font-size:16px;cursor:pointer;padding:3px;border-radius:5px;color:#c62828;flex-shrink:0;}
+.db2:hover{background:#ffebee;}
+.ct{display:flex;gap:7px;margin-bottom:11px;flex-wrap:wrap;}
+.chip{padding:6px 13px;border-radius:17px;font-size:12px;font-weight:700;border:2px solid var(--g2);background:#fff;cursor:pointer;color:var(--tl);font-family:'Noto Sans KR',sans-serif;transition:all 0.18s;}
+.chip.active{background:var(--gc);border-color:var(--gc);color:#fff;}
+/* CHAT */
+.cw{background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);margin-bottom:13px;}
+.chd{background:linear-gradient(135deg,var(--gd),var(--gc));padding:11px 13px;display:flex;align-items:center;justify-content:space-between;}
+.chl{display:flex;align-items:center;gap:7px;color:#fff;font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;}
+.cst{display:flex;align-items:center;gap:7px;}
+.notif-wrap{display:flex;align-items:center;gap:5px;cursor:pointer;}
+.nl{font-size:11px;color:rgba(255,255,255,0.85);}
+.ntbtn{width:34px;height:18px;border-radius:9px;background:rgba(255,255,255,0.25);border:none;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;}
+.ntbtn.on{background:var(--gb);}
+.ntbtn::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left 0.2s;}
+.ntbtn.on::after{left:18px;}
+.fb-s{font-size:10px;padding:2px 8px;border-radius:8px;font-weight:600;}
+.fs-ok{background:var(--gl);color:var(--gc);} .fs-wt{background:#fff3e0;color:var(--or);} .fs-er{background:#ffebee;color:#c62828;}
+.cbody{padding:12px;height:230px;overflow-y:auto;background:var(--g1);}
+.cmg{margin-bottom:9px;display:flex;gap:7px;align-items:flex-start;}
+.cmg.mine{flex-direction:row-reverse;}
+.cav{width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;background:var(--g2);flex-shrink:0;}
+.cbub{max-width:72%;}
+.cnm{font-size:10px;color:var(--tl);margin-bottom:2px;}
+.cmg.mine .cnm{text-align:right;}
+.ctx{background:#fff;border-radius:12px;border-top-left-radius:3px;padding:7px 10px;font-size:13px;word-break:break-word;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+.cmg.mine .ctx{background:var(--gc);color:#fff;border-radius:12px;border-top-right-radius:3px;}
+.ctm2{font-size:9px;color:var(--tl);margin-top:2px;}
+.cmg.mine .ctm2{text-align:right;}
+.cft{padding:9px 11px;background:#fff;border-top:1px solid var(--g2);}
+.nick-saved{display:flex;align-items:center;gap:7px;margin-bottom:7px;background:var(--gl);border-radius:9px;padding:6px 11px;}
+.nick-saved .nsn{font-size:13px;font-weight:700;color:var(--gc);flex:1;}
+.nick-saved .nsc{font-size:11px;color:var(--tl);cursor:pointer;text-decoration:underline;}
+.nick-input-row{display:flex;gap:7px;margin-bottom:7px;align-items:center;}
+.nick-input-row label{font-size:12px;color:var(--tl);white-space:nowrap;}
+.nick-input-row input{flex:1;border:1.5px solid var(--g2);border-radius:9px;padding:7px 11px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;}
+.nick-input-row input:focus{border-color:var(--gc);}
+.nick-save-btn{padding:7px 12px;background:var(--gc);color:#fff;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;white-space:nowrap;}
+.cin{display:flex;gap:7px;align-items:center;background:var(--g1);border-radius:22px;padding:5px 5px 5px 13px;}
+.cin input{flex:1;border:none;outline:none;font-size:13px;font-family:'Noto Sans KR',sans-serif;background:transparent;}
+.csb{width:31px;height:31px;border-radius:50%;background:var(--gc);border:none;color:#fff;cursor:pointer;font-size:13px;flex-shrink:0;}
+/* RANKING */
+.rh{background:linear-gradient(135deg,var(--gd),var(--gc));border-radius:var(--r);padding:13px;margin-bottom:13px;display:flex;}
+.rs2{flex:1;text-align:center;color:#fff;}
+.rs2 .rn{font-family:'Bebas Neue',cursive;font-size:28px;line-height:1;color:var(--or);}
+.rs2 .rl{font-size:10px;opacity:0.8;margin-top:2px;}
+.rs2+.rs2{border-left:1px solid rgba(255,255,255,0.15);}
+.rkc{background:#fff;border-radius:var(--rs);padding:11px 12px;display:flex;align-items:center;gap:10px;box-shadow:var(--sh);margin-bottom:7px;transition:transform 0.18s;}
+.rkc:hover{transform:translateX(3px);}
+.rkc.r1{border-left:4px solid #FFD700;} .rkc.r2{border-left:4px solid #C0C0C0;} .rkc.r3{border-left:4px solid #CD7F32;}
+.rnum{font-family:'Bebas Neue',cursive;font-size:19px;width:22px;text-align:center;color:var(--tl);flex-shrink:0;}
+.rkc.r1 .rnum{color:#FFD700;} .rkc.r2 .rnum{color:#999;} .rkc.r3 .rnum{color:#CD7F32;}
+.rav{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.rif{flex:1;min-width:0;} .rnm{font-size:13px;font-weight:700;} .rdt{font-size:11px;color:var(--tl);margin-top:2px;}
+.rsc{text-align:right;flex-shrink:0;} .rw{font-size:16px;font-weight:900;color:var(--gc);} .rlb{font-size:10px;color:var(--tl);}
+.grc{background:linear-gradient(135deg,#fff9e6,#fffde7);border:2px solid #FFD700;border-radius:var(--r);padding:14px;margin-bottom:11px;}
+.grt{font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;color:#b8860b;margin-bottom:11px;}
+.rbtns{display:flex;gap:8px;margin-top:9px;}
+.rbtn{flex:1;padding:11px;border-radius:11px;font-size:13px;font-weight:700;border:2px solid;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all 0.18s;}
+.rbtn-w{background:#e8f5e9;color:var(--gc);border-color:var(--gc);}
+.rbtn-w.sel, .rbtn-w:hover{background:var(--gc);color:#fff;}
+.rbtn-l{background:#ffebee;color:#c62828;border-color:#c62828;}
+.rbtn-l.sel, .rbtn-l:hover{background:#c62828;color:#fff;}
+/* SHOP */
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:13px;}
+.si{background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:transform 0.18s;}
+.si:hover{transform:translateY(-3px);}
+.sth{height:90px;display:flex;align-items:center;justify-content:center;font-size:40px;position:relative;}
+.sth.g{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);} .sth.o{background:linear-gradient(135deg,#fff3e0,#ffe0b2);}
+.sth.b{background:linear-gradient(135deg,#e3f2fd,#bbdefb);} .sth.y{background:linear-gradient(135deg,#fffde7,#fff9c4);}
+.shot{position:absolute;top:7px;right:7px;background:var(--or);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:8px;}
+.sif{padding:9px 10px 6px;} .snm{font-size:13px;font-weight:700;margin-bottom:3px;}
+.spr{font-size:14px;font-weight:900;color:var(--or);}
+.spr .og{font-size:11px;text-decoration:line-through;color:var(--tl);font-weight:400;margin-left:3px;}
+.sft{display:flex;gap:6px;padding:6px 10px 10px;}
+.gift-btn{flex:1;padding:6px;background:linear-gradient(135deg,var(--or),var(--oh));color:#fff;font-size:12px;font-weight:700;border:none;cursor:pointer;border-radius:8px;font-family:'Noto Sans KR',sans-serif;}
+.adm-del{padding:6px 10px;background:#ffebee;color:#c62828;font-size:11px;font-weight:700;border:none;cursor:pointer;border-radius:8px;font-family:'Noto Sans KR',sans-serif;}
+.lock-bar{background:var(--g1);border:1.5px solid var(--g2);border-radius:var(--rs);padding:10px 13px;display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
+.lock-info{font-size:12px;color:var(--tl);}
+.lock-btn{padding:6px 14px;border-radius:17px;font-size:12px;font-weight:700;border:none;cursor:pointer;font-family:'Noto Sans KR',sans-serif;}
+.lock-btn.locked{background:#ffebee;color:#c62828;}
+.lock-btn.unlocked{background:var(--gl);color:var(--gc);}
+/* MY BAG */
+.pc{background:linear-gradient(135deg,var(--gd),var(--gm));border-radius:var(--r);padding:17px;display:flex;align-items:center;gap:13px;margin-bottom:13px;color:#fff;}
+.pav{width:58px;height:58px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid rgba(255,255,255,0.3);flex-shrink:0;cursor:pointer;}
+.pnm{font-size:18px;font-weight:900;margin-bottom:3px;}
+.plv{display:inline-block;background:var(--or);color:#fff;font-size:11px;font-weight:700;padding:2px 9px;border-radius:17px;margin-bottom:5px;}
+.pm{font-size:11px;opacity:0.8;display:flex;gap:10px;flex-wrap:wrap;}
+.ps2{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:13px;}
+.pb{background:#fff;border-radius:var(--rs);padding:12px 8px;text-align:center;box-shadow:var(--sh);}
+.pb .pv{font-family:'Bebas Neue',cursive;font-size:23px;color:var(--gc);line-height:1;}
+.pb .pl{font-size:10px;color:var(--tl);margin-top:3px;}
+.gi2{background:#fff;border-radius:var(--rs);padding:12px;display:flex;align-items:center;gap:10px;box-shadow:var(--sh);margin-bottom:7px;}
+.gic{font-size:25px;flex-shrink:0;} .gif{flex:1;min-width:0;} .gnm{font-size:13px;font-weight:700;} .gdt{font-size:11px;color:var(--tl);margin-top:2px;}
+.gda{font-size:10px;color:var(--tl);text-align:right;white-space:nowrap;flex-shrink:0;}
+.promo{background:linear-gradient(135deg,#1a3d1a,#2e6b2e);border-radius:var(--r);padding:14px 16px;color:#fff;margin-bottom:10px;position:relative;overflow:hidden;cursor:pointer;}
+.promo::after{content:'🏸';position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:42px;opacity:0.2;}
+.pt{background:var(--or);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;display:inline-block;margin-bottom:5px;}
+.promo h3{font-size:14px;font-weight:900;margin-bottom:4px;} .promo p{font-size:11px;opacity:0.8;max-width:72%;}
+.gb{background:linear-gradient(135deg,#ff6b2b,#ff8c00);border-radius:var(--r);padding:14px 16px;color:#fff;margin-bottom:10px;display:flex;align-items:center;gap:12px;cursor:pointer;}
+.gb .gi3{font-size:32px;flex-shrink:0;} .gb h3{font-size:14px;font-weight:900;margin-bottom:3px;} .gb p{font-size:11px;opacity:0.9;}
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-end;justify-content:center;}
+.mo.open{display:flex;animation:fu 0.2s;}
+.msh{background:#fff;border-radius:21px 21px 0 0;padding:17px 17px 36px;width:100%;max-width:480px;animation:su 0.3s ease;max-height:90vh;overflow-y:auto;}
+@keyframes su{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+.mh{width:36px;height:4px;background:var(--g2);border-radius:2px;margin:0 auto 13px;}
+.mtt{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;margin-bottom:13px;}
+.toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--gd);color:#fff;padding:9px 19px;border-radius:21px;font-size:13px;font-weight:600;z-index:300;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-thumb{background:var(--g2);border-radius:2px;}
 </style>
 </head>
 <body>
 
-<h2>⚡ 번개 모임</h2>
-<input id="mt" placeholder="제목">
-<input id="mp" placeholder="장소">
-<input id="mtime" placeholder="시간">
-<button onclick="addMeet()">등록</button>
-<div id="meetList"></div>
+<header class="hd">
+  <div class="ht">
+    <div class="lw">
+      <div class="li">🎾</div>
+      <div><div class="lt">NIJI COURT</div><span class="ls">테니스 · 배드민턴 커뮤니티</span></div>
+    </div>
+    <div class="od"><div class="db"></div><span id="oc">연결 중...</span></div>
+  </div>
+</header>
 
-<hr>
-<h2>💬 채팅</h2>
-<div id="chat" class="chat"></div>
-<input id="msg"><button onclick="sendMsg()">전송</button>
+<!-- HOME -->
+<div class="pg active" id="pg-home">
+  <button class="ab" onclick="tp('pm')">⚡ 번개 모임 추가하기</button>
+  <div class="ap" id="pm" style="display:none">
+    <div class="at">⚡ 새 번개 모임 등록</div>
+    <div class="fr"><label class="fl">모임 제목 *</label><input class="fi" id="m-t" placeholder="예: 강남 더블스 같이 치실 분!"></div>
+    <div class="r2">
+      <div class="fr"><label class="fl">종목</label><select class="fs" id="m-sp"><option value="tennis">🎾 테니스</option><option value="badminton">🏸 배드민턴</option></select></div>
+      <div class="fr"><label class="fl">상태</label><select class="fs" id="m-st"><option>모집중</option><option>마감임박</option><option>정기</option><option>마감</option></select></div>
+    </div>
+    <div class="r2">
+      <div class="fr"><label class="fl">📍 장소</label><input class="fi" id="m-pl" placeholder="예: 강남구 삼성동"></div>
+      <div class="fr"><label class="fl">🕔 시간</label><input class="fi" id="m-ti" placeholder="예: 오후 7시"></div>
+    </div>
+    <div class="br2">
+      <button class="btn bg2" style="flex:1;padding:11px;border-radius:11px" onclick="addMeet()">✅ 등록</button>
+      <button class="btn bgr" style="padding:11px 13px;border-radius:11px" onclick="tp('pm')">취소</button>
+    </div>
+  </div>
+  <div class="stl"><div class="dot"></div>📣 번개 모임</div>
+  <div class="ct">
+    <button class="chip active" onclick="fm(this,'all')">전체</button>
+    <button class="chip" onclick="fm(this,'tennis')">🎾 테니스</button>
+    <button class="chip" onclick="fm(this,'badminton')">🏸 배드민턴</button>
+  </div>
+  <div id="ml"><div class="eb"><div class="ei">⚡</div><p>불러오는 중...</p></div></div>
 
-<hr>
-<h2>🛍️ 상품</h2>
-<input id="pn" placeholder="상품명">
-<input id="pp" placeholder="가격">
-<button onclick="addProduct()">등록</button>
-<div id="products"></div>
+  <div class="stl" style="margin-top:4px"><div class="dot"></div>💬 실시간 채팅</div>
+  <div class="cw">
+    <div class="chd">
+      <div class="chl">💬 NIJI COURT 오픈 채팅</div>
+      <div class="cst">
+        <div class="notif-wrap" onclick="toggleNotif()">
+          <span class="nl" id="nl-lbl">🔔 알림</span>
+          <button class="ntbtn" id="ntbtn"></button>
+        </div>
+        <span class="fb-s fs-wt" id="fbs">연결 중...</span>
+      </div>
+    </div>
+    <div class="cbody" id="cmsg"></div>
+    <div class="cft">
+      <div id="nick-saved-row" style="display:none">
+        <div class="nick-saved">
+          <span>👤</span>
+          <span class="nsn" id="ns-name"></span>
+          <span class="nsc" onclick="changeNick()">변경</span>
+        </div>
+      </div>
+      <div id="nick-input-row">
+        <div class="nick-input-row">
+          <label>닉네임</label>
+          <input type="text" id="nick-in" placeholder="닉네임 입력 후 저장" maxlength="10">
+          <button class="nick-save-btn" onclick="saveNick()">저장</button>
+        </div>
+      </div>
+      <div class="cin">
+        <input type="text" id="chat-in" placeholder="메시지 입력..." maxlength="200" onkeydown="if(event.key==='Enter')scb()">
+        <button class="csb" onclick="scb()">➤</button>
+      </div>
+    </div>
+  </div>
 
-<hr>
-<h2>🎒 내 가방</h2>
-<div id="bag"></div>
+  <div class="stl"><div class="dot"></div>🛍️ 니지스트링 추천</div>
+  <div class="promo" onclick="showTab('shop')">
+    <div class="pt">🔥 공동구매</div>
+    <h3>이번 주 스트링 특가!</h3>
+    <p>바볼랏·럭실론·요넥스 최대 30% 할인</p>
+  </div>
+</div>
+
+<!-- RANKING -->
+<div class="pg" id="pg-rank">
+  <div class="rh">
+    <div class="rs2"><div class="rn" id="r-tot">0</div><div class="rl">전체 회원</div></div>
+    <div class="rs2"><div class="rn" id="r-ten">0</div><div class="rl">테니스</div></div>
+    <div class="rs2"><div class="rn" id="r-bad">0</div><div class="rl">배드민턴</div></div>
+  </div>
+  <div class="grc">
+    <div class="grt">🎮 게임 결과 입력</div>
+    <div class="r2" style="margin-bottom:9px">
+      <div class="fr"><label class="fl">내 닉네임 *</label><input class="fi" id="gr-me" placeholder="예: 테니스왕"></div>
+      <div class="fr"><label class="fl">상대방 닉네임</label><input class="fi" id="gr-opp" placeholder="예: 배드민턴고수"></div>
+    </div>
+    <div class="r2" style="margin-bottom:4px">
+      <div class="fr"><label class="fl">종목</label><select class="fs" id="gr-sp"><option value="tennis">🎾 테니스</option><option value="badminton">🏸 배드민턴</option></select></div>
+      <div class="fr"><label class="fl">경기 날짜</label><input class="fi" id="gr-dt" type="date"></div>
+    </div>
+    <div class="rbtns">
+      <button class="rbtn rbtn-w" id="rb-win" onclick="selResult('win')">🏆 승리</button>
+      <button class="rbtn rbtn-l" id="rb-lose" onclick="selResult('lose')">😔 패배</button>
+    </div>
+    <button class="btn bg2" style="width:100%;padding:11px;border-radius:11px;margin-top:9px" onclick="submitGame()">✅ 결과 등록</button>
+  </div>
+  <button class="ab" onclick="tp('pr')">👤 내 정보 직접 등록/수정</button>
+  <div class="ap" id="pr" style="display:none">
+    <div class="at">👤 랭킹 정보 등록</div>
+    <div class="fr"><label class="fl">닉네임 *</label><input class="fi" id="r-nk" placeholder="예: 테니스왕김철수"></div>
+    <div class="r2">
+      <div class="fr"><label class="fl">종목</label><select class="fs" id="r-sp"><option value="tennis">🎾 테니스</option><option value="badminton">🏸 배드민턴</option></select></div>
+      <div class="fr"><label class="fl">실력</label><select class="fs" id="r-lv"><option>초급</option><option>중하급</option><option selected>중급</option><option>중상급</option><option>고급</option></select></div>
+    </div>
+    <div class="r3">
+      <div class="fr"><label class="fl">승</label><input class="fi" id="r-w" type="number" placeholder="0" min="0"></div>
+      <div class="fr"><label class="fl">패</label><input class="fi" id="r-l" type="number" placeholder="0" min="0"></div>
+      <div class="fr"><label class="fl">구력(년)</label><input class="fi" id="r-yr" type="number" placeholder="0" min="0"></div>
+    </div>
+    <div class="r2">
+      <div class="fr"><label class="fl">📍 지역</label><input class="fi" id="r-ar" placeholder="예: 강남구"></div>
+      <div class="fr"><label class="fl">주 횟수</label><input class="fi" id="r-fq" placeholder="예: 주3회"></div>
+    </div>
+    <div class="br2">
+      <button class="btn bg2" style="flex:1;padding:11px;border-radius:11px" onclick="addRank()">✅ 등록</button>
+      <button class="btn bgr" style="padding:11px 13px;border-radius:11px" onclick="tp('pr')">취소</button>
+    </div>
+  </div>
+  <div class="stl"><div class="dot"></div>🏆 실력 랭킹</div>
+  <div class="ct">
+    <button class="chip active" onclick="fr2(this,'all')">전체</button>
+    <button class="chip" onclick="fr2(this,'tennis')">🎾 테니스</button>
+    <button class="chip" onclick="fr2(this,'badminton')">🏸 배드민턴</button>
+  </div>
+  <div id="rl"><div class="eb"><div class="ei">🏆</div><p>아직 등록된 회원이 없어요!<br>게임 결과를 입력해보세요 😊</p></div></div>
+</div>
+
+<!-- SHOP -->
+<div class="pg" id="pg-shop">
+  <div class="lock-bar">
+    <div class="lock-info" id="lock-info">🔒 관리자 모드 — 잠금 상태</div>
+    <button class="lock-btn locked" id="lock-btn" onclick="toggleAdmin()">관리자 로그인</button>
+  </div>
+  <div id="admin-shop-area" style="display:none">
+    <button class="ab" onclick="tp('ps')">🛍️ 상품 등록하기</button>
+    <div class="ap" id="ps" style="display:none">
+      <div class="at">🛍️ 새 상품 등록</div>
+      <div class="fr"><label class="fl">상품명 *</label><input class="fi" id="s-nm" placeholder="예: 럭실론 알루파워 1.25"></div>
+      <div class="r2">
+        <div class="fr"><label class="fl">판매가 (원) *</label><input class="fi" id="s-pr" type="number" placeholder="15000"></div>
+        <div class="fr"><label class="fl">정가 (원, 선택)</label><input class="fi" id="s-og" type="number" placeholder="18000"></div>
+      </div>
+      <div class="r2">
+        <div class="fr"><label class="fl">카테고리</label><select class="fs" id="s-ct"><option value="string">🎾 스트링</option><option value="grip">🖐️ 그립</option><option value="acc">💡 액세서리</option><option value="ball">🟡 공/셔틀콕</option></select></div>
+        <div class="fr"><label class="fl">뱃지</label><select class="fs" id="s-bd"><option value="">없음</option><option>HOT</option><option>NEW</option><option>추천</option><option>SALE</option></select></div>
+      </div>
+      <div class="fr"><label class="fl">설명 (선택)</label><input class="fi" id="s-ds" placeholder="예: 폴리 계열 / 내구성 최고"></div>
+      <div class="br2">
+        <button class="btn bg2" style="flex:1;padding:11px;border-radius:11px" onclick="addShop()">✅ 등록</button>
+        <button class="btn bgr" style="padding:11px 13px;border-radius:11px" onclick="tp('ps')">취소</button>
+      </div>
+    </div>
+    <button class="ab" style="border-color:#e57373;color:#c62828" onclick="tp('ppw')">🔑 비밀번호 변경</button>
+    <div class="ap" id="ppw" style="display:none;border-color:#ffcdd2">
+      <div class="at" style="color:#c62828">🔑 비밀번호 변경</div>
+      <div class="fr"><label class="fl">현재 비밀번호</label><input class="fi" id="pw-cur" type="password" placeholder="현재 비밀번호"></div>
+      <div class="fr"><label class="fl">새 비밀번호</label><input class="fi" id="pw-new" type="password" placeholder="새 비밀번호"></div>
+      <div class="fr"><label class="fl">새 비밀번호 확인</label><input class="fi" id="pw-con" type="password" placeholder="다시 입력"></div>
+      <div class="br2">
+        <button class="btn" style="flex:1;padding:11px;border-radius:11px;background:#c62828;color:#fff" onclick="changePw()">변경하기</button>
+        <button class="btn bgr" style="padding:11px 13px;border-radius:11px" onclick="tp('ppw')">취소</button>
+      </div>
+    </div>
+  </div>
+  <div class="stl"><div class="dot"></div>🛒 상품 목록</div>
+  <div class="ct">
+    <button class="chip active" onclick="fs2(this,'all')">전체</button>
+    <button class="chip" onclick="fs2(this,'string')">스트링</button>
+    <button class="chip" onclick="fs2(this,'grip')">그립</button>
+    <button class="chip" onclick="fs2(this,'acc')">액세서리</button>
+    <button class="chip" onclick="fs2(this,'ball')">공/셔틀</button>
+  </div>
+  <div class="sg" id="slist"></div>
+  <div id="sem" class="eb" style="display:none"><div class="ei">🛍️</div><p>아직 상품이 없어요!<br>관리자가 상품을 등록할 예정이에요 😊</p></div>
+  <div class="stl"><div class="dot"></div>🎁 선물하기</div>
+  <div class="gb" onclick="openModal('gift')"><div class="gi3">🎁</div><div><h3>동호인에게 선물 보내기</h3><p>생일·기념일에 스트링, 그립 등을 선물하세요!</p></div></div>
+</div>
+
+<!-- MY BAG -->
+<div class="pg" id="pg-bag">
+  <div class="pc">
+    <div class="pav" onclick="openModal('ep')" title="수정">😄</div>
+    <div>
+      <div class="pnm" id="p-nm">내 닉네임</div>
+      <span class="plv" id="p-lv">중급</span>
+      <div class="pm"><span id="p-sp">🎾 테니스</span><span id="p-yr">구력 0년</span><span id="p-ar">📍 지역 미설정</span></div>
+    </div>
+  </div>
+  <div class="ps2">
+    <div class="pb"><div class="pv" id="p-wr">0%</div><div class="pl">승률</div></div>
+    <div class="pb"><div class="pv" id="p-gm">0</div><div class="pl">총 경기</div></div>
+    <div class="pb"><div class="pv" id="p-gc">0</div><div class="pl">내 장비</div></div>
+  </div>
+  <button class="ab" onclick="tp('pg2')">🎒 장비 추가하기</button>
+  <div class="ap" id="pg2" style="display:none">
+    <div class="at">🎒 장비 등록</div>
+    <div class="r2">
+      <div class="fr"><label class="fl">종류</label>
+        <select class="fs" id="g-tp"><option value="🎾">🎾 테니스 라켓</option><option value="🏸">🏸 배드민턴 라켓</option><option value="🖐️">🖐️ 그립/오버그립</option><option value="👟">👟 운동화</option><option value="👜">👜 가방</option><option value="💪">💪 기타</option></select>
+      </div>
+      <div class="fr"><label class="fl">장비명 *</label><input class="fi" id="g-nm" placeholder="예: 헤드 스피드 MP"></div>
+    </div>
+    <div class="fr"><label class="fl">세부 정보</label><input class="fi" id="g-dt" placeholder="예: 럭실론 알루파워 / 55파운드"></div>
+    <div class="fr"><label class="fl">스트링 교체일</label><input class="fi" id="g-da" type="date"></div>
+    <div class="br2">
+      <button class="btn bg2" style="flex:1;padding:11px;border-radius:11px" onclick="addGear()">✅ 등록</button>
+      <button class="btn bgr" style="padding:11px 13px;border-radius:11px" onclick="tp('pg2')">취소</button>
+    </div>
+  </div>
+  <div class="stl"><div class="dot"></div>🎒 내 장비</div>
+  <div id="gl"><div class="eb"><div class="ei">🎒</div><p>장비를 추가해보세요!</p></div></div>
+</div>
+
+<nav class="nav">
+  <button class="tb active" id="tab-home" onclick="showTab('home')"><span class="ti">🏠</span><span class="tl">홈/피드</span></button>
+  <button class="tb" id="tab-rank" onclick="showTab('rank')"><span class="ti">🏆</span><span class="tl">실력 랭킹</span></button>
+  <button class="tb" id="tab-shop" onclick="showTab('shop')"><span class="ti">🛍️</span><span class="tl">테니스 샵</span></button>
+  <button class="tb" id="tab-bag" onclick="showTab('bag')"><span class="ti">🎒</span><span class="tl">내 가방</span></button>
+</nav>
+
+<!-- MODAL: 관리자 로그인 -->
+<div class="mo" id="modal-adm" onclick="closeModal('adm')">
+  <div class="msh" onclick="event.stopPropagation()">
+    <div class="mh"></div>
+    <div class="mtt">🔐 관리자 로그인</div>
+    <div class="fr"><label class="fl">비밀번호</label><input class="fi" id="adm-pw" type="password" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')checkAdmin()"></div>
+    <div class="br2" style="margin-top:8px">
+      <button class="btn bg2" style="flex:1;padding:12px;border-radius:11px" onclick="checkAdmin()">확인</button>
+      <button class="btn bgr" style="padding:12px 13px;border-radius:11px" onclick="closeModal('adm')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 프로필 수정 -->
+<div class="mo" id="modal-ep" onclick="closeModal('ep')">
+  <div class="msh" onclick="event.stopPropagation()">
+    <div class="mh"></div>
+    <div class="mtt">👤 프로필 수정</div>
+    <div class="fr"><label class="fl">닉네임</label><input class="fi" id="ep-nm" placeholder="닉네임"></div>
+    <div class="r2">
+      <div class="fr"><label class="fl">종목</label><select class="fs" id="ep-sp"><option value="tennis">🎾 테니스</option><option value="badminton">🏸 배드민턴</option></select></div>
+      <div class="fr"><label class="fl">실력</label><select class="fs" id="ep-lv"><option>초급</option><option>중하급</option><option>중급</option><option>중상급</option><option>고급</option></select></div>
+    </div>
+    <div class="r2">
+      <div class="fr"><label class="fl">구력 (년)</label><input class="fi" id="ep-yr" type="number" placeholder="0" min="0"></div>
+      <div class="fr"><label class="fl">📍 지역</label><input class="fi" id="ep-ar" placeholder="예: 강남구"></div>
+    </div>
+    <div class="r2">
+      <div class="fr"><label class="fl">승 횟수</label><input class="fi" id="ep-w" type="number" placeholder="0" min="0"></div>
+      <div class="fr"><label class="fl">패 횟수</label><input class="fi" id="ep-l" type="number" placeholder="0" min="0"></div>
+    </div>
+    <div class="br2">
+      <button class="btn bg2" style="flex:1;padding:12px;border-radius:11px" onclick="saveProfile()">저장</button>
+      <button class="btn bgr" style="padding:12px 13px;border-radius:11px" onclick="closeModal('ep')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 선물 -->
+<div class="mo" id="modal-gift" onclick="closeModal('gift')">
+  <div class="msh" onclick="event.stopPropagation()">
+    <div class="mh"></div>
+    <div class="mtt">🎁 선물하기</div>
+    <p style="font-size:13px;color:var(--tl);margin-bottom:13px">동호인에게 상품 링크를 공유하세요!</p>
+    <div id="gift-list"><div class="eb"><div class="ei">🎁</div><p>상품을 먼저 등록해주세요!</p></div></div>
+    <button class="btn bgr" style="width:100%;padding:11px;border-radius:11px;margin-top:7px" onclick="closeModal('gift')">닫기</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_DOMAIN",
-  databaseURL: "YOUR_DB"
+  apiKey: "AIzaSyB2BnWZ1Y2Iq43M1KlWrZ3CM3DNQu-YHYc",
+  authDomain: "niji-court.firebaseapp.com",
+  databaseURL: "https://niji-court-default-rtdb.firebaseio.com",
+  projectId: "niji-court",
+  storageBucket: "niji-court.firebasestorage.app",
+  messagingSenderId: "684781253718",
+  appId: "1:684781253718:web:f0563eccf54c21268e77f7"
 };
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+let db = null;
+let rMeets = null, rRanks = null, rShop = null, rChat = null;
+let isReady = false;
+let flt = {meet:'all', rank:'all', shop:'all'};
+let gameResult = null;
+let isAdminMode = false;
+let notifOn = localStorage.getItem('niji_notif') !== 'off';
+let savedNick = localStorage.getItem('niji_nick') || '';
+let adminPw = localStorage.getItem('niji_adm_pw') || '1234';
+let profile = JSON.parse(localStorage.getItem('niji_profile') || '{}');
+let gears = JSON.parse(localStorage.getItem('niji_gears') || '[]');
 
-let nick = localStorage.getItem('nick') || prompt('닉네임');
-localStorage.setItem('nick', nick);
-
-let currentRoom = 'global';
-let chatRef = db.ref('chat/global');
-
-function getChatRef(roomId){
-  return db.ref('chat/' + roomId);
+// ── 초기화 ──
+function init() {
+  try {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+    rMeets = db.ref('meets');
+    rRanks = db.ref('ranks');
+    rShop  = db.ref('shop');
+    rChat  = db.ref('chat/global');
+    isReady = true;
+    setFbs('ok', '🟢 실시간 연결됨');
+    document.getElementById('oc').textContent = '실시간 연결됨';
+    // 리스너 등록
+    rMeets.on('value', s => rMeetList(s.val()));
+    rRanks.on('value', s => rRankList(s.val()));
+    rShop.on('value',  s => rShopList(s.val()));
+    rChat.limitToLast(50).on('child_added', s => { const m=s.val(); if(m) rMsg(m); });
+    // 알림 권한 요청
+    if (notifOn && 'Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  } catch(e) {
+    console.error(e);
+    setFbs('er', '연결 오류');
+  }
+  loadNickUI();
+  updateNotifUI();
+  loadProfile();
+  loadGears();
 }
 
-// 모임
-function addMeet(){
-  const title = mt.value;
-  const place = mp.value;
-  const time = mtime.value;
-
-  const roomId = Date.now();
-
-  db.ref('meets').push({title, place, time, roomId});
+// ── 닉네임 자동저장 ──
+function loadNickUI() {
+  if (savedNick) {
+    document.getElementById('nick-saved-row').style.display = 'block';
+    document.getElementById('nick-input-row').style.display = 'none';
+    document.getElementById('ns-name').textContent = savedNick;
+    document.getElementById('nick-in').value = savedNick;
+  } else {
+    document.getElementById('nick-saved-row').style.display = 'none';
+    document.getElementById('nick-input-row').style.display = 'block';
+  }
+}
+function saveNick() {
+  const n = document.getElementById('nick-in').value.trim();
+  if (!n) { toast('⚠️ 닉네임을 입력해주세요!'); return; }
+  savedNick = n;
+  localStorage.setItem('niji_nick', n);
+  loadNickUI();
+  toast('✅ 닉네임 저장: ' + n);
+}
+function changeNick() {
+  savedNick = '';
+  localStorage.removeItem('niji_nick');
+  document.getElementById('nick-in').value = '';
+  loadNickUI();
 }
 
-function loadMeets(){
-  db.ref('meets').on('value', snap=>{
+// ── 알림 ──
+function toggleNotif() {
+  notifOn = !notifOn;
+  localStorage.setItem('niji_notif', notifOn ? 'on' : 'off');
+  updateNotifUI();
+  toast(notifOn ? '🔔 알림 켜짐!' : '🔕 알림 꺼짐!');
+  if (notifOn && 'Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+function updateNotifUI() {
+  const btn = document.getElementById('ntbtn');
+  const lbl = document.getElementById('nl-lbl');
+  if (notifOn) { btn.classList.add('on'); lbl.textContent = '🔔 알림'; }
+  else { btn.classList.remove('on'); lbl.textContent = '🔕 알림'; }
+}
+function tryNotif(nickname, text) {
+  if (!notifOn) return;
+  if (savedNick && nickname === savedNick) return;
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification('💬 NIJI COURT', { body: nickname + ': ' + text });
+  }
+  if (document.hidden) {
+    document.title = '💬 새 메시지! — NIJI COURT';
+    setTimeout(() => { document.title = 'NIJI COURT — 테니스·배드민턴 커뮤니티'; }, 3000);
+  }
+}
+
+// ── 번개 모임 ──
+function rMeetList(data) {
+  const el = document.getElementById('ml');
+  el.innerHTML = '';
+  if (!data) {
+    el.innerHTML = '<div class="eb"><div class="ei">⚡</div><p>번개 모임이 없어요!<br>위 버튼으로 만들어보세요 😊</p></div>';
+    return;
+  }
+  let shown = 0;
+  Object.entries(data).reverse().forEach(([k, m]) => {
+    if (flt.meet !== 'all' && m.sport !== flt.meet) return;
+    shown++;
+    const si = m.sport === 'tennis' ? '🎾' : '🏸';
+    const bc = m.status === '마감임박' || m.status === '마감' ? 'br3' : m.status === '정기' ? 'bb3' : 'bg3';
+    const d = document.createElement('div');
+    d.className = 'mc'; d.dataset.sport = m.sport;
+    d.innerHTML = `<div class="ms ${m.sport}">${si}</div><div class="mi"><div class="mt2">${esc(m.title)}</div><div class="md2">${m.place ? '<span>📍' + esc(m.place) + '</span>' : ''} ${m.time ? '<span>🕔' + esc(m.time) + '</span>' : ''}</div></div><span class="badge ${bc}">${esc(m.status)}</span><button class="db2" onclick="delMeet('${k}')">🗑️</button>`;
+    el.appendChild(d);
+  });
+  if (!shown) el.innerHTML = '<div class="eb"><div class="ei">🔍</div><p>해당 종목 모임이 없어요!</p></div>';
+}
+function addMeet() {
+  if (!isReady) { toast('⚠️ Firebase 연결 중이에요. 잠시 후 시도해주세요!'); return; }
+  const t = v('m-t'), s = v('m-sp'), st = v('m-st'), p = v('m-pl'), ti = v('m-ti');
+  if (!t) { toast('⚠️ 제목을 입력해주세요!'); return; }
+  if (!p) { toast('⚠️ 장소를 입력해주세요!'); return; }
+  if (!ti) { toast('⚠️ 시간을 입력해주세요!'); return; }
+  rMeets.push({ title: t, sport: s, status: st, place: p, time: ti, createdAt: Date.now() });
+  sv('m-t', ''); sv('m-pl', ''); sv('m-ti', '');
+  tp('pm'); toast('✅ 번개 모임 등록!');
+}
+function delMeet(k) { if (confirm('삭제할까요?')) { rMeets.child(k).remove(); toast('🗑️ 삭제됐어요!'); } }
+function fm(el, f) {
+  flt.meet = f;
+  setChip(el);
+  if (!isReady) return;
+  rMeets.once('value', s => rMeetList(s.val()));
+}
+
+// ── 랭킹 + 게임 결과 ──
+function selResult(r) {
+  gameResult = r;
+  document.getElementById('rb-win').classList.toggle('sel', r === 'win');
+  document.getElementById('rb-lose').classList.toggle('sel', r === 'lose');
+}
+function submitGame() {
+  if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
+  const me = v('gr-me').trim();
+  if (!me) { toast('⚠️ 내 닉네임을 입력해주세요!'); return; }
+  if (!gameResult) { toast('⚠️ 승리/패배를 선택해주세요!'); return; }
+  const opp = v('gr-opp').trim();
+  const sport = v('gr-sp');
+  // 내 데이터 찾아서 업데이트
+  rRanks.orderByChild('nick').equalTo(me).once('value', snap => {
     const data = snap.val();
-    meetList.innerHTML='';
-
-    for(let k in data){
-      const m = data[k];
-      meetList.innerHTML += `
-      <div class='card'>
-        ${m.title}<br>
-        ${m.place} / ${m.time}
-        <button onclick="enterRoom('${m.roomId}')">참여</button>
-      </div>`;
+    if (data) {
+      const key = Object.keys(data)[0];
+      const cur = data[key];
+      const upd = {};
+      if (gameResult === 'win') upd.win = (cur.win || 0) + 1;
+      else upd.lose = (cur.lose || 0) + 1;
+      rRanks.child(key).update(upd);
+    } else {
+      rRanks.push({ nick: me, sport, level: '중급', win: gameResult === 'win' ? 1 : 0, lose: gameResult === 'lose' ? 1 : 0, years: 0, area: '', freq: '', createdAt: Date.now() });
+    }
+    // 상대방도 업데이트
+    if (opp) {
+      rRanks.orderByChild('nick').equalTo(opp).once('value', snap2 => {
+        const d2 = snap2.val();
+        if (d2) {
+          const k2 = Object.keys(d2)[0];
+          const c2 = d2[k2];
+          const u2 = {};
+          if (gameResult === 'win') u2.lose = (c2.lose || 0) + 1;
+          else u2.win = (c2.win || 0) + 1;
+          rRanks.child(k2).update(u2);
+        }
+      });
     }
   });
+  sv('gr-me', ''); sv('gr-opp', '');
+  gameResult = null;
+  document.getElementById('rb-win').classList.remove('sel');
+  document.getElementById('rb-lose').classList.remove('sel');
+  toast(gameResult === 'win' ? '🏆 승리 등록!' : '📝 결과 등록 완료!');
+}
+function rRankList(data) {
+  const el = document.getElementById('rl');
+  el.innerHTML = '';
+  if (!data) {
+    el.innerHTML = '<div class="eb"><div class="ei">🏆</div><p>아직 등록된 회원이 없어요!<br>게임 결과를 입력해보세요 😊</p></div>';
+    updateRH([]);
+    return;
+  }
+  let list = Object.entries(data).map(([k, m]) => {
+    const tot = (m.win || 0) + (m.lose || 0);
+    m.wr = tot > 0 ? Math.round((m.win || 0) / tot * 100) : 0;
+    return [k, m];
+  }).sort((a, b) => b[1].wr - a[1].wr);
+  updateRH(list.map(e => e[1]));
+  let shown = 0;
+  const bgs = ['#fff9c4','#e3f2fd','#e8f5e9','#f3e5f5','#fce4ec','#e0f2f1'];
+  const avs = ['😄','🎾','🏸','🌟','👑','💪','🔥','🦅','🎯','🦁'];
+  list.forEach(([k, m]) => {
+    if (flt.rank !== 'all' && m.sport !== flt.rank) return;
+    shown++;
+    const n = shown;
+    const rc = n === 1 ? 'r1' : n === 2 ? 'r2' : n === 3 ? 'r3' : '';
+    const si = m.sport === 'tennis' ? '🎾' : '🏸';
+    const av = avs[Math.abs(hc(m.nick || '?')) % avs.length];
+    const bg = bgs[(n - 1) % bgs.length];
+    const d = document.createElement('div');
+    d.className = 'rkc ' + rc; d.dataset.sport = m.sport;
+    d.innerHTML = `<div class="rnum">${n}</div><div class="rav" style="background:${bg}">${av}</div><div class="rif"><div class="rnm">${esc(m.nick)}</div><div class="rdt">${si} 구력${m.years||0}년 · ${esc(m.freq||'')} · ${esc(m.area||'')} · ${esc(m.level||'')}</div></div><div class="rsc"><div class="rw">${m.wr}%</div><div class="rlb">${m.win||0}승 ${m.lose||0}패</div></div><button class="db2" onclick="delRank('${k}')" style="font-size:14px">🗑️</button>`;
+    el.appendChild(d);
+  });
+  if (!shown) el.innerHTML = '<div class="eb"><div class="ei">🔍</div><p>해당 종목 회원이 없어요!</p></div>';
+}
+function updateRH(list) {
+  document.getElementById('r-tot').textContent = list.length;
+  document.getElementById('r-ten').textContent = list.filter(m => m.sport === 'tennis').length;
+  document.getElementById('r-bad').textContent = list.filter(m => m.sport === 'badminton').length;
+}
+function addRank() {
+  if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
+  const nk = v('r-nk'); if (!nk) { toast('⚠️ 닉네임 입력!'); return; }
+  rRanks.push({ nick: nk, sport: v('r-sp'), level: v('r-lv'), win: parseInt(v('r-w')) || 0, lose: parseInt(v('r-l')) || 0, years: parseInt(v('r-yr')) || 0, area: v('r-ar'), freq: v('r-fq'), createdAt: Date.now() });
+  ['r-nk','r-w','r-l','r-yr','r-ar','r-fq'].forEach(i => sv(i, ''));
+  tp('pr'); toast('✅ 랭킹 등록!');
+}
+function delRank(k) { if (confirm('삭제할까요?')) { rRanks.child(k).remove(); toast('🗑️ 삭제됐어요!'); } }
+function fr2(el, f) {
+  flt.rank = f;
+  setChip(el);
+  if (!isReady) return;
+  rRanks.once('value', s => rRankList(s.val()));
 }
 
-// 채팅
-function enterRoom(roomId){
-  currentRoom = roomId;
-
-  chatRef.off();
-  chatRef = getChatRef(roomId);
-
-  chat.innerHTML='';
-
-  chatRef.limitToLast(50).on('child_added', snap=>{
-    const m = snap.val();
-    chat.innerHTML += `<div>${m.nick}: ${m.text}</div>`;
+// ── 샵 ──
+function toggleAdmin() {
+  if (isAdminMode) {
+    isAdminMode = false;
+    document.getElementById('admin-shop-area').style.display = 'none';
+    document.getElementById('lock-info').textContent = '🔒 관리자 모드 — 잠금 상태';
+    document.getElementById('lock-btn').textContent = '관리자 로그인';
+    document.getElementById('lock-btn').className = 'lock-btn locked';
+    if (isReady) rShop.once('value', s => rShopList(s.val()));
+    toast('🔒 관리자 모드 종료');
+  } else {
+    sv('adm-pw', '');
+    openModal('adm');
+  }
+}
+function checkAdmin() {
+  if (v('adm-pw') === adminPw) {
+    isAdminMode = true;
+    document.getElementById('admin-shop-area').style.display = 'block';
+    document.getElementById('lock-info').textContent = '🔓 관리자 모드 — 활성화됨';
+    document.getElementById('lock-btn').textContent = '로그아웃';
+    document.getElementById('lock-btn').className = 'lock-btn unlocked';
+    closeModal('adm');
+    if (isReady) rShop.once('value', s => rShopList(s.val()));
+    toast('✅ 관리자 모드 활성화!');
+  } else {
+    toast('⚠️ 비밀번호가 틀렸어요!');
+  }
+}
+function changePw() {
+  const cur = v('pw-cur'), nw = v('pw-new'), con = v('pw-con');
+  if (cur !== adminPw) { toast('⚠️ 현재 비밀번호가 틀렸어요!'); return; }
+  if (!nw) { toast('⚠️ 새 비밀번호를 입력해주세요!'); return; }
+  if (nw !== con) { toast('⚠️ 새 비밀번호가 일치하지 않아요!'); return; }
+  adminPw = nw;
+  localStorage.setItem('niji_adm_pw', nw);
+  ['pw-cur','pw-new','pw-con'].forEach(i => sv(i, ''));
+  tp('ppw'); toast('✅ 비밀번호 변경 완료!');
+}
+function rShopList(data) {
+  const grid = document.getElementById('slist');
+  const em = document.getElementById('sem');
+  grid.innerHTML = '';
+  const cats = { string: 'g', grip: 'o', acc: 'b', ball: 'y' };
+  const icos = { string: '🎾', grip: '🖐️', acc: '💡', ball: '🟡' };
+  if (!data) { em.style.display = 'block'; renderGift(null); return; }
+  let shown = 0;
+  Object.entries(data).reverse().forEach(([k, s]) => {
+    if (flt.shop !== 'all' && s.cat !== flt.shop) return;
+    shown++;
+    const col = cats[s.cat] || 'g', ico = icos[s.cat] || '📦';
+    const d = document.createElement('div');
+    d.className = 'si';
+    d.innerHTML = `<div class="sth ${col}">${ico}${s.badge ? '<span class="shot">' + esc(s.badge) + '</span>' : ''}</div><div class="sif"><div class="snm">${esc(s.name)}</div>${s.desc ? '<div style="font-size:11px;color:var(--tl);margin-bottom:3px">' + esc(s.desc) + '</div>' : ''}<div class="spr">${Number(s.price).toLocaleString()}원${s.orig && s.orig > 0 ? '<span class="og">' + Number(s.orig).toLocaleString() + '</span>' : ''}</div></div><div class="sft"><button class="gift-btn" onclick="openModal(\'gift\')">🎁 선물하기</button>${isAdminMode ? '<button class="adm-del" onclick="delShop(\'' + k + '\')">🗑️ 삭제</button>' : ''}</div>`;
+    grid.appendChild(d);
+  });
+  em.style.display = shown ? 'none' : 'block';
+  renderGift(data);
+}
+function renderGift(data) {
+  const el = document.getElementById('gift-list');
+  if (!data) { el.innerHTML = '<div class="eb"><div class="ei">🎁</div><p>상품을 먼저 등록해주세요!</p></div>'; return; }
+  el.innerHTML = '';
+  const icos = { string: '🎾', grip: '🖐️', acc: '💡', ball: '🟡' };
+  Object.entries(data).slice(0, 6).forEach(([k, s]) => {
+    const d = document.createElement('div');
+    d.style = 'display:flex;align-items:center;gap:11px;background:#fff;border-radius:11px;padding:11px;box-shadow:var(--sh);margin-bottom:9px;';
+    d.innerHTML = `<div style="font-size:26px">${icos[s.cat] || '📦'}</div><div style="flex:1"><div style="font-size:13px;font-weight:700">${esc(s.name)}</div><div style="font-size:13px;color:var(--or);font-weight:700">${Number(s.price).toLocaleString()}원</div></div><button class="btn bo2" style="padding:7px 13px;font-size:12px" onclick="toast('🎁 링크 복사! 카톡으로 공유하세요')">선물하기</button>`;
+    el.appendChild(d);
   });
 }
-
-function sendMsg(){
-  const text = msg.value;
-
-  getChatRef(currentRoom).push({nick, text});
-
-  msg.value='';
+function addShop() {
+  if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
+  const nm = v('s-nm'), pr = v('s-pr');
+  if (!nm) { toast('⚠️ 상품명 입력!'); return; }
+  if (!pr) { toast('⚠️ 판매가 입력!'); return; }
+  rShop.push({ name: nm, price: parseInt(pr), orig: parseInt(v('s-og')) || 0, cat: v('s-ct'), badge: v('s-bd'), desc: v('s-ds'), createdAt: Date.now() });
+  ['s-nm','s-pr','s-og','s-ds'].forEach(i => sv(i, ''));
+  tp('ps'); toast('✅ 상품 등록 완료!');
+}
+function delShop(k) { if (confirm('상품을 삭제할까요?')) { rShop.child(k).remove(); toast('🗑️ 삭제됐어요!'); } }
+function fs2(el, f) {
+  flt.shop = f;
+  setChip(el);
+  if (!isReady) return;
+  rShop.once('value', s => rShopList(s.val()));
 }
 
-// 상품
-function addProduct(){
-  const name = pn.value;
-  const price = pp.value;
-
-  db.ref('products').push({name, price});
+// ── 채팅 ──
+function setFbs(t, tx) {
+  const el = document.getElementById('fbs');
+  el.className = 'fb-s ' + (t === 'ok' ? 'fs-ok' : t === 'er' ? 'fs-er' : 'fs-wt');
+  el.textContent = tx;
+}
+function rMsg(msg) {
+  const c = document.getElementById('cmsg');
+  const myNick = savedNick || '';
+  const isMe = msg.nickname === myNick;
+  const avs = ['😄','🎾','🏸','🌟','👑','💪','🔥','🦅'];
+  const av = avs[Math.abs(hc(msg.nickname || '?')) % avs.length];
+  const tm = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '';
+  const d = document.createElement('div');
+  d.className = 'cmg' + (isMe ? ' mine' : '');
+  d.innerHTML = `<div class="cav">${av}</div><div class="cbub"><div class="cnm">${esc(msg.nickname || '익명')}</div><div class="ctx">${esc(msg.text || '')}</div><div class="ctm2">${tm}</div></div>`;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+  tryNotif(msg.nickname || '', msg.text || '');
+}
+function scb() {
+  if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
+  const inp = document.getElementById('chat-in');
+  const nick = savedNick || document.getElementById('nick-in').value.trim() || '익명';
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  // 닉네임 자동 저장
+  if (!savedNick && nick !== '익명') {
+    savedNick = nick;
+    localStorage.setItem('niji_nick', nick);
+    loadNickUI();
+  }
+  rChat.push({ nickname: nick, text, timestamp: Date.now() });
 }
 
-function loadProducts(){
-  db.ref('products').on('value', snap=>{
-    const data = snap.val();
-    products.innerHTML='';
-
-    for(let k in data){
-      const p = data[k];
-      products.innerHTML += `
-      <div class='card'>
-        ${p.name} (${p.price})
-        <button onclick="sendGift('${p.name}','${p.price}')">선물</button>
-      </div>`;
-    }
+// ── 내 가방 ──
+function loadProfile() {
+  document.getElementById('p-nm').textContent = profile.name || '내 닉네임';
+  document.getElementById('p-lv').textContent = profile.level || '중급';
+  document.getElementById('p-sp').textContent = profile.sport === 'badminton' ? '🏸 배드민턴' : '🎾 테니스';
+  document.getElementById('p-yr').textContent = '구력 ' + (profile.years || 0) + '년';
+  document.getElementById('p-ar').textContent = '📍 ' + (profile.area || '지역 미설정');
+  const tot = (profile.win || 0) + (profile.lose || 0);
+  const wr = tot > 0 ? Math.round((profile.win || 0) / tot * 100) : 0;
+  document.getElementById('p-wr').textContent = wr + '%';
+  document.getElementById('p-gm').textContent = tot;
+  sv('ep-nm', profile.name || '');
+  sv('ep-yr', profile.years || 0);
+  sv('ep-ar', profile.area || '');
+  sv('ep-w', profile.win || 0);
+  sv('ep-l', profile.lose || 0);
+  if (profile.level) document.getElementById('ep-lv').value = profile.level;
+  if (profile.sport) document.getElementById('ep-sp').value = profile.sport;
+}
+function saveProfile() {
+  profile = { name: v('ep-nm') || '나', sport: v('ep-sp'), level: v('ep-lv'), years: parseInt(v('ep-yr')) || 0, area: v('ep-ar'), win: parseInt(v('ep-w')) || 0, lose: parseInt(v('ep-l')) || 0 };
+  localStorage.setItem('niji_profile', JSON.stringify(profile));
+  loadProfile();
+  closeModal('ep');
+  toast('✅ 프로필 저장됐어요!');
+}
+function loadGears() {
+  const el = document.getElementById('gl');
+  el.innerHTML = '';
+  document.getElementById('p-gc').textContent = gears.length;
+  if (!gears.length) { el.innerHTML = '<div class="eb"><div class="ei">🎒</div><p>장비를 추가해보세요!</p></div>'; return; }
+  gears.forEach((g, i) => {
+    const d = document.createElement('div');
+    d.className = 'gi2';
+    d.innerHTML = `<div class="gic">${g.type || '🎾'}</div><div class="gif"><div class="gnm">${esc(g.name)}</div><div class="gdt">${esc(g.detail || '')}</div></div><div style="text-align:right;flex-shrink:0">${g.date ? '<div class="gda">교체일<br>' + g.date + '</div>' : ''}<button class="db2" onclick="delGear(${i})" style="font-size:14px">🗑️</button></div>`;
+    el.appendChild(d);
   });
 }
-
-// 선물
-function sendGift(name, price){
-  const to = prompt('닉네임');
-
-  db.ref('bags/' + to).push({name, price});
-  alert('선물 완료');
+function addGear() {
+  const nm = v('g-nm'); if (!nm) { toast('⚠️ 장비명 입력!'); return; }
+  gears.push({ type: v('g-tp'), name: nm, detail: v('g-dt'), date: v('g-da') });
+  localStorage.setItem('niji_gears', JSON.stringify(gears));
+  sv('g-nm', ''); sv('g-dt', ''); sv('g-da', '');
+  loadGears(); tp('pg2'); toast('✅ 장비 등록!');
+}
+function delGear(i) {
+  if (confirm('삭제할까요?')) {
+    gears.splice(i, 1);
+    localStorage.setItem('niji_gears', JSON.stringify(gears));
+    loadGears();
+    toast('🗑️ 삭제됐어요!');
+  }
 }
 
-// 가방
-function loadBag(){
-  db.ref('bags/' + nick).on('value', snap=>{
-    const data = snap.val();
-    bag.innerHTML='';
-
-    for(let k in data){
-      const i = data[k];
-      bag.innerHTML += `<div>${i.name} (${i.price})</div>`;
-    }
-  });
+// ── 유틸 ──
+function showTab(n) {
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tb').forEach(b => b.classList.remove('active'));
+  document.getElementById('pg-' + n).classList.add('active');
+  document.getElementById('tab-' + n).classList.add('active');
 }
+function tp(id) { const el = document.getElementById(id); el.style.display = el.style.display === 'none' ? 'block' : 'none'; }
+function setChip(el) { el.closest('.ct').querySelectorAll('.chip').forEach(c => c.classList.remove('active')); el.classList.add('active'); }
+function openModal(n) { document.getElementById('modal-' + n).classList.add('open'); }
+function closeModal(n) { document.getElementById('modal-' + n).classList.remove('open'); }
+function v(id) { return document.getElementById(id).value; }
+function sv(id, val) { document.getElementById(id).value = val; }
+function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function hc(s) { let h = 0; for (let i = 0; i < s.length; i++) h = Math.imul(31, h) + s.charCodeAt(i) | 0; return h; }
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2600); }
 
-loadMeets();
-loadProducts();
-loadBag();
+window.addEventListener('load', init);
 </script>
-
 </body>
 </html>
