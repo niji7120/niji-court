@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -5,8 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NIJI COURT — 테니스·배드민턴 커뮤니티</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;500;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 :root{
   --gd:#1a3d1a;--gc:#2e6b2e;--gm:#3d8b3d;--gb:#52b052;--gl:#d4edda;
@@ -66,6 +65,23 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 .ct{display:flex;gap:7px;margin-bottom:11px;flex-wrap:wrap;}
 .chip{padding:6px 13px;border-radius:17px;font-size:12px;font-weight:700;border:2px solid var(--g2);background:#fff;cursor:pointer;color:var(--tl);font-family:'Noto Sans KR',sans-serif;transition:all 0.18s;}
 .chip.active{background:var(--gc);border-color:var(--gc);color:#fff;}
+/* MEET CHAT BUTTON */
+.meet-chat-btn{margin-top:5px;padding:4px 11px;background:linear-gradient(135deg,var(--gc),var(--gm));color:#fff;border:none;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;display:inline-block;}
+.meet-chat-btn:hover{opacity:0.85;}
+/* MEET CHAT MODAL */
+.mc-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:300;align-items:flex-end;justify-content:center;}
+.mc-modal.open{display:flex;animation:fu 0.2s;}
+.mc-sheet{background:#fff;border-radius:21px 21px 0 0;width:100%;max-width:480px;display:flex;flex-direction:column;height:88vh;animation:su 0.3s ease;}
+.mc-head{background:linear-gradient(135deg,var(--gd),var(--gc));border-radius:21px 21px 0 0;padding:13px 15px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.mc-handle{width:36px;height:4px;background:rgba(255,255,255,0.35);border-radius:2px;margin:0 auto 0;}
+.mc-title{flex:1;color:#fff;font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mc-close{background:rgba(255,255,255,0.2);border:none;color:#fff;font-size:18px;width:32px;height:32px;border-radius:50%;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.mc-body{flex:1;overflow-y:auto;background:var(--g1);padding:12px;}
+.mc-foot{padding:9px 11px;background:#fff;border-top:1px solid var(--g2);flex-shrink:0;}
+.mc-nick-row{display:flex;gap:7px;margin-bottom:7px;align-items:center;}
+.mc-nick-saved{display:flex;align-items:center;gap:7px;margin-bottom:7px;background:var(--gl);border-radius:9px;padding:6px 11px;}
+.mc-nick-saved .nsn{font-size:13px;font-weight:700;color:var(--gc);flex:1;}
+.mc-nick-saved .nsc{font-size:11px;color:var(--tl);cursor:pointer;text-decoration:underline;}
 /* CHAT */
 .cw{background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);margin-bottom:13px;}
 .chd{background:linear-gradient(135deg,var(--gd),var(--gc));padding:11px 13px;display:flex;align-items:center;justify-content:space-between;}
@@ -451,8 +467,45 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
   </div>
 </div>
 
+<!-- MODAL: 번개 모임 채팅방 -->
+<div class="mc-modal" id="mc-modal">
+  <div class="mc-sheet">
+    <div class="mc-head">
+      <div style="display:flex;flex-direction:column;gap:5px;width:100%">
+        <div class="mc-handle"></div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:18px">💬</span>
+          <span class="mc-title" id="mc-title">채팅방</span>
+          <button class="mc-close" onclick="closeMeetChat()">✕</button>
+        </div>
+      </div>
+    </div>
+    <div class="mc-body" id="mc-body"></div>
+    <div class="mc-foot">
+      <div id="mc-nick-saved-row" style="display:none">
+        <div class="mc-nick-saved">
+          <span>👤</span>
+          <span class="nsn" id="mc-ns-name"></span>
+          <span class="nsc" onclick="changeMcNick()">변경</span>
+        </div>
+      </div>
+      <div id="mc-nick-input-row" class="mc-nick-row">
+        <label style="font-size:12px;color:var(--tl);white-space:nowrap">닉네임</label>
+        <input class="fi" id="mc-nick-in" placeholder="닉네임 입력" style="flex:1;padding:7px 11px;font-size:13px;" onkeydown="if(event.key==='Enter')saveMcNick()">
+        <button class="nick-save-btn" onclick="saveMcNick()">저장</button>
+      </div>
+      <div class="cin">
+        <input id="mc-chat-in" placeholder="메시지를 입력하세요..." onkeydown="if(event.key==='Enter')sendMcMsg()">
+        <button class="csb" onclick="sendMcMsg()">➤</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyB2BnWZ1Y2Iq43M1KlWrZ3CM3DNQu-YHYc",
@@ -578,7 +631,7 @@ function rMeetList(data) {
     const bc = m.status === '마감임박' || m.status === '마감' ? 'br3' : m.status === '정기' ? 'bb3' : 'bg3';
     const d = document.createElement('div');
     d.className = 'mc'; d.dataset.sport = m.sport;
-    d.innerHTML = `<div class="ms ${m.sport}">${si}</div><div class="mi"><div class="mt2">${esc(m.title)}</div><div class="md2">${m.place ? '<span>📍' + esc(m.place) + '</span>' : ''} ${m.time ? '<span>🕔' + esc(m.time) + '</span>' : ''}</div></div><span class="badge ${bc}">${esc(m.status)}</span><button class="db2" onclick="delMeet('${k}')">🗑️</button>`;
+    d.innerHTML = `<div class="ms ${m.sport}">${si}</div><div class="mi"><div class="mt2">${esc(m.title)}</div><div class="md2">${m.place ? '<span>📍' + esc(m.place) + '</span>' : ''} ${m.time ? '<span>🕔' + esc(m.time) + '</span>' : ''}</div><button class="meet-chat-btn" onclick="openMeetChat('${k}','${esc(m.title)}')">💬 채팅방</button></div><span class="badge ${bc}">${esc(m.status)}</span><button class="db2" onclick="delMeet('${k}')">🗑️</button>`;
     el.appendChild(d);
   });
   if (!shown) el.innerHTML = '<div class="eb"><div class="ei">🔍</div><p>해당 종목 모임이 없어요!</p></div>';
@@ -824,7 +877,120 @@ function scb() {
   rChat.push({ nickname: nick, text, timestamp: Date.now() });
 }
 
-// ── 내 가방 ──
+// ── 번개 모임 채팅방 ──
+let curMeetId = null;
+let curMeetChatRef = null;
+let mcNick = localStorage.getItem('niji_mc_nick') || '';
+let mcFirstLoad = true;
+
+function playNotifSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // 카톡 스타일: 짧은 "딩~" 소리 두 번
+    const notes = [880, 1100];
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const t = ctx.currentTime + i * 0.15;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.35, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+      osc.start(t); osc.stop(t + 0.3);
+    });
+  } catch(e) {}
+}
+
+function openMeetChat(meetId, title) {
+  curMeetId = meetId;
+  mcFirstLoad = true;
+  document.getElementById('mc-title').textContent = '⚡ ' + title;
+  document.getElementById('mc-body').innerHTML = '';
+  document.getElementById('mc-modal').classList.add('open');
+  // 닉네임 UI
+  mcNick = localStorage.getItem('niji_mc_nick') || savedNick || '';
+  loadMcNickUI();
+  // Firebase 리스너 연결
+  if (curMeetChatRef) curMeetChatRef.off();
+  curMeetChatRef = db.ref('meetChat/' + meetId);
+  curMeetChatRef.limitToLast(80).on('child_added', s => {
+    const m = s.val();
+    if (m) renderMcMsg(m, mcFirstLoad);
+  });
+  // 첫 로드 완료 플래그 (약간 딜레이)
+  setTimeout(() => { mcFirstLoad = false; }, 600);
+}
+
+function closeMeetChat() {
+  document.getElementById('mc-modal').classList.remove('open');
+  if (curMeetChatRef) { curMeetChatRef.off(); curMeetChatRef = null; }
+  curMeetId = null;
+}
+
+function renderMcMsg(msg, isHistory) {
+  const c = document.getElementById('mc-body');
+  const myNick = mcNick || savedNick || '';
+  const isMe = msg.nickname === myNick;
+  const avs = ['😄','🎾','🏸','🌟','👑','💪','🔥','🦅'];
+  const av = avs[Math.abs(hc(msg.nickname || '?')) % avs.length];
+  const tm = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '';
+  const d = document.createElement('div');
+  d.className = 'cmg' + (isMe ? ' mine' : '');
+  d.innerHTML = `<div class="cav">${av}</div><div class="cbub"><div class="cnm">${esc(msg.nickname||'익명')}</div><div class="ctx">${esc(msg.text||'')}</div><div class="ctm2">${tm}</div></div>`;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+  // 새 메시지이고 내가 보낸 게 아닐 때만 알림음
+  if (!isHistory && !isMe && notifOn) {
+    playNotifSound();
+    tryNotif(msg.nickname || '', msg.text || '');
+  }
+}
+
+function sendMcMsg() {
+  if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
+  if (!curMeetId) return;
+  const inp = document.getElementById('mc-chat-in');
+  const nick = mcNick || savedNick || document.getElementById('mc-nick-in').value.trim() || '익명';
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  if (!mcNick && nick !== '익명') {
+    mcNick = nick;
+    localStorage.setItem('niji_mc_nick', nick);
+    loadMcNickUI();
+  }
+  db.ref('meetChat/' + curMeetId).push({ nickname: nick, text, timestamp: Date.now() });
+}
+
+function loadMcNickUI() {
+  if (mcNick) {
+    document.getElementById('mc-nick-saved-row').style.display = 'block';
+    document.getElementById('mc-nick-input-row').style.display = 'none';
+    document.getElementById('mc-ns-name').textContent = mcNick;
+    document.getElementById('mc-nick-in').value = mcNick;
+  } else {
+    document.getElementById('mc-nick-saved-row').style.display = 'none';
+    document.getElementById('mc-nick-input-row').style.display = 'block';
+  }
+}
+function saveMcNick() {
+  const n = document.getElementById('mc-nick-in').value.trim();
+  if (!n) { toast('⚠️ 닉네임을 입력해주세요!'); return; }
+  mcNick = n;
+  localStorage.setItem('niji_mc_nick', n);
+  loadMcNickUI();
+  toast('✅ 닉네임 저장: ' + n);
+}
+function changeMcNick() {
+  mcNick = '';
+  localStorage.removeItem('niji_mc_nick');
+  document.getElementById('mc-nick-in').value = '';
+  loadMcNickUI();
+}
+
+
 function loadProfile() {
   document.getElementById('p-nm').textContent = profile.name || '내 닉네임';
   document.getElementById('p-lv').textContent = profile.level || '중급';
