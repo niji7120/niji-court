@@ -787,7 +787,10 @@ function submitGame() {
     result: gameResult,
     createdAt: Date.now()
   };
-  rRanks.push(record);
+  rRanks.push(record).then(() => {
+    // 저장 완료 후 목록 강제 갱신
+    rRanks.once('value', s => rRankList(s.val()));
+  });
 
   // 입력 초기화
   ['gr-me','gr-partner','gr-opp1','gr-opp2','gr-score-me','gr-score-opp','gr-dt'].forEach(i => sv(i,''));
@@ -937,7 +940,9 @@ function addShop() {
   const nm = v('s-nm'), pr = v('s-pr');
   if (!nm) { toast('⚠️ 상품명 입력!'); return; }
   if (!pr) { toast('⚠️ 판매가 입력!'); return; }
-  rShop.push({ name: nm, price: parseInt(pr), orig: parseInt(v('s-og')) || 0, cat: v('s-ct'), badge: v('s-bd'), desc: v('s-ds'), url: v('s-url').trim(), createdAt: Date.now() });
+  rShop.push({ name: nm, price: parseInt(pr), orig: parseInt(v('s-og')) || 0, cat: v('s-ct'), badge: v('s-bd'), desc: v('s-ds'), url: v('s-url').trim(), createdAt: Date.now() }).then(() => {
+    rShop.once('value', s => rShopList(s.val()));
+  });
   ['s-nm','s-pr','s-og','s-ds','s-url'].forEach(i => sv(i, ''));
   tp('ps'); toast('✅ 상품 등록 완료!');
 }
@@ -1317,6 +1322,9 @@ function showTab(n) {
   document.getElementById('pg-' + n).classList.add('active');
   document.getElementById('tab-' + n).classList.add('active');
   if (n === 'bag') loadInbox();
+  if (n === 'rank' && isReady) rRanks.once('value', s => rRankList(s.val()));
+  if (n === 'shop' && isReady) rShop.once('value', s => rShopList(s.val()));
+  if (n === 'home' && isReady) rMeets.once('value', s => rMeetList(s.val()));
 }
 function tp(id) { const el = document.getElementById(id); el.style.display = el.style.display === 'none' ? 'block' : 'none'; }
 function setChip(el) { el.closest('.ct').querySelectorAll('.chip').forEach(c => c.classList.remove('active')); el.classList.add('active'); }
