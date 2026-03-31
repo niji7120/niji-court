@@ -714,7 +714,9 @@ function addMeet() {
   if (!t) { toast('⚠️ 제목을 입력해주세요!'); return; }
   if (!p) { toast('⚠️ 장소를 입력해주세요!'); return; }
   if (!ti) { toast('⚠️ 시간을 입력해주세요!'); return; }
-  rMeets.push({ title: t, sport: s, status: st, place: p, time: ti, createdAt: Date.now() });
+  rMeets.push({ title: t, sport: s, status: st, place: p, time: ti, createdAt: Date.now() })
+    .then(() => { rMeets.once('value', snap => rMeetList(snap.val())); })
+    .catch(e => { console.error(e); toast('⚠️ 저장 실패! 다시 시도해주세요.'); });
   sv('m-t', ''); sv('m-pl', ''); sv('m-ti', '');
   tp('pm'); toast('✅ 번개 모임 등록!');
 }
@@ -726,7 +728,10 @@ function delMeet(k) {
     return;
   }
   pendingDel = null;
-  rMeets.child(k).remove(); toast('🗑️ 삭제됐어요!');
+  rMeets.child(k).remove().then(() => {
+    rMeets.once('value', s => rMeetList(s.val()));
+  });
+  toast('🗑️ 삭제됐어요!');
 }
 function fm(el, f) {
   flt.meet = f;
@@ -787,10 +792,9 @@ function submitGame() {
     result: gameResult,
     createdAt: Date.now()
   };
-  rRanks.push(record).then(() => {
-    // 저장 완료 후 목록 강제 갱신
-    rRanks.once('value', s => rRankList(s.val()));
-  });
+  rRanks.push(record)
+    .then(() => { rRanks.once('value', snap => rRankList(snap.val())); })
+    .catch(e => { console.error(e); toast('⚠️ 저장 실패! 다시 시도해주세요.'); });
 
   // 입력 초기화
   ['gr-me','gr-partner','gr-opp1','gr-opp2','gr-score-me','gr-score-opp','gr-dt'].forEach(i => sv(i,''));
@@ -850,7 +854,10 @@ function delRank(k) {
     return;
   }
   pendingDel = null;
-  rRanks.child(k).remove(); toast('🗑️ 삭제됐어요!');
+  rRanks.child(k).remove().then(() => {
+    rRanks.once('value', s => rRankList(s.val()));
+  });
+  toast('🗑️ 삭제됐어요!');
 }
 function fr2(el, f) {
   flt.rank = f;
@@ -940,9 +947,9 @@ function addShop() {
   const nm = v('s-nm'), pr = v('s-pr');
   if (!nm) { toast('⚠️ 상품명 입력!'); return; }
   if (!pr) { toast('⚠️ 판매가 입력!'); return; }
-  rShop.push({ name: nm, price: parseInt(pr), orig: parseInt(v('s-og')) || 0, cat: v('s-ct'), badge: v('s-bd'), desc: v('s-ds'), url: v('s-url').trim(), createdAt: Date.now() }).then(() => {
-    rShop.once('value', s => rShopList(s.val()));
-  });
+  rShop.push({ name: nm, price: parseInt(pr), orig: parseInt(v('s-og')) || 0, cat: v('s-ct'), badge: v('s-bd'), desc: v('s-ds'), url: v('s-url').trim(), createdAt: Date.now() })
+    .then(() => { rShop.once('value', snap => rShopList(snap.val())); })
+    .catch(e => { console.error(e); toast('⚠️ 저장 실패! 다시 시도해주세요.'); });
   ['s-nm','s-pr','s-og','s-ds','s-url'].forEach(i => sv(i, ''));
   tp('ps'); toast('✅ 상품 등록 완료!');
 }
@@ -954,7 +961,10 @@ function delShop(k) {
     return;
   }
   pendingDel = null;
-  rShop.child(k).remove(); toast('🗑️ 삭제됐어요!');
+  rShop.child(k).remove().then(() => {
+    rShop.once('value', s => rShopList(s.val()));
+  });
+  toast('🗑️ 삭제됐어요!');
 }
 function fs2(el, f) {
   flt.shop = f;
