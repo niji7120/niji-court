@@ -172,27 +172,47 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 .toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--gd);color:#fff;padding:9px 19px;border-radius:21px;font-size:13px;font-weight:600;z-index:300;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 ::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-thumb{background:var(--g2);border-radius:2px;}
-/* DRAW */
-.dr-player-tag{display:inline-flex;align-items:center;gap:6px;background:var(--gl);border:1.5px solid var(--gb);border-radius:17px;padding:5px 11px;font-size:13px;font-weight:700;color:var(--gd);margin:3px;}
-.dr-player-tag button{background:none;border:none;cursor:pointer;color:#c62828;font-size:14px;padding:0;line-height:1;}
-.dr-round-title{font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;color:var(--gd);margin:13px 0 7px;display:flex;align-items:center;gap:6px;}
-.dr-match{background:#fff;border-radius:var(--rs);box-shadow:var(--sh);margin-bottom:8px;overflow:hidden;}
-.dr-match-header{background:var(--g1);padding:6px 12px;font-size:11px;color:var(--tl);font-weight:700;}
-.dr-team{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--g1);cursor:pointer;transition:background 0.15s;}
+/* DRAW - 개선 */
+.dr-step-card{background:#fff;border-radius:var(--r);padding:14px;box-shadow:var(--sh);margin-bottom:11px;}
+.dr-step-label{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;color:var(--gd);margin-bottom:11px;display:flex;align-items:center;gap:8px;}
+.dr-step-num{width:22px;height:22px;background:var(--or);color:#fff;border-radius:50%;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Noto Sans KR',sans-serif;font-weight:900;}
+.dr-mode-btn{border:2px solid var(--g2);background:var(--g1);border-radius:13px;padding:14px 10px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;color:var(--tl);transition:all 0.18s;text-align:center;width:100%;}
+.dr-mode-btn.active{border-color:var(--gc);background:var(--gl);color:var(--gd);}
+.dr-player-tag{display:inline-flex;align-items:center;gap:5px;background:var(--gl);border:1.5px solid var(--gb);border-radius:17px;padding:5px 10px 5px 12px;font-size:12px;font-weight:700;color:var(--gd);margin:3px 3px 3px 0;}
+.dr-player-tag button{background:none;border:none;cursor:pointer;color:#c62828;font-size:13px;padding:0;line-height:1;}
+.dr-team-tag{display:inline-flex;align-items:center;gap:5px;background:#e3f2fd;border:1.5px solid #90caf9;border-radius:17px;padding:5px 10px 5px 12px;font-size:12px;font-weight:700;color:#1565c0;margin:3px 3px 3px 0;}
+.dr-team-tag button{background:none;border:none;cursor:pointer;color:#c62828;font-size:13px;padding:0;line-height:1;}
+/* 경기 카드 */
+.dr-round-wrap{margin-bottom:16px;}
+.dr-round-title{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--gd),var(--gc));border-radius:10px;padding:8px 14px;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+.dr-match{background:#fff;border-radius:13px;box-shadow:0 2px 12px rgba(30,80,30,0.10);margin-bottom:9px;overflow:hidden;border:1.5px solid var(--g2);}
+.dr-match-header{background:var(--g1);padding:6px 13px;font-size:11px;color:var(--tl);font-weight:700;display:flex;align-items:center;justify-content:space-between;}
+.dr-match-header .dr-vs{font-size:10px;background:var(--gc);color:#fff;padding:1px 7px;border-radius:8px;font-weight:700;}
+.dr-team{display:flex;align-items:center;gap:10px;padding:11px 13px;border-bottom:1px solid var(--g1);transition:background 0.15s;}
 .dr-team:last-child{border-bottom:none;}
-.dr-team:hover{background:var(--g1);}
-.dr-team.winner{background:#e8f5e9;}
-.dr-team-name{flex:1;font-size:13px;font-weight:700;}
-.dr-score{width:32px;height:32px;border:1.5px solid var(--g2);border-radius:8px;text-align:center;font-size:14px;font-weight:700;font-family:'Noto Sans KR',sans-serif;outline:none;color:var(--gd);}
-.dr-win-badge{background:var(--gc);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;white-space:nowrap;}
-.dr-bye{padding:10px 12px;font-size:12px;color:var(--tl);font-style:italic;}
+.dr-team.winner{background:linear-gradient(90deg,#e8f5e9,#f1f8f1);}
+.dr-team.clickable{cursor:pointer;}
+.dr-team.clickable:hover{background:var(--g1);}
+.dr-team-icon{width:34px;height:34px;border-radius:9px;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.dr-team-icon.doubles{background:#e3f2fd;}
+.dr-team.winner .dr-team-icon{background:#c8e6c9;}
+.dr-team-name{flex:1;font-size:13px;font-weight:700;color:var(--td);min-width:0;}
+.dr-team-name .dr-sub{font-size:11px;font-weight:400;color:var(--tl);display:block;margin-top:1px;}
+.dr-score{width:36px;height:34px;border:1.5px solid var(--g2);border-radius:8px;text-align:center;font-size:15px;font-weight:900;font-family:'Bebas Neue',cursive;outline:none;color:var(--gd);background:#fff;flex-shrink:0;}
+.dr-score:focus{border-color:var(--gc);}
+.dr-win-badge{background:var(--gc);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;white-space:nowrap;flex-shrink:0;}
+.dr-bye{padding:10px 13px;font-size:12px;color:var(--tl);font-style:italic;background:#fafafa;}
+/* 리그 테이블 */
 .league-table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--rs);overflow:hidden;box-shadow:var(--sh);}
-.league-table th{background:var(--gd);color:#fff;padding:8px 10px;font-size:12px;font-weight:700;text-align:center;}
-.league-table td{padding:8px 10px;font-size:12px;text-align:center;border-bottom:1px solid var(--g1);}
+.league-table th{background:var(--gd);color:#fff;padding:9px 10px;font-size:12px;font-weight:700;text-align:center;}
+.league-table td{padding:9px 10px;font-size:12px;text-align:center;border-bottom:1px solid var(--g1);}
 .league-table tr:last-child td{border-bottom:none;}
-.league-table tr:nth-child(even) td{background:var(--g1);}
-.league-table td:first-child{text-align:left;font-weight:700;}
-.league-rank1{background:#fff9e6 !important;} .league-rank2{background:#f5f5f5 !important;} .league-rank3{background:#fff3e0 !important;}
+.league-table td:nth-child(2){text-align:left;font-weight:700;}
+.league-rank1 td{background:#fff9e6 !important;} .league-rank2 td{background:#f5f5f5 !important;} .league-rank3 td{background:#fff3e0 !important;}
+.dr-champ{text-align:center;padding:22px 14px;background:linear-gradient(135deg,#fff9e6,#fffde7);border:2px solid #FFD700;border-radius:var(--r);margin-top:11px;}
+.dr-champ .trophy{font-size:44px;margin-bottom:8px;}
+.dr-champ .champ-label{font-family:'Oswald',sans-serif;font-size:16px;color:#b8860b;margin-bottom:4px;}
+.dr-champ .champ-name{font-size:22px;font-weight:900;color:var(--gd);}
 </style>
 </head>
 <body>
@@ -385,20 +405,20 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 <!-- MY BAG -->
 <div class="pg" id="pg-draw">
 
-  <!-- 번개 모임 선택 -->
-  <div class="stl"><div class="dot"></div>🏅 대진표</div>
+  <div class="stl"><div class="dot"></div>🏅 대진표 만들기</div>
 
-  <div class="card" style="margin-bottom:11px">
-    <div class="at">📋 모임 선택</div>
+  <!-- STEP 1: 기본 설정 -->
+  <div class="dr-step-card">
+    <div class="dr-step-label"><span class="dr-step-num">1</span> 기본 설정</div>
     <div class="fr">
-      <label class="fl">번개 모임에서 불러오기</label>
+      <label class="fl">번개 모임에서 불러오기 (선택)</label>
       <select class="fs" id="dr-meet-sel" onchange="drSelectMeet(this.value)">
-        <option value="">— 모임 선택 (선택 안 해도 됨) —</option>
+        <option value="">— 모임 선택 안 함 —</option>
       </select>
     </div>
     <div class="fr" style="margin-top:8px">
       <label class="fl">대진표 제목 *</label>
-      <input class="fi" id="dr-title" placeholder="예: 4월 번개 테니스 대진표">
+      <input class="fi" id="dr-title" placeholder="예: 4월 번개 테니스">
     </div>
     <div class="r2" style="margin-top:4px">
       <div class="fr">
@@ -409,7 +429,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
         </select>
       </div>
       <div class="fr">
-        <label class="fl">방식</label>
+        <label class="fl">경기 방식</label>
         <select class="fs" id="dr-type">
           <option value="tournament">🏆 토너먼트</option>
           <option value="league">📋 리그전</option>
@@ -418,24 +438,52 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
     </div>
   </div>
 
-  <!-- 참가자 입력 -->
-  <div class="card" style="margin-bottom:11px">
-    <div class="at">👥 참가자 입력</div>
-    <div id="dr-players-list" style="margin-bottom:9px"></div>
-    <div style="display:flex;gap:7px;align-items:center">
-      <input class="fi" id="dr-player-inp" placeholder="이름 입력 후 추가" style="flex:1" onkeydown="if(event.key==='Enter')drAddPlayer()">
-      <button class="btn bg2" style="padding:9px 13px;border-radius:11px;white-space:nowrap" onclick="drAddPlayer()">➕ 추가</button>
+  <!-- STEP 2: 단식/복식 -->
+  <div class="dr-step-card">
+    <div class="dr-step-label"><span class="dr-step-num">2</span> 단식 / 복식</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+      <button class="dr-mode-btn active" id="dr-mode-singles" onclick="drSetMode('singles')">
+        <div style="font-size:26px">🧍</div>
+        <div style="font-size:14px;font-weight:900;margin-top:4px">단식</div>
+        <div style="font-size:11px;opacity:0.7;margin-top:2px">1 vs 1</div>
+      </button>
+      <button class="dr-mode-btn" id="dr-mode-doubles" onclick="drSetMode('doubles')">
+        <div style="font-size:26px">👫</div>
+        <div style="font-size:14px;font-weight:900;margin-top:4px">복식</div>
+        <div style="font-size:11px;opacity:0.7;margin-top:2px">2 vs 2</div>
+      </button>
     </div>
   </div>
 
-  <!-- 대진표 생성 버튼 -->
-  <button class="btn bo2" style="width:100%;padding:13px;border-radius:13px;font-size:15px;margin-bottom:13px" onclick="drGenerate()">🎲 대진표 생성!</button>
+  <!-- STEP 3: 참가자 입력 -->
+  <div class="dr-step-card">
+    <div class="dr-step-label"><span class="dr-step-num">3</span> <span id="dr-player-label">선수 입력</span></div>
+    <div id="dr-players-list" style="margin-bottom:9px;min-height:20px"></div>
+    <div style="display:flex;gap:7px;align-items:center">
+      <input class="fi" id="dr-player-inp" placeholder="이름 입력" style="flex:1" onkeydown="if(event.key==='Enter')drAddPlayer()">
+      <button class="btn bg2" style="padding:9px 14px;border-radius:11px;white-space:nowrap;flex-shrink:0" onclick="drAddPlayer()">➕ 추가</button>
+    </div>
+    <div id="dr-doubles-hint" style="display:none;margin-top:8px;background:var(--gl);border-radius:9px;padding:8px 11px;font-size:12px;color:var(--gc)">
+      💡 복식: <b>팀1선수A / 팀1선수B</b> 형식으로 입력하거나, 선수 2명씩 자동으로 팀을 만들어드려요.<br>선수를 짝수로 입력하면 자동으로 팀이 구성됩니다!
+    </div>
+    <div id="dr-count-badge" style="margin-top:8px;font-size:12px;color:var(--tl);text-align:right"></div>
+  </div>
 
-  <!-- 생성된 대진표 -->
+  <!-- 생성 버튼 -->
+  <button class="btn bo2" style="width:100%;padding:14px;border-radius:14px;font-size:15px;font-weight:900;margin-bottom:14px;letter-spacing:0.5px" onclick="drGenerate()">
+    🎲 대진표 생성!
+  </button>
+
+  <!-- 결과 -->
   <div id="dr-result" style="display:none">
-    <div class="stl"><div class="dot"></div><span id="dr-result-title">대진표</span></div>
+    <div style="background:linear-gradient(135deg,var(--gd),var(--gc));border-radius:var(--r);padding:14px 16px;margin-bottom:13px;color:#fff;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-family:'Oswald',sans-serif;font-size:18px;font-weight:700" id="dr-result-title">대진표</div>
+        <div style="font-size:11px;opacity:0.8;margin-top:3px" id="dr-result-sub"></div>
+      </div>
+      <button onclick="drReset()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:7px 13px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif">🔄 초기화</button>
+    </div>
     <div id="dr-bracket"></div>
-    <button class="btn bgr" style="width:100%;padding:11px;border-radius:11px;margin-top:9px" onclick="drReset()">🔄 초기화</button>
   </div>
 
 </div>
@@ -1024,13 +1072,26 @@ function saveProfile() {
   closeModal('ep');
   toast('✅ 프로필 저장됐어요!');
 }
-let drPlayers = [];
+
+// ── 대진표 ──
+let drPlayers = [];   // 단식: 선수 이름 배열 / 복식: 팀 이름 배열 (자동생성 or 입력)
 let drMatches = [];
 let drLeagueData = {};
+let drMode = 'singles'; // 'singles' | 'doubles'
+
+function drSetMode(mode) {
+  drMode = mode;
+  drPlayers = [];
+  document.getElementById('dr-mode-singles').classList.toggle('active', mode === 'singles');
+  document.getElementById('dr-mode-doubles').classList.toggle('active', mode === 'doubles');
+  document.getElementById('dr-player-label').textContent = mode === 'singles' ? '선수 입력' : '선수 입력 (2명씩 자동 팀 구성)';
+  document.getElementById('dr-doubles-hint').style.display = mode === 'doubles' ? 'block' : 'none';
+  document.getElementById('dr-player-inp').placeholder = mode === 'singles' ? '선수 이름 입력' : '선수 이름 입력 (2명씩 자동 팀)';
+  drRenderPlayers();
+}
 
 function drLoadMeetOptions() {
   const sel = document.getElementById('dr-meet-sel');
-  // 기존 옵션 유지 (첫번째 빈 옵션)
   while (sel.options.length > 1) sel.remove(1);
   if (!meetList || !meetList.length) return;
   meetList.forEach((m, i) => {
@@ -1045,9 +1106,9 @@ function drSelectMeet(idx) {
   if (idx === '') return;
   const m = meetList[parseInt(idx)];
   if (!m) return;
-  sv('dr-title', m.title + ' 대진표');
+  sv('dr-title', m.title);
   document.getElementById('dr-sport').value = m.sport === 'badminton' ? 'badminton' : 'tennis';
-  toast('✅ 모임 정보 불러왔어요! 참가자를 추가하세요.');
+  toast('✅ 모임 정보 불러왔어요!');
 }
 
 function drAddPlayer() {
@@ -1060,28 +1121,80 @@ function drAddPlayer() {
   drRenderPlayers();
 }
 
-function drRemovePlayer(name) {
-  drPlayers = drPlayers.filter(p => p !== name);
+function drRemovePlayer(idx) {
+  drPlayers.splice(idx, 1);
   drRenderPlayers();
 }
 
 function drRenderPlayers() {
   const el = document.getElementById('dr-players-list');
-  if (!drPlayers.length) { el.innerHTML = '<div style="font-size:12px;color:var(--tl);padding:4px 0">참가자를 추가하세요 (최소 2명)</div>'; return; }
-  el.innerHTML = drPlayers.map(p =>
-    `<span class="dr-player-tag">${esc(p)}<button onclick="drRemovePlayer('${esc(p)}')" title="제거">✕</button></span>`
-  ).join('');
+  const badge = document.getElementById('dr-count-badge');
+  if (!drPlayers.length) {
+    el.innerHTML = `<div style="font-size:12px;color:var(--tl);padding:4px 0">${drMode==='singles'?'선수를 추가하세요 (최소 2명)':'선수를 추가하세요 (복식: 짝수명 권장)'}</div>`;
+    badge.textContent = '';
+    return;
+  }
+  if (drMode === 'singles') {
+    el.innerHTML = drPlayers.map((p, i) =>
+      `<span class="dr-player-tag">🧍 ${esc(p)}<button onclick="drRemovePlayer(${i})" title="제거">✕</button></span>`
+    ).join('');
+    badge.textContent = `총 ${drPlayers.length}명`;
+  } else {
+    // 복식: 2명씩 팀으로 묶어서 표시
+    const teams = drGetDoubleTeams();
+    let html = '';
+    teams.forEach((t, ti) => {
+      html += `<div style="margin-bottom:5px"><span style="font-size:11px;color:var(--tl);font-weight:700">팀${ti+1}</span> `;
+      t.forEach((p, pi) => {
+        const idx = ti * 2 + pi;
+        html += `<span class="dr-team-tag">👤 ${esc(p)}<button onclick="drRemovePlayer(${idx})" title="제거">✕</button></span>`;
+      });
+      html += '</div>';
+    });
+    // 홀수 남은 선수
+    if (drPlayers.length % 2 === 1) {
+      const last = drPlayers.length - 1;
+      html += `<div><span style="font-size:11px;color:var(--or);font-weight:700">⏳ 팀 미완성</span> <span class="dr-player-tag">👤 ${esc(drPlayers[last])}<button onclick="drRemovePlayer(${last})">✕</button></span></div>`;
+    }
+    el.innerHTML = html;
+    const teamCount = teams.length;
+    badge.textContent = `총 ${drPlayers.length}명 → ${teamCount}팀${drPlayers.length%2===1?' (1명 대기중)':''}`;
+  }
+}
+
+function drGetDoubleTeams() {
+  // 2명씩 순서대로 팀 구성
+  const teams = [];
+  for (let i = 0; i + 1 < drPlayers.length; i += 2) {
+    teams.push([drPlayers[i], drPlayers[i+1]]);
+  }
+  return teams;
+}
+
+function drGetEntries() {
+  // 단식: 선수 그대로 / 복식: 팀 이름 "A / B" 형식으로 변환
+  if (drMode === 'singles') return drPlayers;
+  const teams = drGetDoubleTeams();
+  if (!teams.length) return [];
+  return teams.map(t => t[0] + ' / ' + t[1]);
 }
 
 function drGenerate() {
   const title = v('dr-title').trim();
   if (!title) { toast('⚠️ 대진표 제목을 입력하세요!'); return; }
-  if (drPlayers.length < 2) { toast('⚠️ 참가자가 최소 2명 필요해요!'); return; }
-  const type = v('dr-type');
-  document.getElementById('dr-result-title').textContent = title + (type === 'tournament' ? ' 🏆 토너먼트' : ' 📋 리그전');
+  const entries = drGetEntries();
+  if (entries.length < 2) { toast(drMode==='doubles'?'⚠️ 팀이 최소 2팀 필요해요! (선수 4명 이상)':'⚠️ 선수가 최소 2명 필요해요!'); return; }
+  if (drMode === 'doubles' && drPlayers.length % 2 !== 0) { toast('⚠️ 복식은 선수가 짝수여야 해요!'); return; }
+
+  const sport = v('dr-sport') === 'badminton' ? '🏸' : '🎾';
+  const modeLabel = drMode === 'singles' ? '단식' : '복식';
+  const typeLabel = v('dr-type') === 'tournament' ? '🏆 토너먼트' : '📋 리그전';
+  document.getElementById('dr-result-title').textContent = title;
+  document.getElementById('dr-result-sub').textContent = `${sport} ${modeLabel} · ${typeLabel} · ${entries.length}${drMode==='singles'?'명':'팀'}`;
   document.getElementById('dr-result').style.display = 'block';
-  if (type === 'tournament') drBuildTournament();
-  else drBuildLeague();
+
+  if (v('dr-type') === 'tournament') drBuildTournament(entries);
+  else drBuildLeague(entries);
   document.getElementById('dr-result').scrollIntoView({ behavior: 'smooth' });
 }
 
@@ -1095,85 +1208,110 @@ function drShuffle(arr) {
 }
 
 // ── 토너먼트 ──
-function drBuildTournament() {
-  const shuffled = drShuffle(drPlayers);
-  // 2의 거듭제곱으로 맞추기 (부전승 처리)
+function drBuildTournament(entries) {
+  const shuffled = drShuffle(entries);
   let size = 1;
   while (size < shuffled.length) size *= 2;
   const padded = [...shuffled];
-  while (padded.length < size) padded.push(null); // null = 부전승
+  while (padded.length < size) padded.push(null);
 
   drMatches = [];
-  let roundPlayers = [...padded];
-  let roundNum = 1;
   const totalRounds = Math.log2(size);
-
-  // 1라운드 매치 생성
   let firstRound = [];
-  for (let i = 0; i < roundPlayers.length; i += 2) {
-    firstRound.push({ p1: roundPlayers[i], p2: roundPlayers[i+1], winner: null, score1: '', score2: '', round: roundNum, id: drMatches.length });
-    drMatches.push(firstRound[firstRound.length-1]);
+  for (let i = 0; i < padded.length; i += 2) {
+    const m = { p1: padded[i], p2: padded[i+1], winner: null, score1: '', score2: '', round: 1, id: drMatches.length };
+    drMatches.push(m);
+    firstRound.push(m);
   }
-
-  drRenderTournament(firstRound, roundNum, totalRounds);
+  drRenderTournament(firstRound, 1, totalRounds);
 }
 
 function drRenderTournament(firstRound, roundNum, totalRounds) {
   const el = document.getElementById('dr-bracket');
   el.innerHTML = '';
+  const isDoubles = drMode === 'doubles';
 
-  // 라운드 이름
   function roundName(r, total) {
-    const remaining = total - r + 1;
-    if (remaining === 1) return '🏆 결승';
-    if (remaining === 2) return '🥈 준결승';
-    if (remaining === 3) return '🥉 8강';
+    const rem = total - r + 1;
+    if (rem === 1) return '🏆 결승';
+    if (rem === 2) return '🥈 준결승';
+    if (rem === 3) return '🥉 8강';
     return r + '라운드';
   }
 
+  function teamIcon(name) {
+    if (!name) return isDoubles ? '👫' : '🧍';
+    return isDoubles ? '👫' : '🧍';
+  }
+
   function renderRound(matches, rNum) {
+    const wrap = document.createElement('div');
+    wrap.className = 'dr-round-wrap';
     const titleEl = document.createElement('div');
     titleEl.className = 'dr-round-title';
-    titleEl.textContent = roundName(rNum, totalRounds);
-    el.appendChild(titleEl);
+    titleEl.innerHTML = roundName(rNum, totalRounds);
+    wrap.appendChild(titleEl);
 
     matches.forEach((m, mi) => {
       const card = document.createElement('div');
       card.className = 'dr-match';
-      card.innerHTML = `<div class="dr-match-header">경기 ${mi+1}</div>`;
+      card.innerHTML = `<div class="dr-match-header"><span>경기 ${mi+1}</span><span class="dr-vs">VS</span></div>`;
 
       if (m.p2 === null) {
-        // 부전승
         card.innerHTML += `
           <div class="dr-team winner" style="cursor:default">
-            <span class="dr-team-name">${esc(m.p1)}</span>
+            <div class="dr-team-icon${isDoubles?' doubles':''}">${teamIcon(m.p1)}</div>
+            <div class="dr-team-name">${esc(m.p1)}${isDoubles?`<span class="dr-sub">팀</span>`:''}
+            </div>
             <span class="dr-win-badge">부전승</span>
           </div>
-          <div class="dr-bye">상대없음 (자동 진출)</div>`;
+          <div class="dr-bye">상대 없음 — 자동 진출</div>`;
         m.winner = m.p1;
       } else {
         const w1 = m.winner === m.p1 ? 'winner' : '';
         const w2 = m.winner === m.p2 ? 'winner' : '';
         card.innerHTML += `
-          <div class="dr-team ${w1}" onclick="drSetWinner(${m.id},'p1')">
-            <span class="dr-team-name">${esc(m.p1 || '?')}</span>
-            <input class="dr-score" type="number" min="0" max="99" value="${m.score1}" placeholder="-"
-              onclick="event.stopPropagation()"
-              onchange="drMatches[${m.id}].score1=this.value">
-            ${m.winner===m.p1?'<span class="dr-win-badge">승</span>':''}
+          <div class="dr-team ${w1} clickable" data-mid="${m.id}" data-who="p1">
+            <div class="dr-team-icon${isDoubles?' doubles':''}">${teamIcon(m.p1)}</div>
+            <div class="dr-team-name">${esc(m.p1||'?')}${isDoubles?`<span class="dr-sub">팀</span>`:''}
+            </div>
+            <input class="dr-score" type="number" min="0" max="99" value="${m.score1}" placeholder="0"
+              data-mid="${m.id}" data-field="score1"
+              onclick="event.stopPropagation()">
+            ${m.winner===m.p1?'<span class="dr-win-badge">✓ 승</span>':''}
           </div>
-          <div class="dr-team ${w2}" onclick="drSetWinner(${m.id},'p2')">
-            <span class="dr-team-name">${esc(m.p2 || '?')}</span>
-            <input class="dr-score" type="number" min="0" max="99" value="${m.score2}" placeholder="-"
-              onclick="event.stopPropagation()"
-              onchange="drMatches[${m.id}].score2=this.value">
-            ${m.winner===m.p2?'<span class="dr-win-badge">승</span>':''}
+          <div class="dr-team ${w2} clickable" data-mid="${m.id}" data-who="p2">
+            <div class="dr-team-icon${isDoubles?' doubles':''}">${teamIcon(m.p2)}</div>
+            <div class="dr-team-name">${esc(m.p2||'?')}${isDoubles?`<span class="dr-sub">팀</span>`:''}
+            </div>
+            <input class="dr-score" type="number" min="0" max="99" value="${m.score2}" placeholder="0"
+              data-mid="${m.id}" data-field="score2"
+              onclick="event.stopPropagation()">
+            ${m.winner===m.p2?'<span class="dr-win-badge">✓ 승</span>':''}
           </div>`;
       }
-      el.appendChild(card);
+      wrap.appendChild(card);
     });
 
-    // 다음 라운드 준비
+    el.appendChild(wrap);
+
+    // 이벤트 위임
+    wrap.querySelectorAll('.dr-team.clickable').forEach(row => {
+      row.onclick = () => {
+        const mid = parseInt(row.dataset.mid);
+        const who = row.dataset.who;
+        drSetWinner(mid, who, firstRound, totalRounds);
+      };
+    });
+    wrap.querySelectorAll('.dr-score').forEach(inp => {
+      inp.onchange = () => {
+        const mid = parseInt(inp.dataset.mid);
+        const field = inp.dataset.field;
+        drMatches[mid][field] = inp.value;
+      };
+    });
+
+    // 다음 라운드
     const winners = matches.map(m => m.winner);
     if (winners.length >= 2 && winners.every(w => w !== null)) {
       const nextMatches = [];
@@ -1183,50 +1321,48 @@ function drRenderTournament(firstRound, roundNum, totalRounds) {
         nextMatches.push(nm);
       }
       if (nextMatches.length === 1 && nextMatches[0].p2 === null) {
-        // 우승자
-        const champEl = document.createElement('div');
-        champEl.innerHTML = `<div style="text-align:center;padding:18px;background:linear-gradient(135deg,#fff9e6,#fffde7);border:2px solid #FFD700;border-radius:var(--r);margin-top:11px"><div style="font-size:36px">🏆</div><div style="font-family:'Oswald',sans-serif;font-size:20px;color:#b8860b;margin-top:6px">우승</div><div style="font-size:22px;font-weight:900;color:var(--gd);margin-top:4px">${esc(nextMatches[0].p1)}</div></div>`;
-        el.appendChild(champEl);
+        drShowChamp(nextMatches[0].p1);
       } else {
         renderRound(nextMatches, rNum + 1);
       }
     } else if (winners.length === 1 && winners[0]) {
-      const champEl = document.createElement('div');
-      champEl.innerHTML = `<div style="text-align:center;padding:18px;background:linear-gradient(135deg,#fff9e6,#fffde7);border:2px solid #FFD700;border-radius:var(--r);margin-top:11px"><div style="font-size:36px">🏆</div><div style="font-family:'Oswald',sans-serif;font-size:20px;color:#b8860b;margin-top:6px">우승</div><div style="font-size:22px;font-weight:900;color:var(--gd);margin-top:4px">${esc(winners[0])}</div></div>`;
-      el.appendChild(champEl);
+      drShowChamp(winners[0]);
     }
   }
 
   renderRound(firstRound, roundNum);
 }
 
-function drSetWinner(matchId, who) {
+function drShowChamp(name) {
+  const el = document.getElementById('dr-bracket');
+  const d = document.createElement('div');
+  d.className = 'dr-champ';
+  d.innerHTML = `<div class="trophy">🏆</div><div class="champ-label">${drMode==='doubles'?'우승팀':'우승'}</div><div class="champ-name">${esc(name)}</div>`;
+  el.appendChild(d);
+}
+
+function drSetWinner(matchId, who, firstRound, totalRounds) {
   const m = drMatches[matchId];
   if (!m) return;
   m.winner = who === 'p1' ? m.p1 : m.p2;
-  // 전체 토너먼트 다시 그리기
-  const firstRound = drMatches.filter(x => x.round === 1);
-  const totalRounds = Math.log2(drGetSize());
   drRenderTournament(firstRound, 1, totalRounds);
-  toast('✅ ' + m.winner + ' 승리!');
+  toast('✅ ' + m.winner + ' 승!');
 }
 
 function drGetSize() {
   let size = 1;
-  while (size < drPlayers.length) size *= 2;
+  const entries = drGetEntries();
+  while (size < entries.length) size *= 2;
   return size;
 }
 
 // ── 리그전 ──
-function drBuildLeague() {
-  const players = drShuffle(drPlayers);
+function drBuildLeague(entries) {
+  const players = drShuffle(entries);
   drLeagueData = {};
-  players.forEach(p => { drLeagueData[p] = { win: 0, lose: 0, draw: 0, pts: 0 }; });
+  players.forEach(p => { drLeagueData[p] = { win: 0, lose: 0, pts: 0 }; });
+  const isDoubles = drMode === 'doubles';
 
-  const el = document.getElementById('dr-bracket');
-  el.innerHTML = '';
-
-  // 리그 매치 목록 (라운드 로빈)
   const matchList = [];
   for (let i = 0; i < players.length; i++) {
     for (let j = i+1; j < players.length; j++) {
@@ -1235,86 +1371,113 @@ function drBuildLeague() {
   }
   drMatches = matchList;
 
+  const el = document.getElementById('dr-bracket');
+  el.innerHTML = '';
+
   function rerenderLeague() {
     el.innerHTML = '';
+
     // 순위표
-    const ranked = Object.entries(drLeagueData).sort((a,b) => b[1].pts - a[1].pts || (b[1].win-b[1].lose)-(a[1].win-a[1].lose));
-    const tableEl = document.createElement('div');
-    tableEl.innerHTML = `
-      <div class="dr-round-title">📊 현재 순위</div>
-      <div style="overflow-x:auto;margin-bottom:13px">
+    const ranked = Object.entries(drLeagueData).sort((a,b) => b[1].pts - a[1].pts || b[1].win - a[1].win);
+    const tableWrap = document.createElement('div');
+    tableWrap.innerHTML = `
+      <div class="dr-round-title" style="margin-bottom:9px">📊 순위표</div>
+      <div style="overflow-x:auto;margin-bottom:16px;border-radius:var(--rs);overflow:hidden;box-shadow:var(--sh)">
       <table class="league-table">
-        <thead><tr><th>순위</th><th>이름</th><th>승</th><th>패</th><th>승점</th></tr></thead>
+        <thead><tr><th>#</th><th>${isDoubles?'팀':'선수'}</th><th>승</th><th>패</th><th>승점</th></tr></thead>
         <tbody>${ranked.map(([name, s], i) =>
           `<tr class="${i===0?'league-rank1':i===1?'league-rank2':i===2?'league-rank3':''}">
             <td>${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</td>
-            <td>${esc(name)}</td><td>${s.win}</td><td>${s.lose}</td><td><b>${s.pts}</b></td>
+            <td>${isDoubles?'👫 ':'🧍 '}${esc(name)}</td>
+            <td style="color:var(--gc);font-weight:900">${s.win}</td>
+            <td style="color:#c62828">${s.lose}</td>
+            <td><b style="font-size:14px">${s.pts}</b></td>
           </tr>`).join('')}
         </tbody>
       </table></div>`;
-    el.appendChild(tableEl);
+    el.appendChild(tableWrap);
 
     // 경기 목록
     const matchTitle = document.createElement('div');
     matchTitle.className = 'dr-round-title';
-    matchTitle.textContent = '📋 전체 경기 일정';
+    matchTitle.style.marginBottom = '9px';
+    matchTitle.textContent = '📋 경기 일정';
     el.appendChild(matchTitle);
 
     drMatches.forEach((m, mi) => {
       const card = document.createElement('div');
       card.className = 'dr-match';
-      card.innerHTML = `<div class="dr-match-header">경기 ${mi+1}</div>`;
+      card.innerHTML = `<div class="dr-match-header"><span>경기 ${mi+1}</span><span class="dr-vs">VS</span></div>`;
       const w1 = m.winner === m.p1 ? 'winner' : '';
       const w2 = m.winner === m.p2 ? 'winner' : '';
       card.innerHTML += `
-        <div class="dr-team ${w1}" onclick="drLeagueWin(${mi},'p1')">
-          <span class="dr-team-name">${esc(m.p1)}</span>
-          <input class="dr-score" type="number" min="0" max="99" value="${m.score1}" placeholder="-"
-            onclick="event.stopPropagation()"
-            onchange="drMatches[${mi}].score1=this.value">
-          ${m.winner===m.p1?'<span class="dr-win-badge">승</span>':''}
+        <div class="dr-team ${w1} clickable" data-mi="${mi}" data-who="p1">
+          <div class="dr-team-icon${isDoubles?' doubles':''}">${isDoubles?'👫':'🧍'}</div>
+          <div class="dr-team-name">${esc(m.p1)}</div>
+          <input class="dr-score" type="number" min="0" max="99" value="${m.score1}" placeholder="0"
+            data-mi="${mi}" data-field="score1" onclick="event.stopPropagation()">
+          ${m.winner===m.p1?'<span class="dr-win-badge">✓ 승</span>':''}
         </div>
-        <div class="dr-team ${w2}" onclick="drLeagueWin(${mi},'p2')">
-          <span class="dr-team-name">${esc(m.p2)}</span>
-          <input class="dr-score" type="number" min="0" max="99" value="${m.score2}" placeholder="-"
-            onclick="event.stopPropagation()"
-            onchange="drMatches[${mi}].score2=this.value">
-          ${m.winner===m.p2?'<span class="dr-win-badge">승</span>':''}
+        <div class="dr-team ${w2} clickable" data-mi="${mi}" data-who="p2">
+          <div class="dr-team-icon${isDoubles?' doubles':''}">${isDoubles?'👫':'🧍'}</div>
+          <div class="dr-team-name">${esc(m.p2)}</div>
+          <input class="dr-score" type="number" min="0" max="99" value="${m.score2}" placeholder="0"
+            data-mi="${mi}" data-field="score2" onclick="event.stopPropagation()">
+          ${m.winner===m.p2?'<span class="dr-win-badge">✓ 승</span>':''}
         </div>`;
+
+      card.querySelectorAll && setTimeout(() => {
+        card.querySelectorAll('.dr-team.clickable').forEach(row => {
+          row.onclick = () => drLeagueWin(parseInt(row.dataset.mi), row.dataset.who, rerenderLeague);
+        });
+        card.querySelectorAll('.dr-score').forEach(inp => {
+          inp.onchange = () => { drMatches[parseInt(inp.dataset.mi)][inp.dataset.field] = inp.value; };
+        });
+      }, 0);
+
       el.appendChild(card);
+    });
+
+    // 이벤트 연결
+    el.querySelectorAll('.dr-team.clickable[data-mi]').forEach(row => {
+      row.onclick = () => drLeagueWin(parseInt(row.dataset.mi), row.dataset.who, rerenderLeague);
+    });
+    el.querySelectorAll('.dr-score[data-mi]').forEach(inp => {
+      inp.onchange = () => { drMatches[parseInt(inp.dataset.mi)][inp.dataset.field] = inp.value; };
     });
   }
 
   rerenderLeague();
-  window._drLeagueRerender = rerenderLeague;
 }
 
-function drLeagueWin(mi, who) {
+function drLeagueWin(mi, who, rerender) {
   const m = drMatches[mi];
   const prev = m.winner;
-  // 이전 결과 취소
   if (prev) {
     const loser = prev === m.p1 ? m.p2 : m.p1;
     drLeagueData[prev].win--;
     drLeagueData[prev].pts -= 2;
     drLeagueData[loser].lose--;
   }
-  // 새 결과 적용
   const winner = who === 'p1' ? m.p1 : m.p2;
   const loser  = who === 'p1' ? m.p2 : m.p1;
   m.winner = winner;
   drLeagueData[winner].win++;
   drLeagueData[winner].pts += 2;
   drLeagueData[loser].lose++;
-  toast('✅ ' + winner + ' 승리!');
-  if (window._drLeagueRerender) window._drLeagueRerender();
+  toast('✅ ' + winner + ' 승!');
+  if (rerender) rerender();
 }
 
 function drReset() {
   drMatches = [];
   drLeagueData = {};
+  drPlayers = [];
+  drRenderPlayers();
   document.getElementById('dr-result').style.display = 'none';
   document.getElementById('dr-bracket').innerHTML = '';
+  document.getElementById('dr-title').value = '';
+  document.getElementById('dr-meet-sel').value = '';
   toast('🔄 초기화됐어요!');
 }
 
