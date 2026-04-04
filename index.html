@@ -3,11 +3,11 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NIJI COURT — 테니스·배드민턴 커뮤니티</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;500;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 :root{
   --gd:#1a3d1a;--gc:#2e6b2e;--gm:#3d8b3d;--gb:#52b052;--gl:#d4edda;
@@ -28,13 +28,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 .od{display:flex;align-items:center;gap:5px;color:var(--gb);font-size:11px;font-weight:600;}
 .db{width:7px;height:7px;background:var(--gb);border-radius:50%;animation:blink 1.4s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-.nav{display:flex;background:#fff;border-top:1px solid var(--g2);position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;box-shadow:0 -2px 20px rgba(0,0,0,0.08);padding-bottom:env(safe-area-inset-bottom,0);}
-.tb{flex:1;padding:12px 4px calc(8px + env(safe-area-inset-bottom,0px));border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--g3);font-family:'Noto Sans KR',sans-serif;transition:color 0.2s;min-height:56px;}
+.nav{display:flex;background:#fff;border-top:1px solid var(--g2);position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;box-shadow:0 -2px 20px rgba(0,0,0,0.08);}
+.tb{flex:1;padding:10px 4px 8px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--g3);font-family:'Noto Sans KR',sans-serif;transition:color 0.2s;}
 .tb .ti{font-size:21px;line-height:1;} .tb .tl{font-size:10px;font-weight:500;}
 .tb.active{color:var(--gc);} .tb.active .ti{transform:translateY(-1px);} .tb.active .tl{font-weight:700;}
-.pg{display:none;padding:13px 13px calc(86px + env(safe-area-inset-bottom,0px));animation:fu 0.22s ease;} .pg.active{display:block;}
+.pg{display:none;padding:13px 13px 86px;animation:fu 0.22s ease;} .pg.active{display:block;}
 @keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-@keyframes badgePop{from{transform:scale(0.5)}to{transform:scale(1)}}
 .stl{font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;color:var(--gd);margin-bottom:11px;display:flex;align-items:center;gap:7px;}
 .stl .dot{width:5px;height:18px;background:var(--or);border-radius:3px;flex-shrink:0;}
 .btn{padding:9px 16px;border-radius:22px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all 0.18s;}
@@ -44,9 +43,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 .eb .ei{font-size:42px;margin-bottom:9px;} .eb p{font-size:13px;line-height:1.6;}
 .fr{margin-bottom:9px;}
 .fl{font-size:12px;font-weight:700;color:var(--tm);margin-bottom:4px;display:block;}
-.fi{width:100%;border:1.5px solid var(--g2);border-radius:var(--rs);padding:9px 12px;font-size:16px;font-family:'Noto Sans KR',sans-serif;outline:none;transition:border 0.18s;background:#fff;}
+.fi{width:100%;border:1.5px solid var(--g2);border-radius:var(--rs);padding:9px 12px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;transition:border 0.18s;background:#fff;}
 .fi:focus{border-color:var(--gc);}
-.fs{width:100%;border:1.5px solid var(--g2);border-radius:var(--rs);padding:9px 12px;font-size:16px;font-family:'Noto Sans KR',sans-serif;outline:none;background:#fff;}
+.fs{width:100%;border:1.5px solid var(--g2);border-radius:var(--rs);padding:9px 12px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;background:#fff;}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
 .r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 .br2{display:flex;gap:8px;margin-top:6px;}
@@ -68,24 +67,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 .ct{display:flex;gap:7px;margin-bottom:11px;flex-wrap:wrap;}
 .chip{padding:6px 13px;border-radius:17px;font-size:12px;font-weight:700;border:2px solid var(--g2);background:#fff;cursor:pointer;color:var(--tl);font-family:'Noto Sans KR',sans-serif;transition:all 0.18s;}
 .chip.active{background:var(--gc);border-color:var(--gc);color:#fff;}
-/* MEET CHAT BUTTON */
-.meet-chat-btn{margin-top:5px;padding:4px 11px;background:linear-gradient(135deg,var(--gc),var(--gm));color:#fff;border:none;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;display:inline-flex;align-items:center;gap:5px;position:relative;}
-.meet-chat-btn:hover{opacity:0.85;}
-.chat-badge{background:#ff3b30;color:#fff;font-size:10px;font-weight:900;min-width:17px;height:17px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;padding:0 4px;line-height:1;animation:badgePop 0.25s ease;}
-/* MEET CHAT MODAL */
-.mc-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:300;align-items:flex-end;justify-content:center;}
-.mc-modal.open{display:flex;animation:fu 0.2s;}
-.mc-sheet{background:#fff;border-radius:21px 21px 0 0;width:100%;max-width:480px;display:flex;flex-direction:column;height:88vh;animation:su 0.3s ease;}
-.mc-head{background:linear-gradient(135deg,var(--gd),var(--gc));border-radius:21px 21px 0 0;padding:13px 15px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.mc-handle{width:36px;height:4px;background:rgba(255,255,255,0.35);border-radius:2px;margin:0 auto 0;}
-.mc-title{flex:1;color:#fff;font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.mc-close{background:rgba(255,255,255,0.2);border:none;color:#fff;font-size:18px;width:32px;height:32px;border-radius:50%;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.mc-body{flex:1;overflow-y:auto;background:var(--g1);padding:12px;}
-.mc-foot{padding:9px 11px;background:#fff;border-top:1px solid var(--g2);flex-shrink:0;}
-.mc-nick-row{display:flex;gap:7px;margin-bottom:7px;align-items:center;}
-.mc-nick-saved{display:flex;align-items:center;gap:7px;margin-bottom:7px;background:var(--gl);border-radius:9px;padding:6px 11px;}
-.mc-nick-saved .nsn{font-size:13px;font-weight:700;color:var(--gc);flex:1;}
-.mc-nick-saved .nsc{font-size:11px;color:var(--tl);cursor:pointer;text-decoration:underline;}
 /* CHAT */
 .cw{background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);margin-bottom:13px;}
 .chd{background:linear-gradient(135deg,var(--gd),var(--gc));padding:11px 13px;display:flex;align-items:center;justify-content:space-between;}
@@ -116,11 +97,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 .nick-saved .nsc{font-size:11px;color:var(--tl);cursor:pointer;text-decoration:underline;}
 .nick-input-row{display:flex;gap:7px;margin-bottom:7px;align-items:center;}
 .nick-input-row label{font-size:12px;color:var(--tl);white-space:nowrap;}
-.nick-input-row input{flex:1;border:1.5px solid var(--g2);border-radius:9px;padding:7px 11px;font-size:16px;font-family:'Noto Sans KR',sans-serif;outline:none;}
+.nick-input-row input{flex:1;border:1.5px solid var(--g2);border-radius:9px;padding:7px 11px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;}
 .nick-input-row input:focus{border-color:var(--gc);}
 .nick-save-btn{padding:7px 12px;background:var(--gc);color:#fff;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;white-space:nowrap;}
 .cin{display:flex;gap:7px;align-items:center;background:var(--g1);border-radius:22px;padding:5px 5px 5px 13px;}
-.cin input{flex:1;border:none;outline:none;font-size:16px;font-family:'Noto Sans KR',sans-serif;background:transparent;}
+.cin input{flex:1;border:none;outline:none;font-size:13px;font-family:'Noto Sans KR',sans-serif;background:transparent;}
 .csb{width:31px;height:31px;border-radius:50%;background:var(--gc);border:none;color:#fff;cursor:pointer;font-size:13px;flex-shrink:0;}
 /* RANKING */
 .rh{background:linear-gradient(135deg,var(--gd),var(--gc));border-radius:var(--r);padding:13px;margin-bottom:13px;display:flex;}
@@ -156,28 +137,14 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 .spr{font-size:14px;font-weight:900;color:var(--or);}
 .spr .og{font-size:11px;text-decoration:line-through;color:var(--tl);font-weight:400;margin-left:3px;}
 .sft{display:flex;gap:6px;padding:6px 10px 10px;}
-.gift-btn{flex:1;padding:6px;background:linear-gradient(135deg,var(--or),var(--oh));color:#fff;font-size:11px;font-weight:700;border:none;cursor:pointer;border-radius:8px;font-family:'Noto Sans KR',sans-serif;}
-.buy-btn{flex:1;padding:6px;background:linear-gradient(135deg,#03c75a,#02a84a);color:#fff;font-size:11px;font-weight:700;border:none;cursor:pointer;border-radius:8px;font-family:'Noto Sans KR',sans-serif;}
+.gift-btn{flex:1;padding:6px;background:linear-gradient(135deg,var(--or),var(--oh));color:#fff;font-size:12px;font-weight:700;border:none;cursor:pointer;border-radius:8px;font-family:'Noto Sans KR',sans-serif;}
 .adm-del{padding:6px 10px;background:#ffebee;color:#c62828;font-size:11px;font-weight:700;border:none;cursor:pointer;border-radius:8px;font-family:'Noto Sans KR',sans-serif;}
 .lock-bar{background:var(--g1);border:1.5px solid var(--g2);border-radius:var(--rs);padding:10px 13px;display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
 .lock-info{font-size:12px;color:var(--tl);}
 .lock-btn{padding:6px 14px;border-radius:17px;font-size:12px;font-weight:700;border:none;cursor:pointer;font-family:'Noto Sans KR',sans-serif;}
 .lock-btn.locked{background:#ffebee;color:#c62828;}
 .lock-btn.unlocked{background:var(--gl);color:var(--gc);}
-/* RECORD CARD */
-.rec-card{background:#fff;border-radius:var(--rs);padding:12px 13px;box-shadow:var(--sh);margin-bottom:8px;border-left:4px solid var(--g2);}
-.rec-card.win{border-left-color:#2e6b2e;}
-.rec-card.lose{border-left-color:#c62828;}
-.rec-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
-.rec-badge{padding:3px 10px;border-radius:14px;font-size:12px;font-weight:900;}
-.rec-badge.win{background:#e8f5e9;color:#2e6b2e;}
-.rec-badge.lose{background:#ffebee;color:#c62828;}
-.rec-score{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;}
-.rec-score .s-me{color:var(--gc);}
-.rec-score .s-opp{color:#c62828;}
-.rec-teams{font-size:12px;color:var(--td);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
-.rec-teams .vs{color:var(--tl);font-size:11px;font-weight:700;}
-.rec-meta{font-size:11px;color:var(--tl);display:flex;gap:8px;flex-wrap:wrap;}
+/* MY BAG */
 .pc{background:linear-gradient(135deg,var(--gd),var(--gm));border-radius:var(--r);padding:17px;display:flex;align-items:center;gap:13px;margin-bottom:13px;color:#fff;}
 .pav{width:58px;height:58px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid rgba(255,255,255,0.3);flex-shrink:0;cursor:pointer;}
 .pnm{font-size:18px;font-weight:900;margin-bottom:3px;}
@@ -202,9 +169,30 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 @keyframes su{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
 .mh{width:36px;height:4px;background:var(--g2);border-radius:2px;margin:0 auto 13px;}
 .mtt{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;margin-bottom:13px;}
-.toast{position:fixed;bottom:calc(76px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%) translateY(20px);background:var(--gd);color:#fff;padding:9px 19px;border-radius:21px;font-size:13px;font-weight:600;z-index:300;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
+.toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--gd);color:#fff;padding:9px 19px;border-radius:21px;font-size:13px;font-weight:600;z-index:300;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 ::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-thumb{background:var(--g2);border-radius:2px;}
+/* DRAW */
+.dr-player-tag{display:inline-flex;align-items:center;gap:6px;background:var(--gl);border:1.5px solid var(--gb);border-radius:17px;padding:5px 11px;font-size:13px;font-weight:700;color:var(--gd);margin:3px;}
+.dr-player-tag button{background:none;border:none;cursor:pointer;color:#c62828;font-size:14px;padding:0;line-height:1;}
+.dr-round-title{font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;color:var(--gd);margin:13px 0 7px;display:flex;align-items:center;gap:6px;}
+.dr-match{background:#fff;border-radius:var(--rs);box-shadow:var(--sh);margin-bottom:8px;overflow:hidden;}
+.dr-match-header{background:var(--g1);padding:6px 12px;font-size:11px;color:var(--tl);font-weight:700;}
+.dr-team{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--g1);cursor:pointer;transition:background 0.15s;}
+.dr-team:last-child{border-bottom:none;}
+.dr-team:hover{background:var(--g1);}
+.dr-team.winner{background:#e8f5e9;}
+.dr-team-name{flex:1;font-size:13px;font-weight:700;}
+.dr-score{width:32px;height:32px;border:1.5px solid var(--g2);border-radius:8px;text-align:center;font-size:14px;font-weight:700;font-family:'Noto Sans KR',sans-serif;outline:none;color:var(--gd);}
+.dr-win-badge{background:var(--gc);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;white-space:nowrap;}
+.dr-bye{padding:10px 12px;font-size:12px;color:var(--tl);font-style:italic;}
+.league-table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--rs);overflow:hidden;box-shadow:var(--sh);}
+.league-table th{background:var(--gd);color:#fff;padding:8px 10px;font-size:12px;font-weight:700;text-align:center;}
+.league-table td{padding:8px 10px;font-size:12px;text-align:center;border-bottom:1px solid var(--g1);}
+.league-table tr:last-child td{border-bottom:none;}
+.league-table tr:nth-child(even) td{background:var(--g1);}
+.league-table td:first-child{text-align:left;font-weight:700;}
+.league-rank1{background:#fff9e6 !important;} .league-rank2{background:#f5f5f5 !important;} .league-rank3{background:#fff3e0 !important;}
 </style>
 </head>
 <body>
@@ -289,72 +277,58 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
   </div>
 </div>
 
-<!-- RECORD -->
+<!-- RANKING -->
 <div class="pg" id="pg-rank">
-  <!-- 요약 헤더 -->
   <div class="rh">
-    <div class="rs2"><div class="rn" id="r-tot">0</div><div class="rl">총 경기</div></div>
-    <div class="rs2"><div class="rn" id="r-win">0</div><div class="rl">승리 🏆</div></div>
-    <div class="rs2"><div class="rn" id="r-los">0</div><div class="rl">패배 😔</div></div>
+    <div class="rs2"><div class="rn" id="r-tot">0</div><div class="rl">전체 회원</div></div>
+    <div class="rs2"><div class="rn" id="r-ten">0</div><div class="rl">테니스</div></div>
+    <div class="rs2"><div class="rn" id="r-bad">0</div><div class="rl">배드민턴</div></div>
   </div>
-
-  <!-- 경기 결과 입력 -->
   <div class="grc">
-    <div class="grt">🎮 경기 결과 입력</div>
-
-    <!-- 단식/복식 선택 -->
-    <div class="fr" style="margin-bottom:10px">
-      <label class="fl">경기 방식</label>
-      <div class="rbtns" style="margin-top:0">
-        <button class="rbtn rbtn-w" id="rb-single" onclick="selMatchType('single')">🙋 단식</button>
-        <button class="rbtn rbtn-w" id="rb-double" onclick="selMatchType('double')">👫 복식</button>
-      </div>
-    </div>
-
-    <!-- 내 팀 -->
+    <div class="grt">🎮 게임 결과 입력</div>
     <div class="r2" style="margin-bottom:9px">
-      <div class="fr"><label class="fl">내 이름 *</label><input class="fi" id="gr-me" placeholder="예: 홍길동"></div>
-      <div class="fr" id="gr-partner-wrap"><label class="fl">파트너 이름</label><input class="fi" id="gr-partner" placeholder="예: 김철수"></div>
+      <div class="fr"><label class="fl">내 닉네임 *</label><input class="fi" id="gr-me" placeholder="예: 테니스왕"></div>
+      <div class="fr"><label class="fl">상대방 닉네임</label><input class="fi" id="gr-opp" placeholder="예: 배드민턴고수"></div>
     </div>
-
-    <!-- 상대 팀 -->
-    <div class="r2" style="margin-bottom:9px">
-      <div class="fr"><label class="fl">상대방 1 *</label><input class="fi" id="gr-opp1" placeholder="예: 이영희"></div>
-      <div class="fr" id="gr-opp2-wrap"><label class="fl">상대방 2</label><input class="fi" id="gr-opp2" placeholder="예: 박민수"></div>
-    </div>
-
-    <!-- 점수 입력 -->
-    <div class="fr" style="margin-bottom:9px">
-      <label class="fl">점수 입력 (자동으로 승/패 결정)</label>
-      <div style="display:flex;align-items:center;gap:10px">
-        <input class="fi" id="gr-score-me" type="number" placeholder="내팀" min="0" style="text-align:center;font-size:18px;font-weight:900;color:var(--gc)" oninput="autoCalcResult()">
-        <span style="font-size:20px;font-weight:900;color:var(--tl)">:</span>
-        <input class="fi" id="gr-score-opp" type="number" placeholder="상대팀" min="0" style="text-align:center;font-size:18px;font-weight:900;color:#c62828" oninput="autoCalcResult()">
-      </div>
-    </div>
-
-    <!-- 자동 판정 표시 -->
-    <div id="gr-result-display" style="display:none;text-align:center;padding:10px;border-radius:11px;margin-bottom:9px;font-size:15px;font-weight:900;"></div>
-
-    <!-- 종목 + 날짜 -->
-    <div class="r2" style="margin-bottom:9px">
+    <div class="r2" style="margin-bottom:4px">
       <div class="fr"><label class="fl">종목</label><select class="fs" id="gr-sp"><option value="tennis">🎾 테니스</option><option value="badminton">🏸 배드민턴</option></select></div>
       <div class="fr"><label class="fl">경기 날짜</label><input class="fi" id="gr-dt" type="date"></div>
     </div>
-
-    <button class="btn bg2" style="width:100%;padding:11px;border-radius:11px" onclick="submitGame()">✅ 결과 등록</button>
+    <div class="rbtns">
+      <button class="rbtn rbtn-w" id="rb-win" onclick="selResult('win')">🏆 승리</button>
+      <button class="rbtn rbtn-l" id="rb-lose" onclick="selResult('lose')">😔 패배</button>
+    </div>
+    <button class="btn bg2" style="width:100%;padding:11px;border-radius:11px;margin-top:9px" onclick="submitGame()">✅ 결과 등록</button>
   </div>
-
-  <!-- 기록 목록 -->
-  <div class="stl"><div class="dot"></div>📋 경기 기록</div>
+  <button class="ab" onclick="tp('pr')">👤 내 정보 직접 등록/수정</button>
+  <div class="ap" id="pr" style="display:none">
+    <div class="at">👤 랭킹 정보 등록</div>
+    <div class="fr"><label class="fl">닉네임 *</label><input class="fi" id="r-nk" placeholder="예: 테니스왕김철수"></div>
+    <div class="r2">
+      <div class="fr"><label class="fl">종목</label><select class="fs" id="r-sp"><option value="tennis">🎾 테니스</option><option value="badminton">🏸 배드민턴</option></select></div>
+      <div class="fr"><label class="fl">실력</label><select class="fs" id="r-lv"><option>초급</option><option>중하급</option><option selected>중급</option><option>중상급</option><option>고급</option></select></div>
+    </div>
+    <div class="r3">
+      <div class="fr"><label class="fl">승</label><input class="fi" id="r-w" type="number" placeholder="0" min="0"></div>
+      <div class="fr"><label class="fl">패</label><input class="fi" id="r-l" type="number" placeholder="0" min="0"></div>
+      <div class="fr"><label class="fl">구력(년)</label><input class="fi" id="r-yr" type="number" placeholder="0" min="0"></div>
+    </div>
+    <div class="r2">
+      <div class="fr"><label class="fl">📍 지역</label><input class="fi" id="r-ar" placeholder="예: 강남구"></div>
+      <div class="fr"><label class="fl">주 횟수</label><input class="fi" id="r-fq" placeholder="예: 주3회"></div>
+    </div>
+    <div class="br2">
+      <button class="btn bg2" style="flex:1;padding:11px;border-radius:11px" onclick="addRank()">✅ 등록</button>
+      <button class="btn bgr" style="padding:11px 13px;border-radius:11px" onclick="tp('pr')">취소</button>
+    </div>
+  </div>
+  <div class="stl"><div class="dot"></div>🏆 실력 랭킹</div>
   <div class="ct">
     <button class="chip active" onclick="fr2(this,'all')">전체</button>
     <button class="chip" onclick="fr2(this,'tennis')">🎾 테니스</button>
     <button class="chip" onclick="fr2(this,'badminton')">🏸 배드민턴</button>
-    <button class="chip" onclick="fr2(this,'single')">🙋 단식</button>
-    <button class="chip" onclick="fr2(this,'double')">👫 복식</button>
   </div>
-  <div id="rl"><div class="eb"><div class="ei">📋</div><p>아직 경기 기록이 없어요!<br>위에서 결과를 입력해보세요 😊</p></div></div>
+  <div id="rl"><div class="eb"><div class="ei">🏆</div><p>아직 등록된 회원이 없어요!<br>게임 결과를 입력해보세요 😊</p></div></div>
 </div>
 
 <!-- SHOP -->
@@ -377,7 +351,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
         <div class="fr"><label class="fl">뱃지</label><select class="fs" id="s-bd"><option value="">없음</option><option>HOT</option><option>NEW</option><option>추천</option><option>SALE</option></select></div>
       </div>
       <div class="fr"><label class="fl">설명 (선택)</label><input class="fi" id="s-ds" placeholder="예: 폴리 계열 / 내구성 최고"></div>
-      <div class="fr"><label class="fl">🛒 네이버 스마트스토어 링크</label><input class="fi" id="s-url" placeholder="https://smartstore.naver.com/..."></div>
       <div class="br2">
         <button class="btn bg2" style="flex:1;padding:11px;border-radius:11px" onclick="addShop()">✅ 등록</button>
         <button class="btn bgr" style="padding:11px 13px;border-radius:11px" onclick="tp('ps')">취소</button>
@@ -410,47 +383,68 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 </div>
 
 <!-- MY BAG -->
-<div class="pg" id="pg-bag">
-  <div class="pc">
-    <div class="pav" onclick="openModal('ep')" title="수정">😄</div>
-    <div>
-      <div class="pnm" id="p-nm">내 닉네임</div>
-      <span class="plv" id="p-lv">중급</span>
-      <div class="pm"><span id="p-sp">🎾 테니스</span><span id="p-yr">구력 0년</span><span id="p-ar">📍 지역 미설정</span></div>
+<div class="pg" id="pg-draw">
+
+  <!-- 번개 모임 선택 -->
+  <div class="stl"><div class="dot"></div>🏅 대진표</div>
+
+  <div class="card" style="margin-bottom:11px">
+    <div class="at">📋 모임 선택</div>
+    <div class="fr">
+      <label class="fl">번개 모임에서 불러오기</label>
+      <select class="fs" id="dr-meet-sel" onchange="drSelectMeet(this.value)">
+        <option value="">— 모임 선택 (선택 안 해도 됨) —</option>
+      </select>
     </div>
-  </div>
-  <div class="ps2">
-    <div class="pb"><div class="pv" id="p-wr">0%</div><div class="pl">승률</div></div>
-    <div class="pb"><div class="pv" id="p-gm">0</div><div class="pl">총 경기</div></div>
-    <div class="pb"><div class="pv" id="p-gc">0</div><div class="pl">내 장비</div></div>
-  </div>
-  <button class="ab" onclick="tp('pg2')">🎒 장비 추가하기</button>
-  <div class="ap" id="pg2" style="display:none">
-    <div class="at">🎒 장비 등록</div>
-    <div class="r2">
-      <div class="fr"><label class="fl">종류</label>
-        <select class="fs" id="g-tp"><option value="🎾">🎾 테니스 라켓</option><option value="🏸">🏸 배드민턴 라켓</option><option value="🖐️">🖐️ 그립/오버그립</option><option value="👟">👟 운동화</option><option value="👜">👜 가방</option><option value="💪">💪 기타</option></select>
+    <div class="fr" style="margin-top:8px">
+      <label class="fl">대진표 제목 *</label>
+      <input class="fi" id="dr-title" placeholder="예: 4월 번개 테니스 대진표">
+    </div>
+    <div class="r2" style="margin-top:4px">
+      <div class="fr">
+        <label class="fl">종목</label>
+        <select class="fs" id="dr-sport">
+          <option value="tennis">🎾 테니스</option>
+          <option value="badminton">🏸 배드민턴</option>
+        </select>
       </div>
-      <div class="fr"><label class="fl">장비명 *</label><input class="fi" id="g-nm" placeholder="예: 헤드 스피드 MP"></div>
-    </div>
-    <div class="fr"><label class="fl">세부 정보</label><input class="fi" id="g-dt" placeholder="예: 럭실론 알루파워 / 55파운드"></div>
-    <div class="fr"><label class="fl">스트링 교체일</label><input class="fi" id="g-da" type="date"></div>
-    <div class="br2">
-      <button class="btn bg2" style="flex:1;padding:11px;border-radius:11px" onclick="addGear()">✅ 등록</button>
-      <button class="btn bgr" style="padding:11px 13px;border-radius:11px" onclick="tp('pg2')">취소</button>
+      <div class="fr">
+        <label class="fl">방식</label>
+        <select class="fs" id="dr-type">
+          <option value="tournament">🏆 토너먼트</option>
+          <option value="league">📋 리그전</option>
+        </select>
+      </div>
     </div>
   </div>
-  <div class="stl"><div class="dot"></div>🎁 받은 선물</div>
-  <div id="inbox-list"><div class="eb"><div class="ei">🎁</div><p>받은 선물이 없어요!</p></div></div>
-  <div class="stl"><div class="dot"></div>🎒 내 장비</div>
-  <div id="gl"><div class="eb"><div class="ei">🎒</div><p>장비를 추가해보세요!</p></div></div>
+
+  <!-- 참가자 입력 -->
+  <div class="card" style="margin-bottom:11px">
+    <div class="at">👥 참가자 입력</div>
+    <div id="dr-players-list" style="margin-bottom:9px"></div>
+    <div style="display:flex;gap:7px;align-items:center">
+      <input class="fi" id="dr-player-inp" placeholder="이름 입력 후 추가" style="flex:1" onkeydown="if(event.key==='Enter')drAddPlayer()">
+      <button class="btn bg2" style="padding:9px 13px;border-radius:11px;white-space:nowrap" onclick="drAddPlayer()">➕ 추가</button>
+    </div>
+  </div>
+
+  <!-- 대진표 생성 버튼 -->
+  <button class="btn bo2" style="width:100%;padding:13px;border-radius:13px;font-size:15px;margin-bottom:13px" onclick="drGenerate()">🎲 대진표 생성!</button>
+
+  <!-- 생성된 대진표 -->
+  <div id="dr-result" style="display:none">
+    <div class="stl"><div class="dot"></div><span id="dr-result-title">대진표</span></div>
+    <div id="dr-bracket"></div>
+    <button class="btn bgr" style="width:100%;padding:11px;border-radius:11px;margin-top:9px" onclick="drReset()">🔄 초기화</button>
+  </div>
+
 </div>
 
 <nav class="nav">
   <button class="tb active" id="tab-home" onclick="showTab('home')"><span class="ti">🏠</span><span class="tl">홈/피드</span></button>
-  <button class="tb" id="tab-rank" onclick="showTab('rank')"><span class="ti">📋</span><span class="tl">경기기록</span></button>
+  <button class="tb" id="tab-rank" onclick="showTab('rank')"><span class="ti">🏆</span><span class="tl">실력 랭킹</span></button>
   <button class="tb" id="tab-shop" onclick="showTab('shop')"><span class="ti">🛍️</span><span class="tl">테니스 샵</span></button>
-  <button class="tb" id="tab-bag" onclick="showTab('bag')"><span class="ti">🎒</span><span class="tl">내 가방</span></button>
+  <button class="tb" id="tab-draw" onclick="showTab('draw')"><span class="ti">🏅</span><span class="tl">대진표</span></button>
 </nav>
 
 <!-- MODAL: 관리자 로그인 -->
@@ -496,67 +490,14 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
   <div class="msh" onclick="event.stopPropagation()">
     <div class="mh"></div>
     <div class="mtt">🎁 선물하기</div>
-    <div id="gift-selected-item" style="display:none;background:var(--gl);border-radius:11px;padding:11px 13px;margin-bottom:13px;align-items:center;gap:10px;">
-      <span id="gift-item-ico" style="font-size:24px">🎾</span>
-      <div style="flex:1">
-        <div id="gift-item-name" style="font-size:13px;font-weight:700"></div>
-        <div id="gift-item-price" style="font-size:13px;color:var(--or);font-weight:700"></div>
-      </div>
-    </div>
-    <div class="fr">
-      <label class="fl">받는 사람 닉네임 *</label>
-      <input class="fi" id="gift-to" placeholder="예: 테니스왕">
-    </div>
-    <div class="fr">
-      <label class="fl">선물 메시지 (선택)</label>
-      <input class="fi" id="gift-msg" placeholder="예: 생일 축하해요! 🎉">
-    </div>
-    <div class="br2" style="margin-top:4px">
-      <button class="btn bo2" style="flex:1;padding:12px;border-radius:11px" onclick="sendGift()">🎁 선물 보내기</button>
-      <button class="btn bgr" style="padding:12px 13px;border-radius:11px" onclick="closeModal('gift')">취소</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: 번개 모임 채팅방 -->
-<div class="mc-modal" id="mc-modal">
-  <div class="mc-sheet">
-    <div class="mc-head">
-      <div style="display:flex;flex-direction:column;gap:5px;width:100%">
-        <div class="mc-handle"></div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <span style="font-size:18px">💬</span>
-          <span class="mc-title" id="mc-title">채팅방</span>
-          <button class="mc-close" onclick="closeMeetChat()">✕</button>
-        </div>
-      </div>
-    </div>
-    <div class="mc-body" id="mc-body"></div>
-    <div class="mc-foot">
-      <div id="mc-nick-saved-row" style="display:none">
-        <div class="mc-nick-saved">
-          <span>👤</span>
-          <span class="nsn" id="mc-ns-name"></span>
-          <span class="nsc" onclick="changeMcNick()">변경</span>
-        </div>
-      </div>
-      <div id="mc-nick-input-row" class="mc-nick-row">
-        <label style="font-size:12px;color:var(--tl);white-space:nowrap">닉네임</label>
-        <input class="fi" id="mc-nick-in" placeholder="닉네임 입력" style="flex:1;padding:7px 11px;font-size:13px;" onkeydown="if(event.key==='Enter')saveMcNick()">
-        <button class="nick-save-btn" onclick="saveMcNick()">저장</button>
-      </div>
-      <div class="cin">
-        <input id="mc-chat-in" placeholder="메시지를 입력하세요..." onkeydown="if(event.key==='Enter')sendMcMsg()">
-        <button class="csb" onclick="sendMcMsg()">➤</button>
-      </div>
-    </div>
+    <p style="font-size:13px;color:var(--tl);margin-bottom:13px">동호인에게 상품 링크를 공유하세요!</p>
+    <div id="gift-list"><div class="eb"><div class="ei">🎁</div><p>상품을 먼저 등록해주세요!</p></div></div>
+    <button class="btn bgr" style="width:100%;padding:11px;border-radius:11px;margin-top:7px" onclick="closeModal('gift')">닫기</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyB2BnWZ1Y2Iq43M1KlWrZ3CM3DNQu-YHYc",
@@ -572,30 +513,18 @@ let db = null;
 let rMeets = null, rRanks = null, rShop = null, rChat = null;
 let isReady = false;
 let flt = {meet:'all', rank:'all', shop:'all'};
+let meetList = [];
+let gameResult = null;
 let isAdminMode = false;
 let notifOn = localStorage.getItem('niji_notif') !== 'off';
 let savedNick = localStorage.getItem('niji_nick') || '';
 let adminPw = localStorage.getItem('niji_adm_pw') || '1234';
-let profile = JSON.parse(localStorage.getItem('niji_profile') || '{}');
-let gears = JSON.parse(localStorage.getItem('niji_gears') || '[]');
+
 
 // ── 초기화 ──
 function init() {
-  if (typeof firebase === 'undefined') {
-    console.warn('Firebase 아직 로딩 중... 재시도');
-    document.getElementById('oc').textContent = '연결 중...';
-    setTimeout(init, 1000);
-    return;
-  }
-  loadNickUI();
-  updateNotifUI();
-  loadProfile();
-  loadGears();
-  selMatchType('single');
   try {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
+    firebase.initializeApp(firebaseConfig);
     db = firebase.database();
     rMeets = db.ref('meets');
     rRanks = db.ref('ranks');
@@ -604,28 +533,21 @@ function init() {
     isReady = true;
     setFbs('ok', '🟢 실시간 연결됨');
     document.getElementById('oc').textContent = '실시간 연결됨';
+    // 리스너 등록
     rMeets.on('value', s => rMeetList(s.val()));
     rRanks.on('value', s => rRankList(s.val()));
     rShop.on('value',  s => rShopList(s.val()));
     rChat.limitToLast(50).on('child_added', s => { const m=s.val(); if(m) rMsg(m); });
-    db.ref('.info/connected').on('value', snap => {
-      if (snap.val() === true) {
-        setFbs('ok', '🟢 실시간 연결됨');
-        document.getElementById('oc').textContent = '실시간 연결됨';
-      } else {
-        setFbs('wt', '🟡 재연결 중...');
-        document.getElementById('oc').textContent = '재연결 중...';
-      }
-    });
+    // 알림 권한 요청
     if (notifOn && 'Notification' in window && Notification.permission === 'default') {
       Notification.requestPermission();
     }
   } catch(e) {
-    console.error('Firebase 초기화 오류:', e);
+    console.error(e);
     setFbs('er', '연결 오류');
-    document.getElementById('oc').textContent = '연결 오류';
-    toast('⚠️ Firebase 연결 실패. 새로고침 해주세요!');
   }
+  loadNickUI();
+  updateNotifUI();
 }
 
 // ── 닉네임 자동저장 ──
@@ -687,26 +609,26 @@ function tryNotif(nickname, text) {
 function rMeetList(data) {
   const el = document.getElementById('ml');
   el.innerHTML = '';
+  meetList = [];
   if (!data) {
     el.innerHTML = '<div class="eb"><div class="ei">⚡</div><p>번개 모임이 없어요!<br>위 버튼으로 만들어보세요 😊</p></div>';
+    drLoadMeetOptions();
     return;
   }
   let shown = 0;
   Object.entries(data).reverse().forEach(([k, m]) => {
+    meetList.push({ ...m, _key: k });
     if (flt.meet !== 'all' && m.sport !== flt.meet) return;
     shown++;
     const si = m.sport === 'tennis' ? '🎾' : '🏸';
     const bc = m.status === '마감임박' || m.status === '마감' ? 'br3' : m.status === '정기' ? 'bb3' : 'bg3';
     const d = document.createElement('div');
     d.className = 'mc'; d.dataset.sport = m.sport;
-    const unread = getUnread(k);
-    const badgeHtml = unread > 0 ? `<span class="chat-badge">${unread > 99 ? '99+' : unread}</span>` : '';
-    d.innerHTML = `<div class="ms ${m.sport}">${si}</div><div class="mi"><div class="mt2">${esc(m.title)}</div><div class="md2">${m.place ? '<span>📍' + esc(m.place) + '</span>' : ''} ${m.time ? '<span>🕔' + esc(m.time) + '</span>' : ''}</div><button class="meet-chat-btn" id="chatbtn-${k}" onclick="openMeetChat('${k}','${esc(m.title)}')">💬 채팅방${badgeHtml}</button></div><span class="badge ${bc}">${esc(m.status)}</span><button class="db2" onclick="delMeet('${k}')">🗑️</button>`;
+    d.innerHTML = `<div class="ms ${m.sport}">${si}</div><div class="mi"><div class="mt2">${esc(m.title)}</div><div class="md2">${m.place ? '<span>📍' + esc(m.place) + '</span>' : ''} ${m.time ? '<span>🕔' + esc(m.time) + '</span>' : ''}</div></div><span class="badge ${bc}">${esc(m.status)}</span><button class="db2" onclick="delMeet('${k}')">🗑️</button>`;
     el.appendChild(d);
   });
   if (!shown) el.innerHTML = '<div class="eb"><div class="ei">🔍</div><p>해당 종목 모임이 없어요!</p></div>';
-  // 백그라운드 리스너 (채팅방 닫혀있어도 새 메시지 감지)
-  if (data) startBgListeners(data);
+  drLoadMeetOptions();
 }
 function addMeet() {
   if (!isReady) { toast('⚠️ Firebase 연결 중이에요. 잠시 후 시도해주세요!'); return; }
@@ -714,25 +636,11 @@ function addMeet() {
   if (!t) { toast('⚠️ 제목을 입력해주세요!'); return; }
   if (!p) { toast('⚠️ 장소를 입력해주세요!'); return; }
   if (!ti) { toast('⚠️ 시간을 입력해주세요!'); return; }
-  rMeets.push({ title: t, sport: s, status: st, place: p, time: ti, createdAt: Date.now() })
-    .then(() => { rMeets.once('value', snap => rMeetList(snap.val())); })
-    .catch(e => { console.error(e); toast('⚠️ 저장 실패! 다시 시도해주세요.'); });
+  rMeets.push({ title: t, sport: s, status: st, place: p, time: ti, createdAt: Date.now() });
   sv('m-t', ''); sv('m-pl', ''); sv('m-ti', '');
   tp('pm'); toast('✅ 번개 모임 등록!');
 }
-function delMeet(k) {
-  if (!pendingDel || pendingDel.key !== k) {
-    pendingDel = { key: k, type: 'meet' };
-    toast('🗑️ 한 번 더 누르면 삭제돼요!');
-    setTimeout(() => { if (pendingDel && pendingDel.key === k) pendingDel = null; }, 3000);
-    return;
-  }
-  pendingDel = null;
-  rMeets.child(k).remove().then(() => {
-    rMeets.once('value', s => rMeetList(s.val()));
-  });
-  toast('🗑️ 삭제됐어요!');
-}
+function delMeet(k) { if (confirm('삭제할까요?')) { rMeets.child(k).remove(); toast('🗑️ 삭제됐어요!'); } }
 function fm(el, f) {
   flt.meet = f;
   setChip(el);
@@ -740,125 +648,98 @@ function fm(el, f) {
   rMeets.once('value', s => rMeetList(s.val()));
 }
 
-// ── 경기 기록 ──
-let matchType = 'single'; // single / double
-let gameResult = null;
-
-function selMatchType(t) {
-  matchType = t;
-  document.getElementById('rb-single').classList.toggle('sel', t === 'single');
-  document.getElementById('rb-double').classList.toggle('sel', t === 'double');
-  // 복식이면 파트너/상대2 표시
-  const isD = t === 'double';
-  document.getElementById('gr-partner-wrap').style.opacity = isD ? '1' : '0.3';
-  document.getElementById('gr-opp2-wrap').style.opacity = isD ? '1' : '0.3';
-  document.getElementById('gr-partner').disabled = !isD;
-  document.getElementById('gr-opp2').disabled = !isD;
+// ── 랭킹 + 게임 결과 ──
+function selResult(r) {
+  gameResult = r;
+  document.getElementById('rb-win').classList.toggle('sel', r === 'win');
+  document.getElementById('rb-lose').classList.toggle('sel', r === 'lose');
 }
-
-function autoCalcResult() {
-  const me = parseInt(document.getElementById('gr-score-me').value);
-  const opp = parseInt(document.getElementById('gr-score-opp').value);
-  const disp = document.getElementById('gr-result-display');
-  if (isNaN(me) || isNaN(opp)) { disp.style.display = 'none'; return; }
-  if (me === opp) { disp.style.display = 'block'; disp.style.background = '#f5f5f5'; disp.style.color = '#666'; disp.textContent = '🤝 무승부'; gameResult = 'draw'; return; }
-  gameResult = me > opp ? 'win' : 'lose';
-  disp.style.display = 'block';
-  if (gameResult === 'win') { disp.style.background = '#e8f5e9'; disp.style.color = '#2e6b2e'; disp.textContent = '🏆 승리!'; }
-  else { disp.style.background = '#ffebee'; disp.style.color = '#c62828'; disp.textContent = '😔 패배'; }
-}
-
 function submitGame() {
   if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
   const me = v('gr-me').trim();
-  if (!me) { toast('⚠️ 내 이름을 입력해주세요!'); return; }
-  const opp1 = v('gr-opp1').trim();
-  if (!opp1) { toast('⚠️ 상대방 이름을 입력해주세요!'); return; }
-  const scoreMe = parseInt(v('gr-score-me'));
-  const scoreOpp = parseInt(v('gr-score-opp'));
-  if (isNaN(scoreMe) || isNaN(scoreOpp)) { toast('⚠️ 점수를 입력해주세요!'); return; }
-  if (gameResult === null) { toast('⚠️ 점수를 입력하면 승패가 자동으로 결정돼요!'); return; }
-
-  const record = {
-    matchType,
-    sport: v('gr-sp'),
-    date: v('gr-dt') || new Date().toISOString().slice(0,10),
-    myName: me,
-    partner: matchType === 'double' ? (v('gr-partner').trim() || '') : '',
-    opp1,
-    opp2: matchType === 'double' ? (v('gr-opp2').trim() || '') : '',
-    scoreMe,
-    scoreOpp,
-    result: gameResult,
-    createdAt: Date.now()
-  };
-  rRanks.push(record)
-    .then(() => { rRanks.once('value', snap => rRankList(snap.val())); })
-    .catch(e => { console.error(e); toast('⚠️ 저장 실패! 다시 시도해주세요.'); });
-
-  // 입력 초기화
-  ['gr-me','gr-partner','gr-opp1','gr-opp2','gr-score-me','gr-score-opp','gr-dt'].forEach(i => sv(i,''));
+  if (!me) { toast('⚠️ 내 닉네임을 입력해주세요!'); return; }
+  if (!gameResult) { toast('⚠️ 승리/패배를 선택해주세요!'); return; }
+  const opp = v('gr-opp').trim();
+  const sport = v('gr-sp');
+  // 내 데이터 찾아서 업데이트
+  rRanks.orderByChild('nick').equalTo(me).once('value', snap => {
+    const data = snap.val();
+    if (data) {
+      const key = Object.keys(data)[0];
+      const cur = data[key];
+      const upd = {};
+      if (gameResult === 'win') upd.win = (cur.win || 0) + 1;
+      else upd.lose = (cur.lose || 0) + 1;
+      rRanks.child(key).update(upd);
+    } else {
+      rRanks.push({ nick: me, sport, level: '중급', win: gameResult === 'win' ? 1 : 0, lose: gameResult === 'lose' ? 1 : 0, years: 0, area: '', freq: '', createdAt: Date.now() });
+    }
+    // 상대방도 업데이트
+    if (opp) {
+      rRanks.orderByChild('nick').equalTo(opp).once('value', snap2 => {
+        const d2 = snap2.val();
+        if (d2) {
+          const k2 = Object.keys(d2)[0];
+          const c2 = d2[k2];
+          const u2 = {};
+          if (gameResult === 'win') u2.lose = (c2.lose || 0) + 1;
+          else u2.win = (c2.win || 0) + 1;
+          rRanks.child(k2).update(u2);
+        }
+      });
+    }
+  });
+  sv('gr-me', ''); sv('gr-opp', '');
   gameResult = null;
-  document.getElementById('gr-result-display').style.display = 'none';
-  toast(record.result === 'win' ? '🏆 승리 기록 완료!' : record.result === 'lose' ? '📝 패배 기록 완료!' : '🤝 무승부 기록 완료!');
+  document.getElementById('rb-win').classList.remove('sel');
+  document.getElementById('rb-lose').classList.remove('sel');
+  toast(gameResult === 'win' ? '🏆 승리 등록!' : '📝 결과 등록 완료!');
 }
-
 function rRankList(data) {
   const el = document.getElementById('rl');
   el.innerHTML = '';
   if (!data) {
-    el.innerHTML = '<div class="eb"><div class="ei">📋</div><p>아직 경기 기록이 없어요!<br>위에서 결과를 입력해보세요 😊</p></div>';
+    el.innerHTML = '<div class="eb"><div class="ei">🏆</div><p>아직 등록된 회원이 없어요!<br>게임 결과를 입력해보세요 😊</p></div>';
     updateRH([]);
     return;
   }
-  let list = Object.entries(data).reverse(); // 최신순
+  let list = Object.entries(data).map(([k, m]) => {
+    const tot = (m.win || 0) + (m.lose || 0);
+    m.wr = tot > 0 ? Math.round((m.win || 0) / tot * 100) : 0;
+    return [k, m];
+  }).sort((a, b) => b[1].wr - a[1].wr);
   updateRH(list.map(e => e[1]));
   let shown = 0;
+  const bgs = ['#fff9c4','#e3f2fd','#e8f5e9','#f3e5f5','#fce4ec','#e0f2f1'];
+  const avs = ['😄','🎾','🏸','🌟','👑','💪','🔥','🦅','🎯','🦁'];
   list.forEach(([k, m]) => {
-    if (flt.rank === 'tennis' && m.sport !== 'tennis') return;
-    if (flt.rank === 'badminton' && m.sport !== 'badminton') return;
-    if (flt.rank === 'single' && m.matchType !== 'single') return;
-    if (flt.rank === 'double' && m.matchType !== 'double') return;
+    if (flt.rank !== 'all' && m.sport !== flt.rank) return;
     shown++;
+    const n = shown;
+    const rc = n === 1 ? 'r1' : n === 2 ? 'r2' : n === 3 ? 'r3' : '';
     const si = m.sport === 'tennis' ? '🎾' : '🏸';
-    const isD = m.matchType === 'double';
-    const myTeam = isD ? `${esc(m.myName)} & ${esc(m.partner||'?')}` : esc(m.myName);
-    const oppTeam = isD ? `${esc(m.opp1)} & ${esc(m.opp2||'?')}` : esc(m.opp1);
-    const res = m.result || (m.scoreMe > m.scoreOpp ? 'win' : 'lose');
+    const av = avs[Math.abs(hc(m.nick || '?')) % avs.length];
+    const bg = bgs[(n - 1) % bgs.length];
     const d = document.createElement('div');
-    d.className = 'rec-card ' + res;
-    d.innerHTML = `
-      <div class="rec-top">
-        <span class="rec-badge ${res}">${res==='win'?'🏆 승리':res==='lose'?'😔 패배':'🤝 무승부'}</span>
-        <div class="rec-score"><span class="s-me">${m.scoreMe}</span> <span style="color:var(--tl);font-size:16px">:</span> <span class="s-opp">${m.scoreOpp}</span></div>
-        <button class="db2" onclick="delRank('${k}')" style="font-size:14px">🗑️</button>
-      </div>
-      <div class="rec-teams"><strong>${myTeam}</strong><span class="vs">VS</span><span>${oppTeam}</span></div>
-      <div class="rec-meta"><span>${si}</span><span>${isD?'👫 복식':'🙋 단식'}</span><span>📅 ${m.date||''}</span></div>`;
+    d.className = 'rkc ' + rc; d.dataset.sport = m.sport;
+    d.innerHTML = `<div class="rnum">${n}</div><div class="rav" style="background:${bg}">${av}</div><div class="rif"><div class="rnm">${esc(m.nick)}</div><div class="rdt">${si} 구력${m.years||0}년 · ${esc(m.freq||'')} · ${esc(m.area||'')} · ${esc(m.level||'')}</div></div><div class="rsc"><div class="rw">${m.wr}%</div><div class="rlb">${m.win||0}승 ${m.lose||0}패</div></div><button class="db2" onclick="delRank('${k}')" style="font-size:14px">🗑️</button>`;
     el.appendChild(d);
   });
-  if (!shown) el.innerHTML = '<div class="eb"><div class="ei">🔍</div><p>해당 조건의 기록이 없어요!</p></div>';
+  if (!shown) el.innerHTML = '<div class="eb"><div class="ei">🔍</div><p>해당 종목 회원이 없어요!</p></div>';
 }
-
 function updateRH(list) {
   document.getElementById('r-tot').textContent = list.length;
-  document.getElementById('r-win').textContent = list.filter(m => m.result === 'win').length;
-  document.getElementById('r-los').textContent = list.filter(m => m.result === 'lose').length;
+  document.getElementById('r-ten').textContent = list.filter(m => m.sport === 'tennis').length;
+  document.getElementById('r-bad').textContent = list.filter(m => m.sport === 'badminton').length;
 }
-
-function delRank(k) {
-  if (!pendingDel || pendingDel.key !== k) {
-    pendingDel = { key: k, type: 'rank' };
-    toast('🗑️ 한 번 더 누르면 삭제돼요!');
-    setTimeout(() => { if (pendingDel && pendingDel.key === k) pendingDel = null; }, 3000);
-    return;
-  }
-  pendingDel = null;
-  rRanks.child(k).remove().then(() => {
-    rRanks.once('value', s => rRankList(s.val()));
-  });
-  toast('🗑️ 삭제됐어요!');
+function addRank() {
+  if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
+  const nk = v('r-nk'); if (!nk) { toast('⚠️ 닉네임 입력!'); return; }
+  rRanks.push({ nick: nk, sport: v('r-sp'), level: v('r-lv'), win: parseInt(v('r-w')) || 0, lose: parseInt(v('r-l')) || 0, years: parseInt(v('r-yr')) || 0, area: v('r-ar'), freq: v('r-fq'), createdAt: Date.now() });
+  ['r-nk','r-w','r-l','r-yr','r-ar','r-fq'].forEach(i => sv(i, ''));
+  tp('pr'); toast('✅ 랭킹 등록!');
 }
+function delRank(k) { if (confirm('삭제할까요?')) { rRanks.child(k).remove(); toast('🗑️ 삭제됐어요!'); } }
 function fr2(el, f) {
   flt.rank = f;
   setChip(el);
@@ -866,11 +747,7 @@ function fr2(el, f) {
   rRanks.once('value', s => rRankList(s.val()));
 }
 
-
 // ── 샵 ──
-let giftTargetKey = null; // 선물할 상품 키
-let giftTargetData = null; // 선물할 상품 데이터
-
 function toggleAdmin() {
   if (isAdminMode) {
     isAdminMode = false;
@@ -909,14 +786,13 @@ function changePw() {
   ['pw-cur','pw-new','pw-con'].forEach(i => sv(i, ''));
   tp('ppw'); toast('✅ 비밀번호 변경 완료!');
 }
-
 function rShopList(data) {
   const grid = document.getElementById('slist');
   const em = document.getElementById('sem');
   grid.innerHTML = '';
   const cats = { string: 'g', grip: 'o', acc: 'b', ball: 'y' };
   const icos = { string: '🎾', grip: '🖐️', acc: '💡', ball: '🟡' };
-  if (!data) { em.style.display = 'block'; return; }
+  if (!data) { em.style.display = 'block'; renderGift(null); return; }
   let shown = 0;
   Object.entries(data).reverse().forEach(([k, s]) => {
     if (flt.shop !== 'all' && s.cat !== flt.shop) return;
@@ -924,139 +800,40 @@ function rShopList(data) {
     const col = cats[s.cat] || 'g', ico = icos[s.cat] || '📦';
     const d = document.createElement('div');
     d.className = 'si';
-    const buyBtn = s.url
-      ? `<button class="buy-btn" onclick="window.open('${esc(s.url)}','_blank')">🛒 구매하기</button>`
-      : `<button class="buy-btn" style="opacity:0.4;cursor:default">🛒 구매하기</button>`;
-    const giftBtn = `<button class="gift-btn" onclick="openGift('${k}')">🎁 선물</button>`;
-    const delBtn = isAdminMode ? `<button class="adm-del" onclick="delShop('${k}')">🗑️</button>` : '';
-    d.innerHTML = `
-      <div class="sth ${col}">${ico}${s.badge ? '<span class="shot">' + esc(s.badge) + '</span>' : ''}</div>
-      <div class="sif">
-        <div class="snm">${esc(s.name)}</div>
-        ${s.desc ? '<div style="font-size:11px;color:var(--tl);margin-bottom:3px">' + esc(s.desc) + '</div>' : ''}
-        <div class="spr">${Number(s.price).toLocaleString()}원${s.orig && s.orig > 0 ? '<span class="og">' + Number(s.orig).toLocaleString() + '</span>' : ''}</div>
-      </div>
-      <div class="sft">${buyBtn}${giftBtn}${delBtn}</div>`;
+    d.innerHTML = `<div class="sth ${col}">${ico}${s.badge ? '<span class="shot">' + esc(s.badge) + '</span>' : ''}</div><div class="sif"><div class="snm">${esc(s.name)}</div>${s.desc ? '<div style="font-size:11px;color:var(--tl);margin-bottom:3px">' + esc(s.desc) + '</div>' : ''}<div class="spr">${Number(s.price).toLocaleString()}원${s.orig && s.orig > 0 ? '<span class="og">' + Number(s.orig).toLocaleString() + '</span>' : ''}</div></div><div class="sft"><button class="gift-btn" onclick="openModal(\'gift\')">🎁 선물하기</button>${isAdminMode ? '<button class="adm-del" onclick="delShop(\'' + k + '\')">🗑️ 삭제</button>' : ''}</div>`;
     grid.appendChild(d);
   });
   em.style.display = shown ? 'none' : 'block';
+  renderGift(data);
 }
-
+function renderGift(data) {
+  const el = document.getElementById('gift-list');
+  if (!data) { el.innerHTML = '<div class="eb"><div class="ei">🎁</div><p>상품을 먼저 등록해주세요!</p></div>'; return; }
+  el.innerHTML = '';
+  const icos = { string: '🎾', grip: '🖐️', acc: '💡', ball: '🟡' };
+  Object.entries(data).slice(0, 6).forEach(([k, s]) => {
+    const d = document.createElement('div');
+    d.style = 'display:flex;align-items:center;gap:11px;background:#fff;border-radius:11px;padding:11px;box-shadow:var(--sh);margin-bottom:9px;';
+    d.innerHTML = `<div style="font-size:26px">${icos[s.cat] || '📦'}</div><div style="flex:1"><div style="font-size:13px;font-weight:700">${esc(s.name)}</div><div style="font-size:13px;color:var(--or);font-weight:700">${Number(s.price).toLocaleString()}원</div></div><button class="btn bo2" style="padding:7px 13px;font-size:12px" onclick="toast('🎁 링크 복사! 카톡으로 공유하세요')">선물하기</button>`;
+    el.appendChild(d);
+  });
+}
 function addShop() {
   if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
   const nm = v('s-nm'), pr = v('s-pr');
   if (!nm) { toast('⚠️ 상품명 입력!'); return; }
   if (!pr) { toast('⚠️ 판매가 입력!'); return; }
-  rShop.push({ name: nm, price: parseInt(pr), orig: parseInt(v('s-og')) || 0, cat: v('s-ct'), badge: v('s-bd'), desc: v('s-ds'), url: v('s-url').trim(), createdAt: Date.now() })
-    .then(() => { rShop.once('value', snap => rShopList(snap.val())); })
-    .catch(e => { console.error(e); toast('⚠️ 저장 실패! 다시 시도해주세요.'); });
-  ['s-nm','s-pr','s-og','s-ds','s-url'].forEach(i => sv(i, ''));
+  rShop.push({ name: nm, price: parseInt(pr), orig: parseInt(v('s-og')) || 0, cat: v('s-ct'), badge: v('s-bd'), desc: v('s-ds'), createdAt: Date.now() });
+  ['s-nm','s-pr','s-og','s-ds'].forEach(i => sv(i, ''));
   tp('ps'); toast('✅ 상품 등록 완료!');
 }
-function delShop(k) {
-  if (!pendingDel || pendingDel.key !== k) {
-    pendingDel = { key: k, type: 'shop' };
-    toast('🗑️ 한 번 더 누르면 삭제돼요!');
-    setTimeout(() => { if (pendingDel && pendingDel.key === k) pendingDel = null; }, 3000);
-    return;
-  }
-  pendingDel = null;
-  rShop.child(k).remove().then(() => {
-    rShop.once('value', s => rShopList(s.val()));
-  });
-  toast('🗑️ 삭제됐어요!');
-}
+function delShop(k) { if (confirm('상품을 삭제할까요?')) { rShop.child(k).remove(); toast('🗑️ 삭제됐어요!'); } }
 function fs2(el, f) {
   flt.shop = f;
   setChip(el);
   if (!isReady) return;
   rShop.once('value', s => rShopList(s.val()));
 }
-
-// ── 선물하기 ──
-function openGift(shopKey) {
-  // 상품 정보 찾기
-  rShop.child(shopKey).once('value', snap => {
-    const s = snap.val();
-    if (!s) { toast('⚠️ 상품 정보를 불러올 수 없어요!'); return; }
-    giftTargetKey = shopKey;
-    giftTargetData = s;
-    const icos = { string: '🎾', grip: '🖐️', acc: '💡', ball: '🟡' };
-    // 모달 내용 업데이트
-    const infoEl = document.getElementById('gift-selected-item');
-    infoEl.style.display = 'flex';
-    document.getElementById('gift-item-ico').textContent = icos[s.cat] || '📦';
-    document.getElementById('gift-item-name').textContent = s.name;
-    document.getElementById('gift-item-price').textContent = Number(s.price).toLocaleString() + '원';
-    sv('gift-to', '');
-    sv('gift-msg', '');
-    openModal('gift');
-  });
-}
-
-function sendGift() {
-  if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
-  const toNick = v('gift-to').trim();
-  if (!toNick) { toast('⚠️ 받는 사람 닉네임을 입력해주세요!'); return; }
-  if (!giftTargetData) { toast('⚠️ 상품을 선택해주세요!'); return; }
-  const fromNick = savedNick || mcNick || '익명';
-  const gift = {
-    toNick,
-    fromNick,
-    itemName: giftTargetData.name,
-    itemPrice: giftTargetData.price,
-    itemCat: giftTargetData.cat,
-    itemUrl: giftTargetData.url || '',
-    message: v('gift-msg').trim(),
-    read: false,
-    createdAt: Date.now()
-  };
-  db.ref('gifts').push(gift);
-  closeModal('gift');
-  toast('🎁 ' + toNick + '님께 선물을 보냈어요!');
-  giftTargetKey = null;
-  giftTargetData = null;
-}
-
-// ── 받은 선물 (내 가방) ──
-function loadInbox() {
-  const myNick = savedNick || mcNick || '';
-  if (!myNick || !isReady) {
-    document.getElementById('inbox-list').innerHTML = '<div class="eb"><div class="ei">👤</div><p>닉네임을 설정하면<br>받은 선물을 확인할 수 있어요!</p></div>';
-    return;
-  }
-  db.ref('gifts').orderByChild('toNick').equalTo(myNick).on('value', snap => {
-    const el = document.getElementById('inbox-list');
-    el.innerHTML = '';
-    const data = snap.val();
-    if (!data) { el.innerHTML = '<div class="eb"><div class="ei">🎁</div><p>받은 선물이 없어요!</p></div>'; return; }
-    const icos = { string: '🎾', grip: '🖐️', acc: '💡', ball: '🟡' };
-    Object.entries(data).reverse().forEach(([k, g]) => {
-      const d = document.createElement('div');
-      const dt = new Date(g.createdAt).toLocaleDateString('ko-KR');
-      const isNew = !g.read;
-      d.style.cssText = 'background:#fff;border-radius:13px;padding:13px;box-shadow:var(--sh);margin-bottom:9px;border-left:4px solid ' + (isNew ? 'var(--or)' : 'var(--g2)') + ';';
-      d.innerHTML = `
-        <div style="display:flex;align-items:center;gap:9px;margin-bottom:7px">
-          <span style="font-size:22px">${icos[g.itemCat] || '📦'}</span>
-          <div style="flex:1">
-            <div style="font-size:13px;font-weight:700">${esc(g.itemName)}</div>
-            <div style="font-size:12px;color:var(--or);font-weight:700">${Number(g.itemPrice).toLocaleString()}원</div>
-          </div>
-          ${isNew ? '<span style="background:var(--or);color:#fff;font-size:10px;font-weight:900;padding:2px 8px;border-radius:10px">NEW</span>' : ''}
-        </div>
-        <div style="font-size:12px;color:var(--td);margin-bottom:5px">💌 <b>${esc(g.fromNick)}</b>님이 선물했어요${g.message ? ' — "' + esc(g.message) + '"' : ''}</div>
-        <div style="display:flex;gap:7px;align-items:center">
-          ${g.itemUrl ? '<button class="btn bo2" style="padding:6px 13px;font-size:12px;flex:1" onclick="window.open(\'' + esc(g.itemUrl) + '\',\'_blank\');markRead(\'' + k + '\')">🛒 스마트스토어에서 받기</button>' : '<span style="font-size:11px;color:var(--tl)">구매 링크가 없어요</span>'}
-          <span style="font-size:11px;color:var(--tl)">${dt}</span>
-        </div>`;
-      el.appendChild(d);
-      // 읽음 처리
-      if (isNew) db.ref('gifts/' + k + '/read').set(true);
-    });
-  });
-}
-
 
 // ── 채팅 ──
 function setFbs(t, tx) {
@@ -1094,189 +871,9 @@ function scb() {
   rChat.push({ nickname: nick, text, timestamp: Date.now() });
 }
 
-// ── 번개 모임 채팅방 ──
-let curMeetId = null;
-let curMeetChatRef = null;
-let mcNick = localStorage.getItem('niji_mc_nick') || '';
-let mcFirstLoad = true;
-let unreadMap = JSON.parse(localStorage.getItem('niji_unread') || '{}');
-let bgListeners = {}; // 백그라운드 리스너 (채팅방 닫혀있을 때)
-let lastSeenMap = JSON.parse(localStorage.getItem('niji_lastseen') || '{}');
-let pendingDel = null; // 삭제 확인용
-let pendingDelGear = -1; // 장비 삭제 확인용
-
-function getUnread(meetId) { return unreadMap[meetId] || 0; }
-function clearUnread(meetId) {
-  unreadMap[meetId] = 0;
-  localStorage.setItem('niji_unread', JSON.stringify(unreadMap));
-  // 버튼 뱃지 즉시 제거
-  const btn = document.getElementById('chatbtn-' + meetId);
-  if (btn) { const b = btn.querySelector('.chat-badge'); if (b) b.remove(); }
-}
-function addUnread(meetId) {
-  if (curMeetId === meetId) return; // 지금 열려있으면 카운트 안 함
-  unreadMap[meetId] = (unreadMap[meetId] || 0) + 1;
-  localStorage.setItem('niji_unread', JSON.stringify(unreadMap));
-  updateBadgeUI(meetId);
-}
-function updateBadgeUI(meetId) {
-  const btn = document.getElementById('chatbtn-' + meetId);
-  if (!btn) return;
-  let b = btn.querySelector('.chat-badge');
-  const cnt = unreadMap[meetId] || 0;
-  if (cnt > 0) {
-    if (!b) { b = document.createElement('span'); b.className = 'chat-badge'; btn.appendChild(b); }
-    b.textContent = cnt > 99 ? '99+' : cnt;
-  } else {
-    if (b) b.remove();
-  }
-}
-
-// 모임 목록 로드 후 각 모임에 백그라운드 리스너 달기
-function startBgListeners(data) {
-  if (!data) return;
-  Object.keys(data).forEach(k => {
-    if (bgListeners[k]) return; // 이미 달려있으면 스킵
-    const ref = db.ref('meetChat/' + k);
-    // 마지막 본 시간 이후 메시지만 감지
-    const since = lastSeenMap[k] || Date.now();
-    bgListeners[k] = ref.orderByChild('timestamp').startAt(since + 1);
-    bgListeners[k].on('child_added', s => {
-      const m = s.val();
-      if (!m) return;
-      const myNick = mcNick || savedNick || '';
-      if (m.nickname === myNick) return; // 내 메시지는 무시
-      addUnread(k);
-      if (notifOn) playNotifSound();
-    });
-  });
-}
-
-
-function playNotifSound() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    // 카톡 스타일: 짧은 "딩~" 소리 두 번
-    const notes = [880, 1100];
-    notes.forEach((freq, i) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.type = 'sine';
-      osc.frequency.value = freq;
-      const t = ctx.currentTime + i * 0.15;
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.35, t + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
-      osc.start(t); osc.stop(t + 0.3);
-    });
-  } catch(e) {}
-}
-
-function openMeetChat(meetId, title) {
-  curMeetId = meetId;
-  mcFirstLoad = true;
-  clearUnread(meetId); // 읽음 처리
-  document.getElementById('mc-title').textContent = '⚡ ' + title;
-  document.getElementById('mc-body').innerHTML = '';
-  document.getElementById('mc-modal').classList.add('open');
-  // 닉네임 UI
-  mcNick = localStorage.getItem('niji_mc_nick') || savedNick || '';
-  loadMcNickUI();
-  // Firebase 리스너 연결
-  if (curMeetChatRef) curMeetChatRef.off();
-  curMeetChatRef = db.ref('meetChat/' + meetId);
-  curMeetChatRef.limitToLast(80).on('child_added', s => {
-    const m = s.val();
-    if (m) renderMcMsg(m, mcFirstLoad);
-  });
-  // 첫 로드 완료 플래그 (약간 딜레이)
-  setTimeout(() => { mcFirstLoad = false; }, 600);
-}
-
-function closeMeetChat() {
-  document.getElementById('mc-modal').classList.remove('open');
-  if (curMeetChatRef) { curMeetChatRef.off(); curMeetChatRef = null; }
-  // 닫는 시점 기록 (백그라운드 리스너가 이후 메시지만 감지)
-  if (curMeetId) {
-    lastSeenMap[curMeetId] = Date.now();
-    localStorage.setItem('niji_lastseen', JSON.stringify(lastSeenMap));
-  }
-  curMeetId = null;
-}
-
-function renderMcMsg(msg, isHistory) {
-  const c = document.getElementById('mc-body');
-  const myNick = mcNick || savedNick || '';
-  const isMe = msg.nickname === myNick;
-  const avs = ['😄','🎾','🏸','🌟','👑','💪','🔥','🦅'];
-  const av = avs[Math.abs(hc(msg.nickname || '?')) % avs.length];
-  const tm = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '';
-  const d = document.createElement('div');
-  d.className = 'cmg' + (isMe ? ' mine' : '');
-  d.innerHTML = `<div class="cav">${av}</div><div class="cbub"><div class="cnm">${esc(msg.nickname||'익명')}</div><div class="ctx">${esc(msg.text||'')}</div><div class="ctm2">${tm}</div></div>`;
-  c.appendChild(d);
-  c.scrollTop = c.scrollHeight;
-  // 새 메시지이고 내가 보낸 게 아닐 때만 알림음
-  if (!isHistory && !isMe && notifOn) {
-    playNotifSound();
-    tryNotif(msg.nickname || '', msg.text || '');
-  }
-}
-
-function sendMcMsg() {
-  if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
-  if (!curMeetId) return;
-  const inp = document.getElementById('mc-chat-in');
-  const nick = mcNick || savedNick || document.getElementById('mc-nick-in').value.trim() || '익명';
-  const text = inp.value.trim();
-  if (!text) return;
-  inp.value = '';
-  if (!mcNick && nick !== '익명') {
-    mcNick = nick;
-    localStorage.setItem('niji_mc_nick', nick);
-    loadMcNickUI();
-  }
-  db.ref('meetChat/' + curMeetId).push({ nickname: nick, text, timestamp: Date.now() });
-}
-
-function loadMcNickUI() {
-  if (mcNick) {
-    document.getElementById('mc-nick-saved-row').style.display = 'block';
-    document.getElementById('mc-nick-input-row').style.display = 'none';
-    document.getElementById('mc-ns-name').textContent = mcNick;
-    document.getElementById('mc-nick-in').value = mcNick;
-  } else {
-    document.getElementById('mc-nick-saved-row').style.display = 'none';
-    document.getElementById('mc-nick-input-row').style.display = 'block';
-  }
-}
-function saveMcNick() {
-  const n = document.getElementById('mc-nick-in').value.trim();
-  if (!n) { toast('⚠️ 닉네임을 입력해주세요!'); return; }
-  mcNick = n;
-  localStorage.setItem('niji_mc_nick', n);
-  loadMcNickUI();
-  toast('✅ 닉네임 저장: ' + n);
-}
-function changeMcNick() {
-  mcNick = '';
-  localStorage.removeItem('niji_mc_nick');
-  document.getElementById('mc-nick-in').value = '';
-  loadMcNickUI();
-}
-
-
-function loadProfile() {
-  document.getElementById('p-nm').textContent = profile.name || '내 닉네임';
-  document.getElementById('p-lv').textContent = profile.level || '중급';
-  document.getElementById('p-sp').textContent = profile.sport === 'badminton' ? '🏸 배드민턴' : '🎾 테니스';
-  document.getElementById('p-yr').textContent = '구력 ' + (profile.years || 0) + '년';
-  document.getElementById('p-ar').textContent = '📍 ' + (profile.area || '지역 미설정');
-  const tot = (profile.win || 0) + (profile.lose || 0);
-  const wr = tot > 0 ? Math.round((profile.win || 0) / tot * 100) : 0;
-  document.getElementById('p-wr').textContent = wr + '%';
-  document.getElementById('p-gm').textContent = tot;
+// ── 프로필 (랭킹 탭 연동) ──
+let profile = JSON.parse(localStorage.getItem('niji_profile') || '{}');
+function loadProfileModal() {
   sv('ep-nm', profile.name || '');
   sv('ep-yr', profile.years || 0);
   sv('ep-ar', profile.area || '');
@@ -1288,41 +885,301 @@ function loadProfile() {
 function saveProfile() {
   profile = { name: v('ep-nm') || '나', sport: v('ep-sp'), level: v('ep-lv'), years: parseInt(v('ep-yr')) || 0, area: v('ep-ar'), win: parseInt(v('ep-w')) || 0, lose: parseInt(v('ep-l')) || 0 };
   localStorage.setItem('niji_profile', JSON.stringify(profile));
-  loadProfile();
   closeModal('ep');
   toast('✅ 프로필 저장됐어요!');
 }
-function loadGears() {
-  const el = document.getElementById('gl');
-  el.innerHTML = '';
-  document.getElementById('p-gc').textContent = gears.length;
-  if (!gears.length) { el.innerHTML = '<div class="eb"><div class="ei">🎒</div><p>장비를 추가해보세요!</p></div>'; return; }
-  gears.forEach((g, i) => {
-    const d = document.createElement('div');
-    d.className = 'gi2';
-    d.innerHTML = `<div class="gic">${g.type || '🎾'}</div><div class="gif"><div class="gnm">${esc(g.name)}</div><div class="gdt">${esc(g.detail || '')}</div></div><div style="text-align:right;flex-shrink:0">${g.date ? '<div class="gda">교체일<br>' + g.date + '</div>' : ''}<button class="db2" onclick="delGear(${i})" style="font-size:14px">🗑️</button></div>`;
-    el.appendChild(d);
+let drPlayers = [];
+let drMatches = [];
+let drLeagueData = {};
+
+function drLoadMeetOptions() {
+  const sel = document.getElementById('dr-meet-sel');
+  // 기존 옵션 유지 (첫번째 빈 옵션)
+  while (sel.options.length > 1) sel.remove(1);
+  if (!meetList || !meetList.length) return;
+  meetList.forEach((m, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = (m.sport === 'badminton' ? '🏸' : '🎾') + ' ' + m.title + ' — ' + (m.place || '장소미정');
+    sel.appendChild(opt);
   });
 }
-function addGear() {
-  const nm = v('g-nm'); if (!nm) { toast('⚠️ 장비명 입력!'); return; }
-  gears.push({ type: v('g-tp'), name: nm, detail: v('g-dt'), date: v('g-da') });
-  localStorage.setItem('niji_gears', JSON.stringify(gears));
-  sv('g-nm', ''); sv('g-dt', ''); sv('g-da', '');
-  loadGears(); tp('pg2'); toast('✅ 장비 등록!');
+
+function drSelectMeet(idx) {
+  if (idx === '') return;
+  const m = meetList[parseInt(idx)];
+  if (!m) return;
+  sv('dr-title', m.title + ' 대진표');
+  document.getElementById('dr-sport').value = m.sport === 'badminton' ? 'badminton' : 'tennis';
+  toast('✅ 모임 정보 불러왔어요! 참가자를 추가하세요.');
 }
-function delGear(i) {
-  if (pendingDelGear !== i) {
-    pendingDelGear = i;
-    toast('🗑️ 한 번 더 누르면 삭제돼요!');
-    setTimeout(() => { if (pendingDelGear === i) pendingDelGear = -1; }, 3000);
-    return;
+
+function drAddPlayer() {
+  const inp = document.getElementById('dr-player-inp');
+  const name = inp.value.trim();
+  if (!name) { toast('⚠️ 이름을 입력하세요!'); return; }
+  if (drPlayers.includes(name)) { toast('⚠️ 이미 있는 이름이에요!'); return; }
+  drPlayers.push(name);
+  inp.value = '';
+  drRenderPlayers();
+}
+
+function drRemovePlayer(name) {
+  drPlayers = drPlayers.filter(p => p !== name);
+  drRenderPlayers();
+}
+
+function drRenderPlayers() {
+  const el = document.getElementById('dr-players-list');
+  if (!drPlayers.length) { el.innerHTML = '<div style="font-size:12px;color:var(--tl);padding:4px 0">참가자를 추가하세요 (최소 2명)</div>'; return; }
+  el.innerHTML = drPlayers.map(p =>
+    `<span class="dr-player-tag">${esc(p)}<button onclick="drRemovePlayer('${esc(p)}')" title="제거">✕</button></span>`
+  ).join('');
+}
+
+function drGenerate() {
+  const title = v('dr-title').trim();
+  if (!title) { toast('⚠️ 대진표 제목을 입력하세요!'); return; }
+  if (drPlayers.length < 2) { toast('⚠️ 참가자가 최소 2명 필요해요!'); return; }
+  const type = v('dr-type');
+  document.getElementById('dr-result-title').textContent = title + (type === 'tournament' ? ' 🏆 토너먼트' : ' 📋 리그전');
+  document.getElementById('dr-result').style.display = 'block';
+  if (type === 'tournament') drBuildTournament();
+  else drBuildLeague();
+  document.getElementById('dr-result').scrollIntoView({ behavior: 'smooth' });
+}
+
+function drShuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
-  pendingDelGear = -1;
-  gears.splice(i, 1);
-  localStorage.setItem('niji_gears', JSON.stringify(gears));
-  loadGears();
-  toast('🗑️ 삭제됐어요!');
+  return a;
+}
+
+// ── 토너먼트 ──
+function drBuildTournament() {
+  const shuffled = drShuffle(drPlayers);
+  // 2의 거듭제곱으로 맞추기 (부전승 처리)
+  let size = 1;
+  while (size < shuffled.length) size *= 2;
+  const padded = [...shuffled];
+  while (padded.length < size) padded.push(null); // null = 부전승
+
+  drMatches = [];
+  let roundPlayers = [...padded];
+  let roundNum = 1;
+  const totalRounds = Math.log2(size);
+
+  // 1라운드 매치 생성
+  let firstRound = [];
+  for (let i = 0; i < roundPlayers.length; i += 2) {
+    firstRound.push({ p1: roundPlayers[i], p2: roundPlayers[i+1], winner: null, score1: '', score2: '', round: roundNum, id: drMatches.length });
+    drMatches.push(firstRound[firstRound.length-1]);
+  }
+
+  drRenderTournament(firstRound, roundNum, totalRounds);
+}
+
+function drRenderTournament(firstRound, roundNum, totalRounds) {
+  const el = document.getElementById('dr-bracket');
+  el.innerHTML = '';
+
+  // 라운드 이름
+  function roundName(r, total) {
+    const remaining = total - r + 1;
+    if (remaining === 1) return '🏆 결승';
+    if (remaining === 2) return '🥈 준결승';
+    if (remaining === 3) return '🥉 8강';
+    return r + '라운드';
+  }
+
+  function renderRound(matches, rNum) {
+    const titleEl = document.createElement('div');
+    titleEl.className = 'dr-round-title';
+    titleEl.textContent = roundName(rNum, totalRounds);
+    el.appendChild(titleEl);
+
+    matches.forEach((m, mi) => {
+      const card = document.createElement('div');
+      card.className = 'dr-match';
+      card.innerHTML = `<div class="dr-match-header">경기 ${mi+1}</div>`;
+
+      if (m.p2 === null) {
+        // 부전승
+        card.innerHTML += `
+          <div class="dr-team winner" style="cursor:default">
+            <span class="dr-team-name">${esc(m.p1)}</span>
+            <span class="dr-win-badge">부전승</span>
+          </div>
+          <div class="dr-bye">상대없음 (자동 진출)</div>`;
+        m.winner = m.p1;
+      } else {
+        const w1 = m.winner === m.p1 ? 'winner' : '';
+        const w2 = m.winner === m.p2 ? 'winner' : '';
+        card.innerHTML += `
+          <div class="dr-team ${w1}" onclick="drSetWinner(${m.id},'p1')">
+            <span class="dr-team-name">${esc(m.p1 || '?')}</span>
+            <input class="dr-score" type="number" min="0" max="99" value="${m.score1}" placeholder="-"
+              onclick="event.stopPropagation()"
+              onchange="drMatches[${m.id}].score1=this.value">
+            ${m.winner===m.p1?'<span class="dr-win-badge">승</span>':''}
+          </div>
+          <div class="dr-team ${w2}" onclick="drSetWinner(${m.id},'p2')">
+            <span class="dr-team-name">${esc(m.p2 || '?')}</span>
+            <input class="dr-score" type="number" min="0" max="99" value="${m.score2}" placeholder="-"
+              onclick="event.stopPropagation()"
+              onchange="drMatches[${m.id}].score2=this.value">
+            ${m.winner===m.p2?'<span class="dr-win-badge">승</span>':''}
+          </div>`;
+      }
+      el.appendChild(card);
+    });
+
+    // 다음 라운드 준비
+    const winners = matches.map(m => m.winner);
+    if (winners.length >= 2 && winners.every(w => w !== null)) {
+      const nextMatches = [];
+      for (let i = 0; i < winners.length; i += 2) {
+        const nm = { p1: winners[i], p2: winners[i+1] || null, winner: null, score1: '', score2: '', round: rNum+1, id: drMatches.length };
+        drMatches.push(nm);
+        nextMatches.push(nm);
+      }
+      if (nextMatches.length === 1 && nextMatches[0].p2 === null) {
+        // 우승자
+        const champEl = document.createElement('div');
+        champEl.innerHTML = `<div style="text-align:center;padding:18px;background:linear-gradient(135deg,#fff9e6,#fffde7);border:2px solid #FFD700;border-radius:var(--r);margin-top:11px"><div style="font-size:36px">🏆</div><div style="font-family:'Oswald',sans-serif;font-size:20px;color:#b8860b;margin-top:6px">우승</div><div style="font-size:22px;font-weight:900;color:var(--gd);margin-top:4px">${esc(nextMatches[0].p1)}</div></div>`;
+        el.appendChild(champEl);
+      } else {
+        renderRound(nextMatches, rNum + 1);
+      }
+    } else if (winners.length === 1 && winners[0]) {
+      const champEl = document.createElement('div');
+      champEl.innerHTML = `<div style="text-align:center;padding:18px;background:linear-gradient(135deg,#fff9e6,#fffde7);border:2px solid #FFD700;border-radius:var(--r);margin-top:11px"><div style="font-size:36px">🏆</div><div style="font-family:'Oswald',sans-serif;font-size:20px;color:#b8860b;margin-top:6px">우승</div><div style="font-size:22px;font-weight:900;color:var(--gd);margin-top:4px">${esc(winners[0])}</div></div>`;
+      el.appendChild(champEl);
+    }
+  }
+
+  renderRound(firstRound, roundNum);
+}
+
+function drSetWinner(matchId, who) {
+  const m = drMatches[matchId];
+  if (!m) return;
+  m.winner = who === 'p1' ? m.p1 : m.p2;
+  // 전체 토너먼트 다시 그리기
+  const firstRound = drMatches.filter(x => x.round === 1);
+  const totalRounds = Math.log2(drGetSize());
+  drRenderTournament(firstRound, 1, totalRounds);
+  toast('✅ ' + m.winner + ' 승리!');
+}
+
+function drGetSize() {
+  let size = 1;
+  while (size < drPlayers.length) size *= 2;
+  return size;
+}
+
+// ── 리그전 ──
+function drBuildLeague() {
+  const players = drShuffle(drPlayers);
+  drLeagueData = {};
+  players.forEach(p => { drLeagueData[p] = { win: 0, lose: 0, draw: 0, pts: 0 }; });
+
+  const el = document.getElementById('dr-bracket');
+  el.innerHTML = '';
+
+  // 리그 매치 목록 (라운드 로빈)
+  const matchList = [];
+  for (let i = 0; i < players.length; i++) {
+    for (let j = i+1; j < players.length; j++) {
+      matchList.push({ p1: players[i], p2: players[j], winner: null, score1: '', score2: '', id: matchList.length });
+    }
+  }
+  drMatches = matchList;
+
+  function rerenderLeague() {
+    el.innerHTML = '';
+    // 순위표
+    const ranked = Object.entries(drLeagueData).sort((a,b) => b[1].pts - a[1].pts || (b[1].win-b[1].lose)-(a[1].win-a[1].lose));
+    const tableEl = document.createElement('div');
+    tableEl.innerHTML = `
+      <div class="dr-round-title">📊 현재 순위</div>
+      <div style="overflow-x:auto;margin-bottom:13px">
+      <table class="league-table">
+        <thead><tr><th>순위</th><th>이름</th><th>승</th><th>패</th><th>승점</th></tr></thead>
+        <tbody>${ranked.map(([name, s], i) =>
+          `<tr class="${i===0?'league-rank1':i===1?'league-rank2':i===2?'league-rank3':''}">
+            <td>${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</td>
+            <td>${esc(name)}</td><td>${s.win}</td><td>${s.lose}</td><td><b>${s.pts}</b></td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>`;
+    el.appendChild(tableEl);
+
+    // 경기 목록
+    const matchTitle = document.createElement('div');
+    matchTitle.className = 'dr-round-title';
+    matchTitle.textContent = '📋 전체 경기 일정';
+    el.appendChild(matchTitle);
+
+    drMatches.forEach((m, mi) => {
+      const card = document.createElement('div');
+      card.className = 'dr-match';
+      card.innerHTML = `<div class="dr-match-header">경기 ${mi+1}</div>`;
+      const w1 = m.winner === m.p1 ? 'winner' : '';
+      const w2 = m.winner === m.p2 ? 'winner' : '';
+      card.innerHTML += `
+        <div class="dr-team ${w1}" onclick="drLeagueWin(${mi},'p1')">
+          <span class="dr-team-name">${esc(m.p1)}</span>
+          <input class="dr-score" type="number" min="0" max="99" value="${m.score1}" placeholder="-"
+            onclick="event.stopPropagation()"
+            onchange="drMatches[${mi}].score1=this.value">
+          ${m.winner===m.p1?'<span class="dr-win-badge">승</span>':''}
+        </div>
+        <div class="dr-team ${w2}" onclick="drLeagueWin(${mi},'p2')">
+          <span class="dr-team-name">${esc(m.p2)}</span>
+          <input class="dr-score" type="number" min="0" max="99" value="${m.score2}" placeholder="-"
+            onclick="event.stopPropagation()"
+            onchange="drMatches[${mi}].score2=this.value">
+          ${m.winner===m.p2?'<span class="dr-win-badge">승</span>':''}
+        </div>`;
+      el.appendChild(card);
+    });
+  }
+
+  rerenderLeague();
+  window._drLeagueRerender = rerenderLeague;
+}
+
+function drLeagueWin(mi, who) {
+  const m = drMatches[mi];
+  const prev = m.winner;
+  // 이전 결과 취소
+  if (prev) {
+    const loser = prev === m.p1 ? m.p2 : m.p1;
+    drLeagueData[prev].win--;
+    drLeagueData[prev].pts -= 2;
+    drLeagueData[loser].lose--;
+  }
+  // 새 결과 적용
+  const winner = who === 'p1' ? m.p1 : m.p2;
+  const loser  = who === 'p1' ? m.p2 : m.p1;
+  m.winner = winner;
+  drLeagueData[winner].win++;
+  drLeagueData[winner].pts += 2;
+  drLeagueData[loser].lose++;
+  toast('✅ ' + winner + ' 승리!');
+  if (window._drLeagueRerender) window._drLeagueRerender();
+}
+
+function drReset() {
+  drMatches = [];
+  drLeagueData = {};
+  document.getElementById('dr-result').style.display = 'none';
+  document.getElementById('dr-bracket').innerHTML = '';
+  toast('🔄 초기화됐어요!');
 }
 
 // ── 유틸 ──
@@ -1331,10 +1188,6 @@ function showTab(n) {
   document.querySelectorAll('.tb').forEach(b => b.classList.remove('active'));
   document.getElementById('pg-' + n).classList.add('active');
   document.getElementById('tab-' + n).classList.add('active');
-  if (n === 'bag') loadInbox();
-  if (n === 'rank' && isReady) rRanks.once('value', s => rRankList(s.val()));
-  if (n === 'shop' && isReady) rShop.once('value', s => rShopList(s.val()));
-  if (n === 'home' && isReady) rMeets.once('value', s => rMeetList(s.val()));
 }
 function tp(id) { const el = document.getElementById(id); el.style.display = el.style.display === 'none' ? 'block' : 'none'; }
 function setChip(el) { el.closest('.ct').querySelectorAll('.chip').forEach(c => c.classList.remove('active')); el.classList.add('active'); }
