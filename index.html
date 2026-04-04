@@ -496,6 +496,41 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
   </div>
 </div>
 
+<!-- MODAL: 번개 모임 상세 -->
+<div class="mo" id="modal-meet" onclick="closeMeetDetail()">
+  <div class="msh" onclick="event.stopPropagation()" style="padding-bottom:24px">
+    <div class="mh"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
+      <div class="mtt" id="md-title" style="margin-bottom:0">모임 이름</div>
+      <span class="badge bg3" id="md-status">모집중</span>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px;font-size:13px;color:var(--tm)">
+      <span id="md-sport"></span>
+      <span id="md-place"></span>
+      <span id="md-time"></span>
+    </div>
+
+    <!-- 참가 버튼 -->
+    <div id="md-join-area" style="margin-bottom:13px"></div>
+
+    <!-- 참가자 목록 -->
+    <div class="stl" style="font-size:13px;margin-bottom:8px"><div class="dot"></div>👥 참가자</div>
+    <div id="md-joins" style="margin-bottom:13px;min-height:32px"></div>
+
+    <!-- 모임 채팅 -->
+    <div class="stl" style="font-size:13px;margin-bottom:8px"><div class="dot"></div>💬 모임 채팅</div>
+    <div class="cw" style="margin-bottom:0">
+      <div class="cbody" id="md-chat-body" style="height:180px"></div>
+      <div class="cft">
+        <div class="cin">
+          <input type="text" id="md-chat-in" placeholder="메시지 입력..." maxlength="200" onkeydown="if(event.key==='Enter')mdSendChat()">
+          <button class="csb" onclick="mdSendChat()">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -624,7 +659,10 @@ function rMeetList(data) {
     const bc = m.status === '마감임박' || m.status === '마감' ? 'br3' : m.status === '정기' ? 'bb3' : 'bg3';
     const d = document.createElement('div');
     d.className = 'mc'; d.dataset.sport = m.sport;
-    d.innerHTML = `<div class="ms ${m.sport}">${si}</div><div class="mi"><div class="mt2">${esc(m.title)}</div><div class="md2">${m.place ? '<span>📍' + esc(m.place) + '</span>' : ''} ${m.time ? '<span>🕔' + esc(m.time) + '</span>' : ''}</div></div><span class="badge ${bc}">${esc(m.status)}</span><button class="db2" onclick="delMeet('${k}')">🗑️</button>`;
+    d.style.cursor = 'pointer';
+    const joinCount = m.joins ? Object.keys(m.joins).length : 0;
+    d.innerHTML = `<div class="ms ${m.sport}">${si}</div><div class="mi"><div class="mt2">${esc(m.title)}</div><div class="md2">${m.place ? '<span>📍' + esc(m.place) + '</span>' : ''} ${m.time ? '<span>🕔' + esc(m.time) + '</span>' : ''}<span>👥 ${joinCount}명</span></div></div><span class="badge ${bc}">${esc(m.status)}</span><button class="db2" onclick="event.stopPropagation();delMeet('${k}')">🗑️</button>`;
+    d.onclick = () => openMeetDetail(k);
     el.appendChild(d);
   });
   if (!shown) el.innerHTML = '<div class="eb"><div class="ei">🔍</div><p>해당 종목 모임이 없어요!</p></div>';
@@ -835,7 +873,105 @@ function fs2(el, f) {
   rShop.once('value', s => rShopList(s.val()));
 }
 
-// ── 채팅 ──
+// ── 번개 모임 상세 + 참가 + 채팅 ──
+let currentMeetKey = null;
+let mdChatRef = null;
+let mdChatListener = null;
+
+function openMeetDetail(key) {
+  const m = meetList.find(x => x._key === key);
+  if (!m) return;
+  currentMeetKey = key;
+
+  document.getElementById('md-title').textContent = m.title;
+  document.getElementById('md-status').textContent = m.status;
+  document.getElementById('md-sport').textContent = m.sport === 'badminton' ? '🏸 배드민턴' : '🎾 테니스';
+  document.getElementById('md-place').textContent = m.place ? '📍 ' + m.place : '';
+  document.getElementById('md-time').textContent = m.time ? '🕔 ' + m.time : '';
+
+  // 참가자 실시간
+  db.ref('meets/' + key + '/joins').on('value', snap => {
+    const joins = snap.val() || {};
+    const names = Object.values(joins).map(j => j.nick);
+    const myNick = savedNick || '';
+    const joined = names.includes(myNick);
+
+    // 참가 버튼
+    const jArea = document.getElementById('md-join-area');
+    if (myNick) {
+      jArea.innerHTML = joined
+        ? `<button class="btn bgr" style="width:100%;padding:11px;border-radius:11px" onclick="mdLeave('${key}')">🚪 참가 취소</button>`
+        : `<button class="btn bo2" style="width:100%;padding:11px;border-radius:11px;font-size:14px" onclick="mdJoin('${key}')">✅ 참가 신청 (${names.length}명 참가중)</button>`;
+    } else {
+      jArea.innerHTML = `<div style="font-size:12px;color:var(--tl);background:var(--g1);border-radius:9px;padding:9px;text-align:center">💬 채팅창에 닉네임 저장 후 참가할 수 있어요</div>`;
+    }
+
+    // 참가자 목록
+    const jList = document.getElementById('md-joins');
+    if (!names.length) {
+      jList.innerHTML = '<span style="font-size:12px;color:var(--tl)">아직 참가자가 없어요. 첫 번째로 참가해보세요!</span>';
+    } else {
+      jList.innerHTML = names.map(n =>
+        `<span style="display:inline-flex;align-items:center;gap:4px;background:var(--gl);border:1.5px solid var(--gb);border-radius:17px;padding:4px 10px;font-size:12px;font-weight:700;color:var(--gd);margin:2px">${esc(n)}</span>`
+      ).join('');
+    }
+  });
+
+  // 모임 채팅 실시간
+  document.getElementById('md-chat-body').innerHTML = '';
+  if (mdChatRef && mdChatListener) mdChatRef.off('child_added', mdChatListener);
+  mdChatRef = db.ref('meetChat/' + key);
+  mdChatListener = mdChatRef.limitToLast(40).on('child_added', snap => {
+    const msg = snap.val();
+    if (!msg) return;
+    const c = document.getElementById('md-chat-body');
+    const myNick = savedNick || '';
+    const isMe = msg.nickname === myNick;
+    const avs = ['😄','🎾','🏸','🌟','👑','💪','🔥','🦅'];
+    const av = avs[Math.abs(hc(msg.nickname || '?')) % avs.length];
+    const tm = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '';
+    const d = document.createElement('div');
+    d.className = 'cmg' + (isMe ? ' mine' : '');
+    d.innerHTML = `<div class="cav">${av}</div><div class="cbub"><div class="cnm">${esc(msg.nickname||'익명')}</div><div class="ctx">${esc(msg.text||'')}</div><div class="ctm2">${tm}</div></div>`;
+    c.appendChild(d);
+    c.scrollTop = c.scrollHeight;
+  });
+
+  document.getElementById('modal-meet').classList.add('open');
+}
+
+function closeMeetDetail() {
+  document.getElementById('modal-meet').classList.remove('open');
+  if (mdChatRef && mdChatListener) { mdChatRef.off('child_added', mdChatListener); mdChatListener = null; }
+  if (currentMeetKey) db.ref('meets/' + currentMeetKey + '/joins').off();
+  currentMeetKey = null;
+  document.getElementById('md-chat-body').innerHTML = '';
+}
+
+function mdJoin(key) {
+  const nick = savedNick;
+  if (!nick) { toast('⚠️ 닉네임을 먼저 저장하세요!'); return; }
+  db.ref('meets/' + key + '/joins/' + nick).set({ nick, joinedAt: Date.now() });
+  toast('✅ 참가 신청 완료!');
+}
+
+function mdLeave(key) {
+  const nick = savedNick;
+  if (!nick) return;
+  db.ref('meets/' + key + '/joins/' + nick).remove();
+  toast('🚪 참가 취소됐어요.');
+}
+
+function mdSendChat() {
+  if (!currentMeetKey) return;
+  if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
+  const inp = document.getElementById('md-chat-in');
+  const nick = savedNick || '익명';
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  db.ref('meetChat/' + currentMeetKey).push({ nickname: nick, text, timestamp: Date.now() });
+}
 function setFbs(t, tx) {
   const el = document.getElementById('fbs');
   el.className = 'fb-s ' + (t === 'ok' ? 'fs-ok' : t === 'er' ? 'fs-er' : 'fs-wt');
