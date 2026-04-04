@@ -126,24 +126,37 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 .rbtn-l{background:#ffebee;color:#c62828;border-color:#c62828;}
 .rbtn-l.sel, .rbtn-l:hover{background:#c62828;color:#fff;}
 /* SHOP */
-.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:13px;}
-.si{background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:transform 0.18s;}
-.si:hover{transform:translateY(-3px);}
-.sth{height:90px;display:flex;align-items:center;justify-content:center;font-size:40px;position:relative;}
+.sg{display:flex;flex-direction:column;gap:11px;margin-bottom:13px;}
+.si{background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:transform 0.18s;display:flex;align-items:stretch;}
+.si:hover{transform:translateY(-2px);box-shadow:var(--shl);}
+.sth{width:90px;min-width:90px;display:flex;align-items:center;justify-content:center;font-size:38px;position:relative;flex-shrink:0;}
 .sth.g{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);} .sth.o{background:linear-gradient(135deg,#fff3e0,#ffe0b2);}
 .sth.b{background:linear-gradient(135deg,#e3f2fd,#bbdefb);} .sth.y{background:linear-gradient(135deg,#fffde7,#fff9c4);}
-.shot{position:absolute;top:7px;right:7px;background:var(--or);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:8px;}
-.sif{padding:9px 10px 6px;} .snm{font-size:13px;font-weight:700;margin-bottom:3px;}
-.spr{font-size:14px;font-weight:900;color:var(--or);}
-.spr .og{font-size:11px;text-decoration:line-through;color:var(--tl);font-weight:400;margin-left:3px;}
-.sft{display:flex;gap:6px;padding:6px 10px 10px;}
-.gift-btn{flex:1;padding:6px;background:linear-gradient(135deg,var(--or),var(--oh));color:#fff;font-size:12px;font-weight:700;border:none;cursor:pointer;border-radius:8px;font-family:'Noto Sans KR',sans-serif;}
-.adm-del{padding:6px 10px;background:#ffebee;color:#c62828;font-size:11px;font-weight:700;border:none;cursor:pointer;border-radius:8px;font-family:'Noto Sans KR',sans-serif;}
+.sth.p{background:linear-gradient(135deg,#f3e5f5,#e1bee7);}
+.shot{position:absolute;top:6px;left:6px;background:var(--or);color:#fff;font-size:9px;font-weight:700;padding:2px 5px;border-radius:6px;}
+.sib{flex:1;display:flex;flex-direction:column;padding:10px 12px;min-width:0;}
+.snm{font-size:13px;font-weight:700;margin-bottom:2px;color:var(--td);line-height:1.35;}
+.sdsc{font-size:11px;color:var(--tl);margin-bottom:4px;line-height:1.4;}
+.spr{font-size:15px;font-weight:900;color:var(--or);}
+.spr .og{font-size:11px;text-decoration:line-through;color:var(--tl);font-weight:400;margin-left:4px;}
+.sft{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;}
+.buy-btn{flex:1;min-width:80px;padding:7px 6px;background:linear-gradient(135deg,#03c75a,#02a84d);color:#fff;font-size:12px;font-weight:700;border:none;cursor:pointer;border-radius:8px;font-family:'Noto Sans KR',sans-serif;display:flex;align-items:center;justify-content:center;gap:4px;text-decoration:none;}
+.buy-btn:hover{background:linear-gradient(135deg,#02a84d,#018a3f);}
+.buy-btn .naver-n{font-size:11px;background:#fff;color:#03c75a;border-radius:3px;padding:1px 4px;font-weight:900;line-height:1;}
+.gift-btn{padding:7px 10px;background:linear-gradient(135deg,var(--or),var(--oh));color:#fff;font-size:12px;font-weight:700;border:none;cursor:pointer;border-radius:8px;font-family:'Noto Sans KR',sans-serif;}
+.adm-del{padding:7px 10px;background:#ffebee;color:#c62828;font-size:11px;font-weight:700;border:none;cursor:pointer;border-radius:8px;font-family:'Noto Sans KR',sans-serif;}
+.adm-edit{padding:7px 10px;background:#e3f2fd;color:#1565c0;font-size:11px;font-weight:700;border:none;cursor:pointer;border-radius:8px;font-family:'Noto Sans KR',sans-serif;}
 .lock-bar{background:var(--g1);border:1.5px solid var(--g2);border-radius:var(--rs);padding:10px 13px;display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
 .lock-info{font-size:12px;color:var(--tl);}
 .lock-btn{padding:6px 14px;border-radius:17px;font-size:12px;font-weight:700;border:none;cursor:pointer;font-family:'Noto Sans KR',sans-serif;}
 .lock-btn.locked{background:#ffebee;color:#c62828;}
 .lock-btn.unlocked{background:var(--gl);color:var(--gc);}
+/* 스마트스토어 배너 */
+.naver-banner{background:linear-gradient(135deg,#03c75a,#02a84d);border-radius:var(--r);padding:14px 16px;color:#fff;margin-bottom:13px;display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none;}
+.naver-banner:hover{opacity:0.92;}
+.naver-logo{width:42px;height:42px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#03c75a;flex-shrink:0;font-family:'Oswald',sans-serif;}
+.naver-banner h3{font-size:14px;font-weight:900;margin-bottom:3px;}
+.naver-banner p{font-size:11px;opacity:0.9;}
 /* MY BAG */
 .pc{background:linear-gradient(135deg,var(--gd),var(--gm));border-radius:var(--r);padding:17px;display:flex;align-items:center;gap:13px;margin-bottom:13px;color:#fff;}
 .pav{width:58px;height:58px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid rgba(255,255,255,0.3);flex-shrink:0;cursor:pointer;}
@@ -353,27 +366,56 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 
 <!-- SHOP -->
 <div class="pg" id="pg-shop">
+
+  <!-- 관리자 바 -->
   <div class="lock-bar">
     <div class="lock-info" id="lock-info">🔒 관리자 모드 — 잠금 상태</div>
     <button class="lock-btn locked" id="lock-btn" onclick="toggleAdmin()">관리자 로그인</button>
   </div>
+
+  <!-- 관리자 전용 영역 -->
   <div id="admin-shop-area" style="display:none">
     <button class="ab" onclick="tp('ps')">🛍️ 상품 등록하기</button>
     <div class="ap" id="ps" style="display:none">
-      <div class="at">🛍️ 새 상품 등록</div>
+      <div class="at" id="s-edit-title">🛍️ 새 상품 등록</div>
       <div class="fr"><label class="fl">상품명 *</label><input class="fi" id="s-nm" placeholder="예: 럭실론 알루파워 1.25"></div>
       <div class="r2">
         <div class="fr"><label class="fl">판매가 (원) *</label><input class="fi" id="s-pr" type="number" placeholder="15000"></div>
         <div class="fr"><label class="fl">정가 (원, 선택)</label><input class="fi" id="s-og" type="number" placeholder="18000"></div>
       </div>
       <div class="r2">
-        <div class="fr"><label class="fl">카테고리</label><select class="fs" id="s-ct"><option value="string">🎾 스트링</option><option value="grip">🖐️ 그립</option><option value="acc">💡 액세서리</option><option value="ball">🟡 공/셔틀콕</option></select></div>
-        <div class="fr"><label class="fl">뱃지</label><select class="fs" id="s-bd"><option value="">없음</option><option>HOT</option><option>NEW</option><option>추천</option><option>SALE</option></select></div>
+        <div class="fr"><label class="fl">카테고리</label>
+          <select class="fs" id="s-ct">
+            <option value="string">🎾 스트링</option>
+            <option value="grip">🖐️ 그립</option>
+            <option value="acc">💡 액세서리</option>
+            <option value="ball">🟡 공/셔틀콕</option>
+            <option value="watch">⌚ 시계줄</option>
+            <option value="bag">👜 가방/잡화</option>
+          </select>
+        </div>
+        <div class="fr"><label class="fl">뱃지</label>
+          <select class="fs" id="s-bd">
+            <option value="">없음</option>
+            <option>HOT</option><option>NEW</option><option>추천</option><option>SALE</option><option>품절</option>
+          </select>
+        </div>
       </div>
-      <div class="fr"><label class="fl">설명 (선택)</label><input class="fi" id="s-ds" placeholder="예: 폴리 계열 / 내구성 최고"></div>
+      <div class="fr"><label class="fl">상품 설명 (선택)</label><input class="fi" id="s-ds" placeholder="예: 폴리 계열 / 내구성 최고"></div>
+      <div class="fr"><label class="fl">🟢 네이버 스마트스토어 링크 (선택)</label><input class="fi" id="s-url" placeholder="https://smartstore.naver.com/..."></div>
       <div class="br2">
-        <button class="btn bg2" style="flex:1;padding:11px;border-radius:11px" onclick="addShop()">✅ 등록</button>
-        <button class="btn bgr" style="padding:11px 13px;border-radius:11px" onclick="tp('ps')">취소</button>
+        <button class="btn bg2" id="s-submit-btn" style="flex:1;padding:11px;border-radius:11px" onclick="addShop()">✅ 등록</button>
+        <button class="btn bgr" style="padding:11px 13px;border-radius:11px" onclick="shopCancelEdit()">취소</button>
+      </div>
+    </div>
+    <button class="ab" style="border-color:#03c75a;color:#02a84d" onclick="tp('pstore')">🟢 스마트스토어 주소 설정</button>
+    <div class="ap" id="pstore" style="display:none;border-color:#c8e6c9">
+      <div class="at" style="color:#02a84d">🟢 네이버 스마트스토어 주소</div>
+      <div class="fr"><label class="fl">스토어 메인 URL</label><input class="fi" id="store-url-input" placeholder="https://smartstore.naver.com/내스토어명"></div>
+      <div style="font-size:11px;color:var(--tl);margin-bottom:9px">※ 입력하면 상단 배너와 개별 상품 링크 없는 상품에 적용돼요</div>
+      <div class="br2">
+        <button class="btn" style="flex:1;padding:11px;border-radius:11px;background:#03c75a;color:#fff" onclick="saveStoreUrl()">✅ 저장</button>
+        <button class="btn bgr" style="padding:11px 13px;border-radius:11px" onclick="tp('pstore')">취소</button>
       </div>
     </div>
     <button class="ab" style="border-color:#e57373;color:#c62828" onclick="tp('ppw')">🔑 비밀번호 변경</button>
@@ -388,18 +430,41 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
       </div>
     </div>
   </div>
+
+  <!-- 네이버 스마트스토어 배너 -->
+  <a class="naver-banner" href="https://smartstore.naver.com/nijishop" target="_blank" id="naver-store-banner">
+    <div class="naver-logo">N</div>
+    <div>
+      <h3>NIJI STRING 스마트스토어</h3>
+      <p>시계줄 맞춤 제작 · 스트링 · 테니스 용품</p>
+    </div>
+    <div style="margin-left:auto;font-size:20px">›</div>
+  </a>
+
+  <!-- 카테고리 필터 -->
   <div class="stl"><div class="dot"></div>🛒 상품 목록</div>
-  <div class="ct">
+  <div class="ct" style="flex-wrap:wrap">
     <button class="chip active" onclick="fs2(this,'all')">전체</button>
-    <button class="chip" onclick="fs2(this,'string')">스트링</button>
-    <button class="chip" onclick="fs2(this,'grip')">그립</button>
-    <button class="chip" onclick="fs2(this,'acc')">액세서리</button>
+    <button class="chip" onclick="fs2(this,'string')">🎾 스트링</button>
+    <button class="chip" onclick="fs2(this,'grip')">🖐️ 그립</button>
+    <button class="chip" onclick="fs2(this,'acc')">💡 액세서리</button>
     <button class="chip" onclick="fs2(this,'ball')">공/셔틀</button>
+    <button class="chip" onclick="fs2(this,'watch')">⌚ 시계줄</button>
+    <button class="chip" onclick="fs2(this,'bag')">👜 가방</button>
   </div>
   <div class="sg" id="slist"></div>
-  <div id="sem" class="eb" style="display:none"><div class="ei">🛍️</div><p>아직 상품이 없어요!<br>관리자가 상품을 등록할 예정이에요 😊</p></div>
+  <div id="sem" class="eb" style="display:none">
+    <div class="ei">🛍️</div>
+    <p>아직 상품이 없어요!<br>관리자가 상품을 등록할 예정이에요 😊</p>
+  </div>
+
+  <!-- 선물하기 -->
   <div class="stl"><div class="dot"></div>🎁 선물하기</div>
-  <div class="gb" onclick="openModal('gift')"><div class="gi3">🎁</div><div><h3>동호인에게 선물 보내기</h3><p>생일·기념일에 스트링, 그립 등을 선물하세요!</p></div></div>
+  <div class="gb" onclick="openModal('gift')">
+    <div class="gi3">🎁</div>
+    <div><h3>동호인에게 선물 보내기</h3><p>생일·기념일에 스트링, 그립 등을 선물하세요!</p></div>
+  </div>
+
 </div>
 
 <!-- MY BAG -->
@@ -411,7 +476,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
   <div class="dr-step-card">
     <div class="dr-step-label"><span class="dr-step-num">1</span> 기본 설정</div>
     <div class="fr">
-      <label class="fl">번개 모임에서 참가자 자동 불러오기 (선택)</label>
+      <label class="fl">번개 모임에서 불러오기 (선택)</label>
       <select class="fs" id="dr-meet-sel" onchange="drSelectMeet(this.value)">
         <option value="">— 모임 선택 안 함 —</option>
       </select>
@@ -459,11 +524,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
   <div class="dr-step-card">
     <div class="dr-step-label"><span class="dr-step-num">3</span> <span id="dr-player-label">선수 입력</span></div>
     <div id="dr-players-list" style="margin-bottom:9px;min-height:20px"></div>
-    <div style="background:var(--g1);border-radius:9px;padding:7px 10px;font-size:11px;color:var(--tl);margin-bottom:9px">
-      💡 번개 모임 선택 시 참가자가 자동 등록돼요. ▲▼ 버튼으로 순서를 바꿀 수 있어요.<br>게스트나 추가 선수는 아래에서 직접 입력하세요.
-    </div>
     <div style="display:flex;gap:7px;align-items:center">
-      <input class="fi" id="dr-player-inp" placeholder="추가 선수 이름 입력 (게스트 등)" style="flex:1" onkeydown="if(event.key==='Enter')drAddPlayer()">
+      <input class="fi" id="dr-player-inp" placeholder="이름 입력" style="flex:1" onkeydown="if(event.key==='Enter')drAddPlayer()">
       <button class="btn bg2" style="padding:9px 14px;border-radius:11px;white-space:nowrap;flex-shrink:0" onclick="drAddPlayer()">➕ 추가</button>
     </div>
     <div id="dr-doubles-hint" style="display:none;margin-top:8px;background:var(--gl);border-radius:9px;padding:8px 11px;font-size:12px;color:var(--gc)">
@@ -541,7 +603,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
   <div class="msh" onclick="event.stopPropagation()">
     <div class="mh"></div>
     <div class="mtt">🎁 선물하기</div>
-    <p style="font-size:13px;color:var(--tl);margin-bottom:13px">동호인에게 상품 링크를 공유하세요!</p>
+    <p style="font-size:13px;color:var(--tl);margin-bottom:13px">상품 링크를 눌러 네이버 스마트스토어에서 구매 후 동호인에게 선물하세요! 💚</p>
     <div id="gift-list"><div class="eb"><div class="ei">🎁</div><p>상품을 먼저 등록해주세요!</p></div></div>
     <button class="btn bgr" style="width:100%;padding:11px;border-radius:11px;margin-top:7px" onclick="closeModal('gift')">닫기</button>
   </div>
@@ -634,6 +696,7 @@ function init() {
   }
   loadNickUI();
   updateNotifUI();
+  loadStoreUrl();
 }
 
 // ── 닉네임 자동저장 ──
@@ -879,17 +942,40 @@ function rShopList(data) {
   const grid = document.getElementById('slist');
   const em = document.getElementById('sem');
   grid.innerHTML = '';
-  const cats = { string: 'g', grip: 'o', acc: 'b', ball: 'y' };
-  const icos = { string: '🎾', grip: '🖐️', acc: '💡', ball: '🟡' };
+  const cats = { string: 'g', grip: 'o', acc: 'b', ball: 'y', watch: 'p', bag: 'o' };
+  const icos = { string: '🎾', grip: '🖐️', acc: '💡', ball: '🟡', watch: '⌚', bag: '👜' };
   if (!data) { em.style.display = 'block'; renderGift(null); return; }
   let shown = 0;
   Object.entries(data).reverse().forEach(([k, s]) => {
     if (flt.shop !== 'all' && s.cat !== flt.shop) return;
     shown++;
-    const col = cats[s.cat] || 'g', ico = icos[s.cat] || '📦';
+    const col = cats[s.cat] || 'g';
+    const ico = icos[s.cat] || '📦';
+    const isSoldOut = s.badge === '품절';
     const d = document.createElement('div');
     d.className = 'si';
-    d.innerHTML = `<div class="sth ${col}">${ico}${s.badge ? '<span class="shot">' + esc(s.badge) + '</span>' : ''}</div><div class="sif"><div class="snm">${esc(s.name)}</div>${s.desc ? '<div style="font-size:11px;color:var(--tl);margin-bottom:3px">' + esc(s.desc) + '</div>' : ''}<div class="spr">${Number(s.price).toLocaleString()}원${s.orig && s.orig > 0 ? '<span class="og">' + Number(s.orig).toLocaleString() + '</span>' : ''}</div></div><div class="sft"><button class="gift-btn" onclick="openModal(\'gift\')">🎁 선물하기</button>${isAdminMode ? '<button class="adm-del" onclick="delShop(\'' + k + '\')">🗑️ 삭제</button>' : ''}</div>`;
+    if (isSoldOut) d.style.opacity = '0.65';
+
+    // 구매버튼: URL 있으면 네이버 연결, 없으면 스토어 메인으로
+    const storeUrl = s.url || 'https://smartstore.naver.com/nijishop';
+    const buyBtn = `<a class="buy-btn" href="${esc(storeUrl)}" target="_blank"><span class="naver-n">N</span> 구매하기</a>`;
+    const giftBtnHtml = `<button class="gift-btn" onclick="openShopGift('${k}')">🎁 선물</button>`;
+    const adminBtns = isAdminMode
+      ? `<button class="adm-edit" onclick="editShop('${k}')">✏️</button><button class="adm-del" onclick="delShop('${k}')">🗑️</button>`
+      : '';
+
+    d.innerHTML = `
+      <div class="sth ${col}">${ico}${s.badge ? '<span class="shot">' + esc(s.badge) + '</span>' : ''}</div>
+      <div class="sib">
+        <div class="snm">${esc(s.name)}</div>
+        ${s.desc ? `<div class="sdsc">${esc(s.desc)}</div>` : ''}
+        <div class="spr">${Number(s.price).toLocaleString()}원${s.orig && s.orig > 0 ? `<span class="og">${Number(s.orig).toLocaleString()}원</span>` : ''}</div>
+        <div class="sft">
+          ${isSoldOut ? '<span style="font-size:12px;color:#c62828;font-weight:700;padding:7px 6px">품절</span>' : buyBtn}
+          ${isSoldOut ? '' : giftBtnHtml}
+          ${adminBtns}
+        </div>
+      </div>`;
     grid.appendChild(d);
   });
   em.style.display = shown ? 'none' : 'block';
@@ -899,12 +985,46 @@ function renderGift(data) {
   const el = document.getElementById('gift-list');
   if (!data) { el.innerHTML = '<div class="eb"><div class="ei">🎁</div><p>상품을 먼저 등록해주세요!</p></div>'; return; }
   el.innerHTML = '';
-  const icos = { string: '🎾', grip: '🖐️', acc: '💡', ball: '🟡' };
-  Object.entries(data).slice(0, 6).forEach(([k, s]) => {
+  const icos = { string: '🎾', grip: '🖐️', acc: '💡', ball: '🟡', watch: '⌚', bag: '👜' };
+  const items = Object.entries(data).filter(([, s]) => s.badge !== '품절').slice(0, 8);
+  if (!items.length) { el.innerHTML = '<div class="eb"><div class="ei">🎁</div><p>선물 가능한 상품이 없어요!</p></div>'; return; }
+  items.forEach(([k, s]) => {
+    const storeUrl = s.url || 'https://smartstore.naver.com/nijishop';
     const d = document.createElement('div');
     d.style = 'display:flex;align-items:center;gap:11px;background:#fff;border-radius:11px;padding:11px;box-shadow:var(--sh);margin-bottom:9px;';
-    d.innerHTML = `<div style="font-size:26px">${icos[s.cat] || '📦'}</div><div style="flex:1"><div style="font-size:13px;font-weight:700">${esc(s.name)}</div><div style="font-size:13px;color:var(--or);font-weight:700">${Number(s.price).toLocaleString()}원</div></div><button class="btn bo2" style="padding:7px 13px;font-size:12px" onclick="toast('🎁 링크 복사! 카톡으로 공유하세요')">선물하기</button>`;
+    d.innerHTML = `
+      <div style="font-size:26px">${icos[s.cat] || '📦'}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:700;margin-bottom:2px">${esc(s.name)}</div>
+        <div style="font-size:13px;color:var(--or);font-weight:700">${Number(s.price).toLocaleString()}원</div>
+      </div>
+      <a href="${esc(storeUrl)}" target="_blank" class="buy-btn" style="flex:none;white-space:nowrap;text-decoration:none;padding:7px 11px">
+        <span class="naver-n">N</span> 선물링크
+      </a>`;
     el.appendChild(d);
+  });
+}
+function openShopGift(key) {
+  openModal('gift');
+}
+let shopEditKey = null;
+function editShop(k) {
+  if (!isReady) return;
+  db.ref('shop/' + k).once('value', snap => {
+    const s = snap.val();
+    if (!s) return;
+    shopEditKey = k;
+    sv('s-nm', s.name || '');
+    sv('s-pr', s.price || '');
+    sv('s-og', s.orig || '');
+    sv('s-ds', s.desc || '');
+    sv('s-url', s.url || '');
+    document.getElementById('s-ct').value = s.cat || 'string';
+    document.getElementById('s-bd').value = s.badge || '';
+    document.getElementById('s-edit-title').textContent = '✏️ 상품 수정';
+    document.getElementById('s-submit-btn').textContent = '✅ 수정 완료';
+    if (document.getElementById('ps').style.display === 'none') tp('ps');
+    document.getElementById('ps').scrollIntoView({ behavior: 'smooth' });
   });
 }
 function addShop() {
@@ -912,9 +1032,56 @@ function addShop() {
   const nm = v('s-nm'), pr = v('s-pr');
   if (!nm) { toast('⚠️ 상품명 입력!'); return; }
   if (!pr) { toast('⚠️ 판매가 입력!'); return; }
-  rShop.push({ name: nm, price: parseInt(pr), orig: parseInt(v('s-og')) || 0, cat: v('s-ct'), badge: v('s-bd'), desc: v('s-ds'), createdAt: Date.now() });
-  ['s-nm','s-pr','s-og','s-ds'].forEach(i => sv(i, ''));
-  tp('ps'); toast('✅ 상품 등록 완료!');
+  const urlVal = v('s-url').trim();
+  const payload = {
+    name: nm,
+    price: parseInt(pr),
+    orig: parseInt(v('s-og')) || 0,
+    cat: v('s-ct'),
+    badge: v('s-bd'),
+    desc: v('s-ds'),
+    url: urlVal,
+    updatedAt: Date.now()
+  };
+  if (shopEditKey) {
+    // 수정 모드
+    db.ref('shop/' + shopEditKey).update(payload);
+    shopEditKey = null;
+    document.getElementById('s-edit-title').textContent = '🛍️ 새 상품 등록';
+    document.getElementById('s-submit-btn').textContent = '✅ 등록';
+    toast('✅ 상품 수정 완료!');
+  } else {
+    payload.createdAt = Date.now();
+    rShop.push(payload);
+    toast('✅ 상품 등록 완료!');
+  }
+  ['s-nm','s-pr','s-og','s-ds','s-url'].forEach(i => sv(i, ''));
+  tp('ps');
+}
+function saveStoreUrl() {
+  const url = v('store-url-input').trim();
+  if (!url) { toast('⚠️ URL을 입력해주세요!'); return; }
+  localStorage.setItem('niji_store_url', url);
+  // 배너 업데이트
+  const banner = document.getElementById('naver-store-banner');
+  if (banner) banner.href = url;
+  tp('pstore');
+  toast('✅ 스토어 주소 저장됐어요!');
+}
+function loadStoreUrl() {
+  const saved = localStorage.getItem('niji_store_url');
+  if (saved) {
+    const banner = document.getElementById('naver-store-banner');
+    if (banner) banner.href = saved;
+    sv('store-url-input', saved);
+  }
+}
+function shopCancelEdit() {
+  shopEditKey = null;
+  ['s-nm','s-pr','s-og','s-ds','s-url'].forEach(i => sv(i, ''));
+  if (document.getElementById('s-edit-title')) document.getElementById('s-edit-title').textContent = '🛍️ 새 상품 등록';
+  if (document.getElementById('s-submit-btn')) document.getElementById('s-submit-btn').textContent = '✅ 등록';
+  tp('ps');
 }
 function delShop(k) { if (confirm('상품을 삭제할까요?')) { rShop.child(k).remove(); toast('🗑️ 삭제됐어요!'); } }
 function fs2(el, f) {
@@ -941,30 +1108,46 @@ function openMeetDetail(key) {
   document.getElementById('md-time').textContent = m.time ? '🕔 ' + m.time : '';
 
   // 참가자 실시간
-  db.ref('meets/' + key + '/joins').on('value', snap => {
-    const joins = snap.val() || {};
-    const names = Object.values(joins).map(j => j.nick);
-    const myNick = savedNick || '';
-    const joined = names.includes(myNick);
+  db.ref('meets/' + key + '/joins').on('value', function(snap) {
+    var joins = snap.val() || {};
+    var names = Object.values(joins).map(function(j){ return j.nick; }).filter(Boolean);
+    var myNick = savedNick || '';
+    var joined = !!(myNick && names.includes(myNick));
 
     // 참가 버튼
-    const jArea = document.getElementById('md-join-area');
+    var jArea = document.getElementById('md-join-area');
     if (myNick) {
-      jArea.innerHTML = joined
-        ? `<button class="btn bgr" style="width:100%;padding:11px;border-radius:11px" onclick="mdLeave('${key}')">🚪 참가 취소</button>`
-        : `<button class="btn bo2" style="width:100%;padding:11px;border-radius:11px;font-size:14px" onclick="mdJoin('${key}')">✅ 참가 신청 (${names.length}명 참가중)</button>`;
+      if (joined) {
+        jArea.innerHTML =
+          '<div style="background:#e8f5e9;border:2px solid var(--gc);border-radius:13px;padding:11px 13px;margin-bottom:7px;display:flex;align-items:center;gap:9px">' +
+            '<span style="font-size:20px">\u2705</span>' +
+            '<div style="flex:1">' +
+              '<div style="font-size:13px;font-weight:700;color:var(--gc)">참가 신청 완료!</div>' +
+              '<div style="font-size:11px;color:var(--tl);margin-top:2px">' + esc(myNick) + '\uB2D8 \u00B7 \uCD1D ' + names.length + '\uBA85 \uCC38\uAC00\uC911</div>' +
+            '</div>' +
+          '</div>' +
+          '<button id="btn-leave-' + key + '" style="width:100%;padding:10px;border-radius:11px;border:2px solid #e57373;background:#fff;color:#c62828;font-size:13px;font-weight:700;cursor:pointer;font-family:Noto Sans KR,sans-serif">\uD83D\uDEAA \uCC38\uAC00 \uCDE8\uC18C\uD558\uAE30</button>';
+        document.getElementById('btn-leave-' + key).onclick = function(){ mdLeaveConfirm(key); };
+      } else {
+        jArea.innerHTML =
+          '<button id="btn-join-' + key + '" style="width:100%;padding:12px;border-radius:11px;border:none;background:var(--or);color:#fff;font-size:14px;font-weight:900;cursor:pointer;font-family:Noto Sans KR,sans-serif">' +
+            '\u2705 \uCC38\uAC00 \uC2E0\uCCAD\uD558\uAE30 (\uD604\uC7AC ' + names.length + '\uBA85)' +
+          '</button>';
+        document.getElementById('btn-join-' + key).onclick = function(){ mdJoin(key); };
+      }
     } else {
-      jArea.innerHTML = `<div style="font-size:12px;color:var(--tl);background:var(--g1);border-radius:9px;padding:9px;text-align:center">💬 채팅창에 닉네임 저장 후 참가할 수 있어요</div>`;
+      jArea.innerHTML = '<div style="font-size:12px;color:var(--tl);background:var(--g1);border-radius:9px;padding:9px;text-align:center">\uD83D\uDCAC \uB2C9\uB124\uC784\uC744 \uBA3C\uC800 \uC800\uC7A5\uD558\uBA74 \uCC38\uAC00\uD560 \uC218 \uC788\uC5B4\uC694</div>';
     }
 
     // 참가자 목록
-    const jList = document.getElementById('md-joins');
+    var jList = document.getElementById('md-joins');
     if (!names.length) {
       jList.innerHTML = '<span style="font-size:12px;color:var(--tl)">아직 참가자가 없어요. 첫 번째로 참가해보세요!</span>';
     } else {
-      jList.innerHTML = names.map(n =>
-        `<span style="display:inline-flex;align-items:center;gap:4px;background:var(--gl);border:1.5px solid var(--gb);border-radius:17px;padding:4px 10px;font-size:12px;font-weight:700;color:var(--gd);margin:2px">${esc(n)}</span>`
-      ).join('');
+      jList.innerHTML = names.map(function(n) {
+        var isMe = (n === myNick);
+        return '<span style="display:inline-flex;align-items:center;gap:4px;background:' + (isMe ? 'var(--gc)' : 'var(--gl)') + ';border:1.5px solid ' + (isMe ? 'var(--gc)' : 'var(--gb)') + ';border-radius:17px;padding:4px 10px;font-size:12px;font-weight:700;color:' + (isMe ? '#fff' : 'var(--gd)') + ';margin:2px">' + (isMe ? '\uD83D\uDC64 ' : '') + esc(n) + '</span>';
+      }).join('');
     }
   });
 
@@ -1000,17 +1183,56 @@ function closeMeetDetail() {
 }
 
 function mdJoin(key) {
-  const nick = savedNick;
+  var nick = savedNick;
   if (!nick) { toast('⚠️ 닉네임을 먼저 저장하세요!'); return; }
-  db.ref('meets/' + key + '/joins/' + nick).set({ nick, joinedAt: Date.now() });
-  toast('✅ 참가 신청 완료!');
+  if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
+  // 닉네임을 안전한 키로 변환 (특수문자 제거)
+  var safeKey = nick.replace(/[.#$\[\]]/g, '_');
+  db.ref('meets/' + key + '/joins/' + safeKey).set({ nick: nick, joinedAt: Date.now() });
+  toast('✅ ' + nick + '님 참가 완료!');
+}
+
+function mdLeaveConfirm(key) {
+  // confirm 대신 인앱 확인 처리
+  var area = document.getElementById('md-join-area');
+  area.innerHTML =
+    '<div style="background:#fff3e0;border:2px solid var(--or);border-radius:13px;padding:13px;text-align:center">' +
+      '<div style="font-size:14px;font-weight:700;margin-bottom:9px">정말 참가를 취소할까요? 😢</div>' +
+      '<div style="display:flex;gap:9px">' +
+        '<button id="btn-leave-confirm" style="flex:1;padding:10px;border-radius:9px;border:none;background:#c62828;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:Noto Sans KR,sans-serif">🚪 네, 취소할게요</button>' +
+        '<button id="btn-leave-cancel" style="flex:1;padding:10px;border-radius:9px;border:2px solid var(--g2);background:#fff;color:var(--tm);font-size:13px;font-weight:700;cursor:pointer;font-family:Noto Sans KR,sans-serif">아니요, 유지</button>' +
+      '</div>' +
+    '</div>';
+  document.getElementById('btn-leave-confirm').onclick = function(){ mdLeave(key); };
+  document.getElementById('btn-leave-cancel').onclick = function(){
+    // 취소 누르면 다시 Firebase 데이터 강제 갱신
+    db.ref('meets/' + key + '/joins').once('value', function(snap){
+      // 리스너가 이미 붙어있으므로 자동 갱신됨 — 버튼만 복원
+      var names = Object.values(snap.val() || {}).map(function(j){ return j.nick; }).filter(Boolean);
+      var area2 = document.getElementById('md-join-area');
+      if (area2) {
+        area2.innerHTML =
+          '<div style="background:#e8f5e9;border:2px solid var(--gc);border-radius:13px;padding:11px 13px;margin-bottom:7px;display:flex;align-items:center;gap:9px">' +
+            '<span style="font-size:20px">✅</span>' +
+            '<div style="flex:1">' +
+              '<div style="font-size:13px;font-weight:700;color:var(--gc)">참가 신청 완료!</div>' +
+              '<div style="font-size:11px;color:var(--tl);margin-top:2px">' + esc(savedNick) + '님 · 총 ' + names.length + '명 참가중</div>' +
+            '</div>' +
+          '</div>' +
+          '<button id="btn-leave-re" style="width:100%;padding:10px;border-radius:11px;border:2px solid #e57373;background:#fff;color:#c62828;font-size:13px;font-weight:700;cursor:pointer;font-family:Noto Sans KR,sans-serif">🚪 참가 취소하기</button>';
+        document.getElementById('btn-leave-re').onclick = function(){ mdLeaveConfirm(key); };
+      }
+    });
+  };
 }
 
 function mdLeave(key) {
-  const nick = savedNick;
+  var nick = savedNick;
   if (!nick) return;
-  db.ref('meets/' + key + '/joins/' + nick).remove();
-  toast('🚪 참가 취소됐어요.');
+  if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
+  var safeKey = nick.replace(/[.#$\[\]]/g, '_');
+  db.ref('meets/' + key + '/joins/' + safeKey).remove();
+  toast('🚪 참가가 취소됐어요.');
 }
 
 function mdSendChat() {
@@ -1111,23 +1333,7 @@ function drSelectMeet(idx) {
   if (!m) return;
   sv('dr-title', m.title);
   document.getElementById('dr-sport').value = m.sport === 'badminton' ? 'badminton' : 'tennis';
-
-  // 참가자 목록 Firebase에서 불러오기
-  drPlayers = [];
-  drRenderPlayers();
-  toast('⏳ 참가자 불러오는 중...');
-
-  db.ref('meets/' + m._key + '/joins').once('value', snap => {
-    const joins = snap.val() || {};
-    const names = Object.values(joins).map(j => j.nick).filter(Boolean);
-    if (names.length === 0) {
-      toast('⚠️ 아직 참가자가 없어요!');
-      return;
-    }
-    drPlayers = names;
-    drRenderPlayers();
-    toast('✅ ' + names.length + '명 참가자 불러왔어요!');
-  });
+  toast('✅ 모임 정보 불러왔어요!');
 }
 
 function drAddPlayer() {
@@ -1145,13 +1351,6 @@ function drRemovePlayer(idx) {
   drRenderPlayers();
 }
 
-function drMovePlayer(idx, dir) {
-  const newIdx = idx + dir;
-  if (newIdx < 0 || newIdx >= drPlayers.length) return;
-  [drPlayers[idx], drPlayers[newIdx]] = [drPlayers[newIdx], drPlayers[idx]];
-  drRenderPlayers();
-}
-
 function drRenderPlayers() {
   const el = document.getElementById('dr-players-list');
   const badge = document.getElementById('dr-count-badge');
@@ -1162,13 +1361,7 @@ function drRenderPlayers() {
   }
   if (drMode === 'singles') {
     el.innerHTML = drPlayers.map((p, i) =>
-      `<div style="display:flex;align-items:center;gap:6px;background:var(--gl);border:1.5px solid var(--gb);border-radius:11px;padding:6px 10px;margin-bottom:5px">
-        <span style="font-size:12px;font-weight:900;color:var(--tl);width:18px;text-align:center">${i+1}</span>
-        <span style="flex:1;font-size:13px;font-weight:700;color:var(--gd)">🧍 ${esc(p)}</span>
-        <button onclick="drMovePlayer(${i},-1)" style="background:none;border:1.5px solid var(--g2);border-radius:7px;width:26px;height:26px;cursor:pointer;font-size:13px;color:var(--tm)" ${i===0?'disabled':''}>▲</button>
-        <button onclick="drMovePlayer(${i},1)" style="background:none;border:1.5px solid var(--g2);border-radius:7px;width:26px;height:26px;cursor:pointer;font-size:13px;color:var(--tm)" ${i===drPlayers.length-1?'disabled':''}>▼</button>
-        <button onclick="drRemovePlayer(${i})" style="background:none;border:none;cursor:pointer;color:#c62828;font-size:15px;padding:0 2px" title="제거">✕</button>
-      </div>`
+      `<span class="dr-player-tag">🧍 ${esc(p)}<button onclick="drRemovePlayer(${i})" title="제거">✕</button></span>`
     ).join('');
     badge.textContent = `총 ${drPlayers.length}명`;
   } else {
@@ -1176,29 +1369,17 @@ function drRenderPlayers() {
     const teams = drGetDoubleTeams();
     let html = '';
     teams.forEach((t, ti) => {
-      html += `<div style="background:#e3f2fd;border:1.5px solid #90caf9;border-radius:11px;padding:7px 10px;margin-bottom:5px">
-        <span style="font-size:11px;color:#1565c0;font-weight:900">팀${ti+1}</span>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:4px">`;
+      html += `<div style="margin-bottom:5px"><span style="font-size:11px;color:var(--tl);font-weight:700">팀${ti+1}</span> `;
       t.forEach((p, pi) => {
         const idx = ti * 2 + pi;
-        html += `<div style="display:flex;align-items:center;gap:5px;background:#fff;border-radius:8px;padding:4px 8px">
-          <span style="font-size:12px;font-weight:700">👤 ${esc(p)}</span>
-          <button onclick="drMovePlayer(${idx},-1)" style="background:none;border:1.5px solid var(--g2);border-radius:6px;width:22px;height:22px;cursor:pointer;font-size:11px;color:var(--tm)" ${idx===0?'disabled':''}>▲</button>
-          <button onclick="drMovePlayer(${idx},1)" style="background:none;border:1.5px solid var(--g2);border-radius:6px;width:22px;height:22px;cursor:pointer;font-size:11px;color:var(--tm)" ${idx===drPlayers.length-1?'disabled':''}>▼</button>
-          <button onclick="drRemovePlayer(${idx})" style="background:none;border:none;cursor:pointer;color:#c62828;font-size:13px;padding:0">✕</button>
-        </div>`;
+        html += `<span class="dr-team-tag">👤 ${esc(p)}<button onclick="drRemovePlayer(${idx})" title="제거">✕</button></span>`;
       });
-      html += '</div></div>';
+      html += '</div>';
     });
     // 홀수 남은 선수
     if (drPlayers.length % 2 === 1) {
       const last = drPlayers.length - 1;
-      html += `<div style="display:flex;align-items:center;gap:6px;background:#fff3e0;border:1.5px solid var(--or);border-radius:11px;padding:6px 10px;margin-bottom:5px">
-        <span style="font-size:11px;color:var(--or);font-weight:700">⏳ 팀 미완성</span>
-        <span style="flex:1;font-size:12px;font-weight:700">👤 ${esc(drPlayers[last])}</span>
-        <button onclick="drMovePlayer(${last},-1)" style="background:none;border:1.5px solid var(--g2);border-radius:6px;width:22px;height:22px;cursor:pointer;font-size:11px;color:var(--tm)" ${last===0?'disabled':''}>▲</button>
-        <button onclick="drRemovePlayer(${last})" style="background:none;border:none;cursor:pointer;color:#c62828;font-size:13px;padding:0">✕</button>
-      </div>`;
+      html += `<div><span style="font-size:11px;color:var(--or);font-weight:700">⏳ 팀 미완성</span> <span class="dr-player-tag">👤 ${esc(drPlayers[last])}<button onclick="drRemovePlayer(${last})">✕</button></span></div>`;
     }
     el.innerHTML = html;
     const teamCount = teams.length;
