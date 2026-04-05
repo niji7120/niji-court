@@ -6,9 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NIJI COURT — 테니스·배드민턴 커뮤니티</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;500;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <style>
 :root{
   --gd:#1a3d1a;--gc:#2e6b2e;--gm:#3d8b3d;--gb:#52b052;--gl:#d4edda;
@@ -374,7 +371,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
   </div>
 
   <!-- 프로필 화면 (로그인 후) -->
-  <div class="prof-wrap" id="prof-wrap">
+  <div class="prof-wrap" id="prof-wrap" style="display:none">
 
     <!-- 히어로 카드 -->
     <div class="prof-hero">
@@ -886,6 +883,48 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 <div class="toast" id="toast"></div>
 
 <script>
+// Firebase 스크립트를 순서대로 동적 로드 후 init 실행
+(function() {
+  const primary = [
+    'https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js',
+    'https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js',
+    'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js'
+  ];
+  const fallback = [
+    'https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app-compat.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-database-compat.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-auth-compat.min.js'
+  ];
+
+  function runInit() {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  }
+
+  function loadScripts(urls, i, onAllDone, onFail) {
+    if (i >= urls.length) { onAllDone(); return; }
+    const s = document.createElement('script');
+    s.src = urls[i];
+    s.onload = function() { loadScripts(urls, i + 1, onAllDone, onFail); };
+    s.onerror = function() { onFail(i); };
+    document.head.appendChild(s);
+  }
+
+  // 1차: gstatic 시도
+  loadScripts(primary, 0, runInit, function(failIdx) {
+    console.warn('gstatic CDN 실패, cloudflare로 전환...');
+    // 2차: cloudflare 시도
+    loadScripts(fallback, 0, runInit, function() {
+      document.getElementById('oc').textContent = '⚠️ Firebase 로드 실패';
+      alert('인터넷 연결을 확인해주세요.\nFirebase 스크립트를 불러올 수 없어요.');
+    });
+  });
+})();
+</script>
+<script>
 const firebaseConfig = {
   apiKey: "AIzaSyB2BnWZ1Y2Iq43M1KlWrZ3CM3DNQu-YHYc",
   authDomain: "niji-court.firebaseapp.com",
@@ -932,9 +971,16 @@ function init() {
       Notification.requestPermission();
     }
     // 리다이렉트 로그인 결과 처리
-    auth.getRedirectResult().catch(e => {
+    auth.getRedirectResult().then(result => {
       document.getElementById('login-loading').style.display = 'none';
-      if (e.code !== 'auth/no-current-user') {
+      const loginBtn = document.querySelector('.google-btn');
+      if (loginBtn) { loginBtn.disabled = false; loginBtn.style.opacity = '1'; }
+    }).catch(e => {
+      document.getElementById('login-loading').style.display = 'none';
+      const loginBtn = document.querySelector('.google-btn');
+      if (loginBtn) { loginBtn.disabled = false; loginBtn.style.opacity = '1'; }
+      // auth/null-user 는 정상 (리다이렉트 없이 접속한 경우)
+      if (e.code && e.code !== 'auth/null-user' && e.code !== 'auth/no-current-user') {
         toast('⚠️ 로그인 실패: ' + e.message);
       }
     });
@@ -1052,7 +1098,28 @@ function addMeet() {
   sv('m-t', ''); sv('m-pl', ''); sv('m-ti', '');
   tp('pm'); toast('✅ 번개 모임 등록!');
 }
-function delMeet(k) { if (confirm('삭제할까요?')) { rMeets.child(k).remove(); toast('🗑️ 삭제됐어요!'); } }
+function delMeet(k) {
+  const card = document.querySelector('.mc[data-key="' + k + '"]');
+  const area = card || document.getElementById('ml');
+  // 인앱 확인 토스트 방식
+  const confirmDiv = document.createElement('div');
+  confirmDiv.style = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#fff;border:2px solid var(--or);border-radius:14px;padding:13px 16px;z-index:500;box-shadow:0 4px 24px rgba(0,0,0,0.18);min-width:260px;text-align:center';
+  confirmDiv.innerHTML =
+    '<div style="font-size:13px;font-weight:700;margin-bottom:10px">🗑️ 이 모임을 삭제할까요?</div>' +
+    '<div style="display:flex;gap:9px;justify-content:center">' +
+      '<button id="del-meet-yes" style="padding:8px 20px;border-radius:9px;border:none;background:#c62828;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:Noto Sans KR,sans-serif">삭제</button>' +
+      '<button id="del-meet-no" style="padding:8px 20px;border-radius:9px;border:2px solid var(--g2);background:#fff;color:var(--tm);font-size:13px;font-weight:700;cursor:pointer;font-family:Noto Sans KR,sans-serif">취소</button>' +
+    '</div>';
+  document.body.appendChild(confirmDiv);
+  document.getElementById('del-meet-yes').onclick = function() {
+    rMeets.child(k).remove();
+    toast('🗑️ 삭제됐어요!');
+    document.body.removeChild(confirmDiv);
+  };
+  document.getElementById('del-meet-no').onclick = function() {
+    document.body.removeChild(confirmDiv);
+  };
+}
 function fm(el, f) {
   flt.meet = f;
   setChip(el);
@@ -1063,14 +1130,38 @@ function fm(el, f) {
 // ── 구글 로그인 / 로그아웃 ──
 function signInGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
+  const loginBtn = document.querySelector('.google-btn');
+  if (loginBtn) { loginBtn.disabled = true; loginBtn.style.opacity = '0.6'; }
   document.getElementById('login-loading').style.display = 'block';
   auth.signInWithRedirect(provider).catch(e => {
     document.getElementById('login-loading').style.display = 'none';
+    if (loginBtn) { loginBtn.disabled = false; loginBtn.style.opacity = '1'; }
     toast('⚠️ 로그인 실패: ' + e.message);
   });
 }
 function signOutUser() {
-  auth.signOut().then(() => toast('👋 로그아웃됐어요!'));
+  // 로그아웃 전 사용자 데이터 리스너 정리
+  if (currentUser) {
+    const uid = currentUser.uid;
+    db.ref('users/' + uid + '/profile').off();
+    db.ref('users/' + uid + '/strings').off();
+    db.ref('users/' + uid + '/rackets').off();
+  }
+  auth.signOut().then(() => {
+    toast('👋 로그아웃됐어요!');
+    // 프로필 화면 초기화
+    document.getElementById('prof-disp-name').textContent = '닉네임';
+    document.getElementById('prof-disp-email').textContent = '';
+    document.getElementById('prof-disp-badges').innerHTML = '';
+    document.getElementById('prof-stat-win').textContent = '0';
+    document.getElementById('prof-stat-lose').textContent = '0';
+    document.getElementById('prof-stat-str').textContent = '0';
+    document.getElementById('racket-list').innerHTML = '';
+    document.getElementById('string-list').innerHTML = '';
+    document.getElementById('prof-avatar-wrap').innerHTML = '<span id="prof-avatar-emoji">😄</span>';
+  }).catch(e => {
+    toast('⚠️ 로그아웃 실패: ' + e.message);
+  });
 }
 
 // ── 프로필 불러오기 ──
@@ -1442,7 +1533,25 @@ function shopCancelEdit() {
   if (document.getElementById('s-submit-btn')) document.getElementById('s-submit-btn').textContent = '✅ 등록';
   tp('ps');
 }
-function delShop(k) { if (confirm('상품을 삭제할까요?')) { rShop.child(k).remove(); toast('🗑️ 삭제됐어요!'); } }
+function delShop(k) {
+  const confirmDiv = document.createElement('div');
+  confirmDiv.style = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#fff;border:2px solid var(--or);border-radius:14px;padding:13px 16px;z-index:500;box-shadow:0 4px 24px rgba(0,0,0,0.18);min-width:260px;text-align:center';
+  confirmDiv.innerHTML =
+    '<div style="font-size:13px;font-weight:700;margin-bottom:10px">🗑️ 이 상품을 삭제할까요?</div>' +
+    '<div style="display:flex;gap:9px;justify-content:center">' +
+      '<button id="del-shop-yes" style="padding:8px 20px;border-radius:9px;border:none;background:#c62828;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:Noto Sans KR,sans-serif">삭제</button>' +
+      '<button id="del-shop-no" style="padding:8px 20px;border-radius:9px;border:2px solid var(--g2);background:#fff;color:var(--tm);font-size:13px;font-weight:700;cursor:pointer;font-family:Noto Sans KR,sans-serif">취소</button>' +
+    '</div>';
+  document.body.appendChild(confirmDiv);
+  document.getElementById('del-shop-yes').onclick = function() {
+    rShop.child(k).remove();
+    toast('🗑️ 삭제됐어요!');
+    document.body.removeChild(confirmDiv);
+  };
+  document.getElementById('del-shop-no').onclick = function() {
+    document.body.removeChild(confirmDiv);
+  };
+}
 function fs2(el, f) {
   flt.shop = f;
   setChip(el);
@@ -1639,24 +1748,6 @@ function scb() {
   rChat.push({ nickname: nick, text, timestamp: Date.now() });
 }
 
-// ── 프로필 (랭킹 탭 연동) ──
-let profile = JSON.parse(localStorage.getItem('niji_profile') || '{}');
-function loadProfileModal() {
-  sv('ep-nm', profile.name || '');
-  sv('ep-yr', profile.years || 0);
-  sv('ep-ar', profile.area || '');
-  sv('ep-w', profile.win || 0);
-  sv('ep-l', profile.lose || 0);
-  if (profile.level) document.getElementById('ep-lv').value = profile.level;
-  if (profile.sport) document.getElementById('ep-sp').value = profile.sport;
-}
-function saveProfile() {
-  profile = { name: v('ep-nm') || '나', sport: v('ep-sp'), level: v('ep-lv'), years: parseInt(v('ep-yr')) || 0, area: v('ep-ar'), win: parseInt(v('ep-w')) || 0, lose: parseInt(v('ep-l')) || 0 };
-  localStorage.setItem('niji_profile', JSON.stringify(profile));
-  closeModal('ep');
-  toast('✅ 프로필 저장됐어요!');
-}
-
 // ── 대진표 ──
 let drPlayers = [];   // 단식: 선수 이름 배열 / 복식: 팀 이름 배열 (자동생성 or 입력)
 let drMatches = [];
@@ -1692,7 +1783,27 @@ function drSelectMeet(idx) {
   if (!m) return;
   sv('dr-title', m.title);
   document.getElementById('dr-sport').value = m.sport === 'badminton' ? 'badminton' : 'tennis';
-  toast('✅ 모임 정보 불러왔어요!');
+
+  // 번개 참가자 자동 불러오기
+  if (m._key && isReady) {
+    db.ref('meets/' + m._key + '/joins').once('value', function(snap) {
+      const joins = snap.val() || {};
+      const names = Object.values(joins).map(function(j){ return j.nick; }).filter(Boolean);
+      if (!names.length) {
+        toast('✅ 모임 정보 불러왔어요! (참가자 없음)');
+        return;
+      }
+      // 기존 선수 초기화 후 참가자 추가
+      drPlayers = [];
+      names.forEach(function(n) {
+        if (n && !drPlayers.includes(n)) drPlayers.push(n);
+      });
+      drRenderPlayers();
+      toast('✅ 참가자 ' + drPlayers.length + '명을 불러왔어요!');
+    });
+  } else {
+    toast('✅ 모임 정보 불러왔어요!');
+  }
 }
 
 function drAddPlayer() {
@@ -2082,7 +2193,6 @@ function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt
 function hc(s) { let h = 0; for (let i = 0; i < s.length; i++) h = Math.imul(31, h) + s.charCodeAt(i) | 0; return h; }
 function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2600); }
 
-window.addEventListener('load', init);
 </script>
 </body>
 </html>
