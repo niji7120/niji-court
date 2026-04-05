@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;500;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <style>
 :root{
   --gd:#1a3d1a;--gc:#2e6b2e;--gm:#3d8b3d;--gb:#52b052;--gl:#d4edda;
@@ -104,7 +105,54 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 .cin input{flex:1;border:none;outline:none;font-size:13px;font-family:'Noto Sans KR',sans-serif;background:transparent;}
 .csb{width:31px;height:31px;border-radius:50%;background:var(--gc);border:none;color:#fff;cursor:pointer;font-size:13px;flex-shrink:0;}
 /* RANKING */
-.rh{background:linear-gradient(135deg,var(--gd),var(--gc));border-radius:var(--r);padding:13px;margin-bottom:13px;display:flex;}
+.rh{display:none} /* 랭킹 헤더 숨김 */
+/* PROFILE / LOGIN */
+.login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;padding:24px;}
+.login-logo{width:80px;height:80px;background:linear-gradient(135deg,var(--gd),var(--gc));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;margin-bottom:16px;box-shadow:var(--shl);}
+.login-title{font-family:'Bebas Neue',cursive;font-size:28px;color:var(--gd);letter-spacing:2px;margin-bottom:6px;}
+.login-sub{font-size:13px;color:var(--tl);margin-bottom:30px;text-align:center;line-height:1.6;}
+.google-btn{display:flex;align-items:center;gap:12px;background:#fff;border:2px solid var(--g2);border-radius:14px;padding:14px 24px;font-size:15px;font-weight:700;color:var(--td);cursor:pointer;font-family:'Noto Sans KR',sans-serif;box-shadow:var(--sh);transition:all 0.18s;width:100%;max-width:300px;justify-content:center;}
+.google-btn:hover{box-shadow:var(--shl);border-color:var(--gc);transform:translateY(-2px);}
+.google-btn img{width:22px;height:22px;}
+.prof-wrap{display:none;}
+.prof-hero{background:linear-gradient(135deg,var(--gd),var(--gm));border-radius:var(--r);padding:20px 16px;margin-bottom:13px;color:#fff;position:relative;overflow:hidden;}
+.prof-hero::after{content:'🎾';position:absolute;right:-8px;bottom:-10px;font-size:80px;opacity:0.08;}
+.prof-top{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.prof-avatar{width:68px;height:68px;border-radius:50%;border:3px solid rgba(255,255,255,0.4);object-fit:cover;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;overflow:hidden;}
+.prof-avatar img{width:100%;height:100%;object-fit:cover;}
+.prof-name{font-size:20px;font-weight:900;margin-bottom:4px;}
+.prof-email{font-size:11px;opacity:0.75;margin-bottom:6px;}
+.prof-badges{display:flex;gap:6px;flex-wrap:wrap;}
+.prof-badge{background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);border-radius:17px;padding:3px 10px;font-size:11px;font-weight:700;}
+.prof-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.15);border-radius:11px;overflow:hidden;}
+.prof-stat{background:rgba(0,0,0,0.15);padding:10px 8px;text-align:center;}
+.prof-stat .sv{font-family:'Bebas Neue',cursive;font-size:22px;color:#fff;line-height:1;}
+.prof-stat .sl{font-size:10px;opacity:0.8;margin-top:2px;}
+.prof-logout{position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:9px;padding:5px 10px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;font-family:'Noto Sans KR',sans-serif;}
+.prof-section{background:#fff;border-radius:var(--r);box-shadow:var(--sh);margin-bottom:11px;overflow:hidden;}
+.prof-section-title{background:var(--g1);padding:10px 14px;font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--gd);display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--g2);}
+.prof-section-body{padding:13px 14px;}
+.prof-field{display:flex;align-items:center;padding:9px 0;border-bottom:1px solid var(--g1);}
+.prof-field:last-child{border-bottom:none;}
+.prof-field-label{font-size:12px;color:var(--tl);width:90px;flex-shrink:0;}
+.prof-field-val{font-size:13px;font-weight:700;color:var(--td);flex:1;}
+.prof-edit-btn{background:var(--g1);border:none;border-radius:9px;padding:5px 11px;font-size:11px;font-weight:700;color:var(--tm);cursor:pointer;font-family:'Noto Sans KR',sans-serif;}
+.string-card{background:var(--g1);border-radius:var(--rs);padding:11px 13px;margin-bottom:8px;border-left:4px solid var(--gc);}
+.string-card.badminton{border-left-color:#1565c0;}
+.string-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.string-card-name{font-size:13px;font-weight:700;color:var(--gd);}
+.string-dday{font-size:12px;font-weight:900;padding:3px 9px;border-radius:17px;}
+.dday-ok{background:#e8f5e9;color:var(--gc);}
+.dday-warn{background:#fff3e0;color:#e65100;}
+.dday-over{background:#ffebee;color:#c62828;}
+.string-info{font-size:11px;color:var(--tl);display:flex;gap:10px;flex-wrap:wrap;}
+.add-string-btn{display:flex;align-items:center;gap:6px;background:var(--gl);border:1.5px dashed var(--gb);border-radius:var(--rs);padding:10px 13px;color:var(--gc);font-size:13px;font-weight:700;cursor:pointer;width:100%;font-family:'Noto Sans KR',sans-serif;margin-top:6px;}
+.racket-card{background:#fff;border:1.5px solid var(--g2);border-radius:var(--rs);padding:11px 13px;margin-bottom:8px;display:flex;align-items:center;gap:11px;}
+.racket-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:var(--g1);}
+.racket-info{flex:1;min-width:0;}
+.racket-name{font-size:13px;font-weight:700;margin-bottom:2px;}
+.racket-detail{font-size:11px;color:var(--tl);}
+.racket-del{background:none;border:none;font-size:15px;cursor:pointer;color:#e57373;padding:3px;}
 .rs2{flex:1;text-align:center;color:#fff;}
 .rs2 .rn{font-family:'Bebas Neue',cursive;font-size:28px;line-height:1;color:var(--or);}
 .rs2 .rl{font-size:10px;opacity:0.8;margin-top:2px;}
@@ -310,58 +358,78 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
   </div>
 </div>
 
-<!-- RANKING -->
+<!-- PROFILE -->
 <div class="pg" id="pg-rank">
-  <div class="rh">
-    <div class="rs2"><div class="rn" id="r-tot">0</div><div class="rl">전체 회원</div></div>
-    <div class="rs2"><div class="rn" id="r-ten">0</div><div class="rl">테니스</div></div>
-    <div class="rs2"><div class="rn" id="r-bad">0</div><div class="rl">배드민턴</div></div>
+
+  <!-- 로그인 화면 -->
+  <div class="login-screen" id="login-screen">
+    <div class="login-logo">🎾</div>
+    <div class="login-title">NIJI COURT</div>
+    <div class="login-sub">구글 계정으로 로그인하면<br>나만의 프로필과 장비를 관리할 수 있어요!</div>
+    <button class="google-btn" onclick="signInGoogle()">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+      구글로 로그인
+    </button>
+    <div id="login-loading" style="display:none;margin-top:18px;color:var(--tl);font-size:13px">⏳ 로그인 중...</div>
   </div>
-  <div class="grc">
-    <div class="grt">🎮 게임 결과 입력</div>
-    <div class="r2" style="margin-bottom:9px">
-      <div class="fr"><label class="fl">내 닉네임 *</label><input class="fi" id="gr-me" placeholder="예: 테니스왕"></div>
-      <div class="fr"><label class="fl">상대방 닉네임</label><input class="fi" id="gr-opp" placeholder="예: 배드민턴고수"></div>
+
+  <!-- 프로필 화면 (로그인 후) -->
+  <div class="prof-wrap" id="prof-wrap">
+
+    <!-- 히어로 카드 -->
+    <div class="prof-hero">
+      <button class="prof-logout" onclick="signOutUser()">로그아웃</button>
+      <div class="prof-top">
+        <div class="prof-avatar" id="prof-avatar-wrap">
+          <span id="prof-avatar-emoji">😄</span>
+        </div>
+        <div>
+          <div class="prof-name" id="prof-disp-name">닉네임</div>
+          <div class="prof-email" id="prof-disp-email"></div>
+          <div class="prof-badges" id="prof-disp-badges"></div>
+        </div>
+      </div>
+      <div class="prof-stats">
+        <div class="prof-stat"><div class="sv" id="prof-stat-win">0</div><div class="sl">🏆 승</div></div>
+        <div class="prof-stat"><div class="sv" id="prof-stat-lose">0</div><div class="sl">😔 패</div></div>
+        <div class="prof-stat"><div class="sv" id="prof-stat-str">0</div><div class="sl">🎾 스트링</div></div>
+      </div>
     </div>
-    <div class="r2" style="margin-bottom:4px">
-      <div class="fr"><label class="fl">종목</label><select class="fs" id="gr-sp"><option value="tennis">🎾 테니스</option><option value="badminton">🏸 배드민턴</option></select></div>
-      <div class="fr"><label class="fl">경기 날짜</label><input class="fi" id="gr-dt" type="date"></div>
+
+    <!-- 기본 정보 -->
+    <div class="prof-section">
+      <div class="prof-section-title">👤 기본 정보 <button class="prof-edit-btn" style="margin-left:auto" onclick="openModal('ep')">✏️ 수정</button></div>
+      <div class="prof-section-body">
+        <div class="prof-field"><span class="prof-field-label">닉네임</span><span class="prof-field-val" id="pf-nick">—</span></div>
+        <div class="prof-field"><span class="prof-field-label">종목</span><span class="prof-field-val" id="pf-sport">—</span></div>
+        <div class="prof-field"><span class="prof-field-label">실력</span><span class="prof-field-val" id="pf-level">—</span></div>
+        <div class="prof-field"><span class="prof-field-label">🎾 NTRP</span><span class="prof-field-val" id="pf-ntrp">—</span></div>
+        <div class="prof-field"><span class="prof-field-label">구력</span><span class="prof-field-val" id="pf-years">—</span></div>
+        <div class="prof-field"><span class="prof-field-label">📍 지역</span><span class="prof-field-val" id="pf-area">—</span></div>
+        <div class="prof-field"><span class="prof-field-label">운동 빈도</span><span class="prof-field-val" id="pf-freq">—</span></div>
+        <div class="prof-field"><span class="prof-field-label">한 줄 소개</span><span class="prof-field-val" id="pf-bio">—</span></div>
+      </div>
     </div>
-    <div class="rbtns">
-      <button class="rbtn rbtn-w" id="rb-win" onclick="selResult('win')">🏆 승리</button>
-      <button class="rbtn rbtn-l" id="rb-lose" onclick="selResult('lose')">😔 패배</button>
+
+    <!-- 라켓 장비 -->
+    <div class="prof-section">
+      <div class="prof-section-title">🏸 나의 라켓</div>
+      <div class="prof-section-body">
+        <div id="racket-list"></div>
+        <button class="add-string-btn" onclick="openModal('add-racket')">➕ 라켓 추가</button>
+      </div>
     </div>
-    <button class="btn bg2" style="width:100%;padding:11px;border-radius:11px;margin-top:9px" onclick="submitGame()">✅ 결과 등록</button>
+
+    <!-- 스트링 교체 기록 -->
+    <div class="prof-section">
+      <div class="prof-section-title">🎾 스트링 교체 기록</div>
+      <div class="prof-section-body">
+        <div id="string-list"></div>
+        <button class="add-string-btn" onclick="openModal('add-string')">➕ 스트링 교체 기록 추가</button>
+      </div>
+    </div>
+
   </div>
-  <button class="ab" onclick="tp('pr')">👤 내 정보 직접 등록/수정</button>
-  <div class="ap" id="pr" style="display:none">
-    <div class="at">👤 랭킹 정보 등록</div>
-    <div class="fr"><label class="fl">닉네임 *</label><input class="fi" id="r-nk" placeholder="예: 테니스왕김철수"></div>
-    <div class="r2">
-      <div class="fr"><label class="fl">종목</label><select class="fs" id="r-sp"><option value="tennis">🎾 테니스</option><option value="badminton">🏸 배드민턴</option></select></div>
-      <div class="fr"><label class="fl">실력</label><select class="fs" id="r-lv"><option>초급</option><option>중하급</option><option selected>중급</option><option>중상급</option><option>고급</option></select></div>
-    </div>
-    <div class="r3">
-      <div class="fr"><label class="fl">승</label><input class="fi" id="r-w" type="number" placeholder="0" min="0"></div>
-      <div class="fr"><label class="fl">패</label><input class="fi" id="r-l" type="number" placeholder="0" min="0"></div>
-      <div class="fr"><label class="fl">구력(년)</label><input class="fi" id="r-yr" type="number" placeholder="0" min="0"></div>
-    </div>
-    <div class="r2">
-      <div class="fr"><label class="fl">📍 지역</label><input class="fi" id="r-ar" placeholder="예: 강남구"></div>
-      <div class="fr"><label class="fl">주 횟수</label><input class="fi" id="r-fq" placeholder="예: 주3회"></div>
-    </div>
-    <div class="br2">
-      <button class="btn bg2" style="flex:1;padding:11px;border-radius:11px" onclick="addRank()">✅ 등록</button>
-      <button class="btn bgr" style="padding:11px 13px;border-radius:11px" onclick="tp('pr')">취소</button>
-    </div>
-  </div>
-  <div class="stl"><div class="dot"></div>🏆 실력 랭킹</div>
-  <div class="ct">
-    <button class="chip active" onclick="fr2(this,'all')">전체</button>
-    <button class="chip" onclick="fr2(this,'tennis')">🎾 테니스</button>
-    <button class="chip" onclick="fr2(this,'badminton')">🏸 배드민턴</button>
-  </div>
-  <div id="rl"><div class="eb"><div class="ei">🏆</div><p>아직 등록된 회원이 없어요!<br>게임 결과를 입력해보세요 😊</p></div></div>
 </div>
 
 <!-- SHOP -->
@@ -554,8 +622,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 </div>
 
 <nav class="nav">
+  <button class="tb" id="tab-rank" onclick="showTab('rank')"><span class="ti">👤</span><span class="tl">프로필</span></button>
   <button class="tb active" id="tab-home" onclick="showTab('home')"><span class="ti">🏠</span><span class="tl">홈/피드</span></button>
-  <button class="tb" id="tab-rank" onclick="showTab('rank')"><span class="ti">🏆</span><span class="tl">실력 랭킹</span></button>
+  <button class="tb" id="tab-chat" onclick="showTab('home');setTimeout(()=>{document.getElementById('cmsg').scrollTop=99999},100)"><span class="ti">💬</span><span class="tl">채팅</span></button>
   <button class="tb" id="tab-shop" onclick="showTab('shop')"><span class="ti">🛍️</span><span class="tl">테니스 샵</span></button>
   <button class="tb" id="tab-draw" onclick="showTab('draw')"><span class="ti">🏅</span><span class="tl">대진표</span></button>
 </nav>
@@ -580,20 +649,190 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
     <div class="mtt">👤 프로필 수정</div>
     <div class="fr"><label class="fl">닉네임</label><input class="fi" id="ep-nm" placeholder="닉네임"></div>
     <div class="r2">
-      <div class="fr"><label class="fl">종목</label><select class="fs" id="ep-sp"><option value="tennis">🎾 테니스</option><option value="badminton">🏸 배드민턴</option></select></div>
-      <div class="fr"><label class="fl">실력</label><select class="fs" id="ep-lv"><option>초급</option><option>중하급</option><option>중급</option><option>중상급</option><option>고급</option></select></div>
+      <div class="fr"><label class="fl">종목</label>
+        <select class="fs" id="ep-sp">
+          <option value="tennis">🎾 테니스</option>
+          <option value="badminton">🏸 배드민턴</option>
+          <option value="both">🎾🏸 둘 다</option>
+        </select>
+      </div>
+      <div class="fr"><label class="fl">실력</label>
+        <select class="fs" id="ep-lv">
+          <option>입문</option><option>초급</option><option>중하급</option><option>중급</option><option>중상급</option><option>고급</option>
+        </select>
+      </div>
     </div>
     <div class="r2">
       <div class="fr"><label class="fl">구력 (년)</label><input class="fi" id="ep-yr" type="number" placeholder="0" min="0"></div>
       <div class="fr"><label class="fl">📍 지역</label><input class="fi" id="ep-ar" placeholder="예: 강남구"></div>
     </div>
     <div class="r2">
-      <div class="fr"><label class="fl">승 횟수</label><input class="fi" id="ep-w" type="number" placeholder="0" min="0"></div>
-      <div class="fr"><label class="fl">패 횟수</label><input class="fi" id="ep-l" type="number" placeholder="0" min="0"></div>
+      <div class="fr"><label class="fl">운동 빈도</label><input class="fi" id="ep-fq" placeholder="예: 주3회"></div>
+      <div class="fr"><label class="fl">승 / 패</label>
+        <div style="display:flex;gap:5px">
+          <input class="fi" id="ep-w" type="number" placeholder="승" min="0" style="width:50%">
+          <input class="fi" id="ep-l" type="number" placeholder="패" min="0" style="width:50%">
+        </div>
+      </div>
     </div>
+    <div class="r2">
+      <div class="fr">
+        <label class="fl" style="display:flex;align-items:center;gap:5px">
+          NTRP 등급
+          <button onclick="openModal('ntrp-guide')" style="background:var(--gc);color:#fff;border:none;border-radius:50%;width:16px;height:16px;font-size:10px;font-weight:900;cursor:pointer;line-height:16px;padding:0;flex-shrink:0">?</button>
+        </label>
+        <select class="fs" id="ep-ntrp">
+          <option value="">— 선택 안 함 —</option>
+          <option value="1.0">1.0 — 라켓 처음 잡은 수준</option>
+          <option value="1.5">1.5 — 공은 맞추지만 방향 조절 안됨</option>
+          <option value="2.0">2.0 — 느린 공으로 랠리 가능</option>
+          <option value="2.5">2.5 — 짧은 랠리, 서브 가능 (D조)</option>
+          <option value="3.0">3.0 — 포핸드 안정, 백핸드 약함 (C조)</option>
+          <option value="3.5">3.5 ⭐ 동호인 평균, 복식 게임 가능 (B~C조)</option>
+          <option value="4.0">4.0 — 방향·깊이 조절, 전략 있음 (B조)</option>
+          <option value="4.5">4.5 — 약점 거의 없음, 경기 운영 가능 (A조)</option>
+          <option value="5.0">5.0 — 강한 서브·공격, 준선수급</option>
+          <option value="5.5">5.5 — 대학 선수 수준</option>
+          <option value="6.0">6.0 — 전국 대회 수준</option>
+          <option value="6.5">6.5 ~ 7.0 — 프로 선수</option>
+        </select>
+      </div>
+      <div class="fr"><label class="fl">한국 대회 조</label>
+        <select class="fs" id="ep-div">
+          <option value="">— 선택 안 함 —</option>
+          <option value="D조">D조 (2.5~3.0)</option>
+          <option value="C조">C조 (3.0~3.5)</option>
+          <option value="B조">B조 (3.5~4.0)</option>
+          <option value="A조">A조 (4.0~4.5+)</option>
+        </select>
+      </div>
+    </div>
+    <div class="fr"><label class="fl">한 줄 소개</label><input class="fi" id="ep-bio" placeholder="예: 강남 더블스 즐기는 중급자 🎾"></div>
     <div class="br2">
       <button class="btn bg2" style="flex:1;padding:12px;border-radius:11px" onclick="saveProfile()">저장</button>
       <button class="btn bgr" style="padding:12px 13px;border-radius:11px" onclick="closeModal('ep')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: NTRP 안내 -->
+<div class="mo" id="modal-ntrp-guide" onclick="closeModal('ntrp-guide')">
+  <div class="msh" onclick="event.stopPropagation()" style="padding-bottom:28px">
+    <div class="mh"></div>
+    <div class="mtt">🎾 NTRP 등급이란?</div>
+    <p style="font-size:12px;color:var(--tl);margin-bottom:14px;line-height:1.6">NTRP는 테니스 실력을 <b>1.0~7.0</b> (0.5 단위)으로 나눈 국제 기준이에요.<br>숫자가 높을수록 실력이 높아요. 아래 4가지 기준으로 판단해요.</p>
+
+    <div style="background:var(--g1);border-radius:11px;padding:11px 13px;margin-bottom:12px;font-size:12px;line-height:1.7">
+      <b style="font-size:13px;color:var(--gd)">🔑 4가지 판단 기준</b><br>
+      1️⃣ <b>스트로크 안정성</b> — 랠리를 얼마나 오래, 안정적으로?<br>
+      2️⃣ <b>컨트롤</b> — 방향·깊이 조절 가능?<br>
+      3️⃣ <b>서브 & 리턴</b> — 단순히 넣기 vs 공격 서브?<br>
+      4️⃣ <b>경기 운영</b> — 포인트 만들기, 상대 공략?
+    </div>
+
+    <!-- 초보 -->
+    <div style="background:#e8f5e9;border-radius:10px;padding:10px 13px;margin-bottom:9px">
+      <div style="font-size:12px;font-weight:900;color:var(--gc);margin-bottom:7px">🟢 초보 구간 (1.0 ~ 2.5)</div>
+      <div style="font-size:11px;line-height:1.8;color:var(--td)">
+        <b>1.0</b> — 라켓 처음 잡은 수준, 공 맞추기도 어려움<br>
+        <b>1.5</b> — 공은 맞추지만 방향 조절 안됨<br>
+        <b>2.0</b> — 느린 공으로 랠리 가능, 기본 룰 이해<br>
+        <b>2.5</b> — 짧은 랠리 가능, 서브 넣을 수 있음 (정확도 낮음)
+      </div>
+    </div>
+
+    <!-- 중급 -->
+    <div style="background:#fffde7;border-radius:10px;padding:10px 13px;margin-bottom:9px">
+      <div style="font-size:12px;font-weight:900;color:#f57f17;margin-bottom:7px">🟡 중급 구간 (3.0 ~ 4.0)</div>
+      <div style="font-size:11px;line-height:1.8;color:var(--td)">
+        <b>3.0</b> — 포핸드 어느 정도 안정, 백핸드 약점<br>
+        <b>3.5 ⭐</b> — 동호인 평균! 랠리 안정, 복식 게임 가능<br>
+        <b>4.0</b> — 방향·깊이 조절, 네트 플레이, 전략 개념
+      </div>
+    </div>
+
+    <!-- 상급 -->
+    <div style="background:#e3f2fd;border-radius:10px;padding:10px 13px;margin-bottom:9px">
+      <div style="font-size:12px;font-weight:900;color:#1565c0;margin-bottom:7px">🔵 상급 구간 (4.5 ~ 5.5)</div>
+      <div style="font-size:11px;line-height:1.8;color:var(--td)">
+        <b>4.5</b> — 모든 샷 안정, 약점 거의 없음<br>
+        <b>5.0</b> — 강한 서브·공격, 포인트 설계 가능, 준선수급<br>
+        <b>5.5</b> — 대학 선수 수준, 스핀·파워·전략 완성
+      </div>
+    </div>
+
+    <!-- 선수 -->
+    <div style="background:#ffebee;border-radius:10px;padding:10px 13px;margin-bottom:13px">
+      <div style="font-size:12px;font-weight:900;color:#c62828;margin-bottom:7px">🔴 선수 구간 (6.0 ~ 7.0)</div>
+      <div style="font-size:11px;line-height:1.8;color:var(--td)">
+        <b>6.0</b> — 전국 대회 수준 선수<br>
+        <b>6.5 ~ 7.0</b> — 프로 선수
+      </div>
+    </div>
+
+    <!-- 한국 기준 -->
+    <div style="background:var(--g1);border-radius:10px;padding:10px 13px;margin-bottom:14px;font-size:11px;line-height:1.9">
+      <b style="font-size:12px;color:var(--gd)">🎯 한국 동호인 대회 기준</b><br>
+      <b>D조</b> → NTRP 2.5 ~ 3.0<br>
+      <b>C조</b> → NTRP 3.0 ~ 3.5<br>
+      <b>B조</b> → NTRP 3.5 ~ 4.0<br>
+      <b>A조</b> → NTRP 4.0 ~ 4.5 이상
+    </div>
+
+    <button class="btn bg2" style="width:100%;padding:11px;border-radius:11px" onclick="closeModal('ntrp-guide')">확인!</button>
+  </div>
+</div>
+
+<!-- MODAL: 라켓 추가 -->
+<div class="mo" id="modal-add-racket" onclick="closeModal('add-racket')">
+  <div class="msh" onclick="event.stopPropagation()">
+    <div class="mh"></div>
+    <div class="mtt">🏸 라켓 추가</div>
+    <div class="fr"><label class="fl">브랜드 / 모델명 *</label><input class="fi" id="rk-nm" placeholder="예: 바볼랏 퓨어드라이브"></div>
+    <div class="r2">
+      <div class="fr"><label class="fl">종목</label>
+        <select class="fs" id="rk-sp">
+          <option value="tennis">🎾 테니스</option>
+          <option value="badminton">🏸 배드민턴</option>
+        </select>
+      </div>
+      <div class="fr"><label class="fl">무게 (g)</label><input class="fi" id="rk-wt" type="number" placeholder="예: 300"></div>
+    </div>
+    <div class="r2">
+      <div class="fr"><label class="fl">그립 사이즈</label><input class="fi" id="rk-gr" placeholder="예: G2"></div>
+      <div class="fr"><label class="fl">구입 시기</label><input class="fi" id="rk-dt" type="month"></div>
+    </div>
+    <div class="fr"><label class="fl">메모</label><input class="fi" id="rk-memo" placeholder="예: 메인 라켓"></div>
+    <div class="br2">
+      <button class="btn bg2" style="flex:1;padding:12px;border-radius:11px" onclick="addRacket()">✅ 추가</button>
+      <button class="btn bgr" style="padding:12px 13px;border-radius:11px" onclick="closeModal('add-racket')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 스트링 교체 기록 추가 -->
+<div class="mo" id="modal-add-string" onclick="closeModal('add-string')">
+  <div class="msh" onclick="event.stopPropagation()">
+    <div class="mh"></div>
+    <div class="mtt">🎾 스트링 교체 기록</div>
+    <div class="fr"><label class="fl">스트링 이름 *</label><input class="fi" id="st-nm" placeholder="예: 럭실론 알루파워 1.25"></div>
+    <div class="r2">
+      <div class="fr"><label class="fl">종목</label>
+        <select class="fs" id="st-sp">
+          <option value="tennis">🎾 테니스</option>
+          <option value="badminton">🏸 배드민턴</option>
+        </select>
+      </div>
+      <div class="fr"><label class="fl">장력 (lbs)</label><input class="fi" id="st-tn" type="number" placeholder="예: 52"></div>
+    </div>
+    <div class="r2">
+      <div class="fr"><label class="fl">교체일 *</label><input class="fi" id="st-dt" type="date"></div>
+      <div class="fr"><label class="fl">교체 주기 (주)</label><input class="fi" id="st-cy" type="number" placeholder="예: 8" min="1"></div>
+    </div>
+    <div class="fr"><label class="fl">메모</label><input class="fi" id="st-memo" placeholder="예: 강남 니지스트링에서 교체"></div>
+    <div class="br2">
+      <button class="btn bg2" style="flex:1;padding:12px;border-radius:11px" onclick="addStringRecord()">✅ 저장</button>
+      <button class="btn bgr" style="padding:12px 13px;border-radius:11px" onclick="closeModal('add-string')">취소</button>
     </div>
   </div>
 </div>
@@ -657,7 +896,7 @@ const firebaseConfig = {
   appId: "1:684781253718:web:f0563eccf54c21268e77f7"
 };
 
-let db = null;
+let db = null, auth = null;
 let rMeets = null, rRanks = null, rShop = null, rChat = null;
 let isReady = false;
 let flt = {meet:'all', rank:'all', shop:'all'};
@@ -667,6 +906,7 @@ let isAdminMode = false;
 let notifOn = localStorage.getItem('niji_notif') !== 'off';
 let savedNick = localStorage.getItem('niji_nick') || '';
 let adminPw = localStorage.getItem('niji_adm_pw') || '1234';
+let currentUser = null;
 
 
 // ── 초기화 ──
@@ -674,6 +914,7 @@ function init() {
   try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.database();
+    auth = firebase.auth();
     rMeets = db.ref('meets');
     rRanks = db.ref('ranks');
     rShop  = db.ref('shop');
@@ -690,6 +931,18 @@ function init() {
     if (notifOn && 'Notification' in window && Notification.permission === 'default') {
       Notification.requestPermission();
     }
+    // 구글 로그인 상태 감지
+    auth.onAuthStateChanged(user => {
+      currentUser = user;
+      if (user) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('prof-wrap').style.display = 'block';
+        loadUserProfile(user);
+      } else {
+        document.getElementById('login-screen').style.display = 'flex';
+        document.getElementById('prof-wrap').style.display = 'none';
+      }
+    });
   } catch(e) {
     console.error(e);
     setFbs('er', '연결 오류');
@@ -800,104 +1053,203 @@ function fm(el, f) {
   rMeets.once('value', s => rMeetList(s.val()));
 }
 
-// ── 랭킹 + 게임 결과 ──
-function selResult(r) {
-  gameResult = r;
-  document.getElementById('rb-win').classList.toggle('sel', r === 'win');
-  document.getElementById('rb-lose').classList.toggle('sel', r === 'lose');
-}
-function submitGame() {
-  if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
-  const me = v('gr-me').trim();
-  if (!me) { toast('⚠️ 내 닉네임을 입력해주세요!'); return; }
-  if (!gameResult) { toast('⚠️ 승리/패배를 선택해주세요!'); return; }
-  const opp = v('gr-opp').trim();
-  const sport = v('gr-sp');
-  // 내 데이터 찾아서 업데이트
-  rRanks.orderByChild('nick').equalTo(me).once('value', snap => {
-    const data = snap.val();
-    if (data) {
-      const key = Object.keys(data)[0];
-      const cur = data[key];
-      const upd = {};
-      if (gameResult === 'win') upd.win = (cur.win || 0) + 1;
-      else upd.lose = (cur.lose || 0) + 1;
-      rRanks.child(key).update(upd);
-    } else {
-      rRanks.push({ nick: me, sport, level: '중급', win: gameResult === 'win' ? 1 : 0, lose: gameResult === 'lose' ? 1 : 0, years: 0, area: '', freq: '', createdAt: Date.now() });
-    }
-    // 상대방도 업데이트
-    if (opp) {
-      rRanks.orderByChild('nick').equalTo(opp).once('value', snap2 => {
-        const d2 = snap2.val();
-        if (d2) {
-          const k2 = Object.keys(d2)[0];
-          const c2 = d2[k2];
-          const u2 = {};
-          if (gameResult === 'win') u2.lose = (c2.lose || 0) + 1;
-          else u2.win = (c2.win || 0) + 1;
-          rRanks.child(k2).update(u2);
-        }
-      });
-    }
+// ── 구글 로그인 / 로그아웃 ──
+function signInGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  document.getElementById('login-loading').style.display = 'block';
+  auth.signInWithPopup(provider).catch(e => {
+    document.getElementById('login-loading').style.display = 'none';
+    toast('⚠️ 로그인 실패: ' + e.message);
   });
-  sv('gr-me', ''); sv('gr-opp', '');
-  gameResult = null;
-  document.getElementById('rb-win').classList.remove('sel');
-  document.getElementById('rb-lose').classList.remove('sel');
-  toast(gameResult === 'win' ? '🏆 승리 등록!' : '📝 결과 등록 완료!');
 }
-function rRankList(data) {
-  const el = document.getElementById('rl');
-  el.innerHTML = '';
-  if (!data) {
-    el.innerHTML = '<div class="eb"><div class="ei">🏆</div><p>아직 등록된 회원이 없어요!<br>게임 결과를 입력해보세요 😊</p></div>';
-    updateRH([]);
-    return;
+function signOutUser() {
+  auth.signOut().then(() => toast('👋 로그아웃됐어요!'));
+}
+
+// ── 프로필 불러오기 ──
+function loadUserProfile(user) {
+  const uid = user.uid;
+  const photoURL = user.photoURL;
+  // 아바타
+  const av = document.getElementById('prof-avatar-wrap');
+  if (photoURL) {
+    av.innerHTML = `<img src="${photoURL}" alt="프로필">`;
+  } else {
+    av.innerHTML = `<span id="prof-avatar-emoji">😄</span>`;
   }
-  let list = Object.entries(data).map(([k, m]) => {
-    const tot = (m.win || 0) + (m.lose || 0);
-    m.wr = tot > 0 ? Math.round((m.win || 0) / tot * 100) : 0;
-    return [k, m];
-  }).sort((a, b) => b[1].wr - a[1].wr);
-  updateRH(list.map(e => e[1]));
-  let shown = 0;
-  const bgs = ['#fff9c4','#e3f2fd','#e8f5e9','#f3e5f5','#fce4ec','#e0f2f1'];
-  const avs = ['😄','🎾','🏸','🌟','👑','💪','🔥','🦅','🎯','🦁'];
-  list.forEach(([k, m]) => {
-    if (flt.rank !== 'all' && m.sport !== flt.rank) return;
-    shown++;
-    const n = shown;
-    const rc = n === 1 ? 'r1' : n === 2 ? 'r2' : n === 3 ? 'r3' : '';
-    const si = m.sport === 'tennis' ? '🎾' : '🏸';
-    const av = avs[Math.abs(hc(m.nick || '?')) % avs.length];
-    const bg = bgs[(n - 1) % bgs.length];
+  document.getElementById('prof-disp-email').textContent = user.email || '';
+
+  db.ref('users/' + uid + '/profile').on('value', snap => {
+    const p = snap.val() || {};
+    // 닉네임
+    const name = p.nick || user.displayName || '닉네임 없음';
+    document.getElementById('prof-disp-name').textContent = name;
+    document.getElementById('pf-nick').textContent = name;
+    // savedNick 동기화 (채팅 닉네임)
+    if (p.nick) { savedNick = p.nick; localStorage.setItem('niji_nick', p.nick); loadNickUI(); }
+    // 배지
+    const badges = [];
+    if (p.sport === 'tennis') badges.push('🎾 테니스');
+    else if (p.sport === 'badminton') badges.push('🏸 배드민턴');
+    else if (p.sport === 'both') badges.push('🎾🏸 멀티');
+    if (p.ntrp) badges.push('NTRP ' + p.ntrp);
+    if (p.division) badges.push(p.division);
+    if (p.area) badges.push('📍' + p.area);
+    document.getElementById('prof-disp-badges').innerHTML = badges.map(b => `<span class="prof-badge">${b}</span>`).join('');
+    // 필드
+    const sportLabel = p.sport === 'tennis' ? '🎾 테니스' : p.sport === 'badminton' ? '🏸 배드민턴' : p.sport === 'both' ? '🎾🏸 둘 다' : '—';
+    document.getElementById('pf-sport').textContent = sportLabel;
+    document.getElementById('pf-level').textContent = p.level || '—';
+    document.getElementById('pf-years').textContent = p.years ? p.years + '년' : '—';
+    document.getElementById('pf-area').textContent = p.area || '—';
+    document.getElementById('pf-freq').textContent = p.freq || '—';
+    document.getElementById('pf-bio').textContent = p.bio || '—';
+    // NTRP 필드 표시
+    const ntrpEl = document.getElementById('pf-ntrp');
+    if (ntrpEl) ntrpEl.textContent = p.ntrp ? ('NTRP ' + p.ntrp + (p.division ? ' / ' + p.division : '')) : '—';
+    // 승패 통계
+    document.getElementById('prof-stat-win').textContent = p.win || 0;
+    document.getElementById('prof-stat-lose').textContent = p.lose || 0;
+    // 수정 모달 채우기
+    document.getElementById('ep-nm').value = p.nick || user.displayName || '';
+    document.getElementById('ep-sp').value = p.sport || 'tennis';
+    document.getElementById('ep-lv').value = p.level || '중급';
+    document.getElementById('ep-yr').value = p.years || '';
+    document.getElementById('ep-ar').value = p.area || '';
+    document.getElementById('ep-fq').value = p.freq || '';
+    document.getElementById('ep-w').value = p.win || '';
+    document.getElementById('ep-l').value = p.lose || '';
+    document.getElementById('ep-bio').value = p.bio || '';
+    document.getElementById('ep-ntrp').value = p.ntrp || '';
+    document.getElementById('ep-div').value = p.division || '';
+  });
+  // 스트링 기록
+  db.ref('users/' + uid + '/strings').on('value', snap => {
+    renderStringList(snap.val());
+    const cnt = snap.val() ? Object.keys(snap.val()).length : 0;
+    document.getElementById('prof-stat-str').textContent = cnt;
+  });
+  // 라켓
+  db.ref('users/' + uid + '/rackets').on('value', snap => {
+    renderRacketList(snap.val());
+  });
+}
+
+// ── 프로필 저장 ──
+function saveProfile() {
+  if (!currentUser) { toast('⚠️ 로그인 필요!'); return; }
+  const uid = currentUser.uid;
+  const p = {
+    nick: v('ep-nm').trim(),
+    sport: v('ep-sp'),
+    level: v('ep-lv'),
+    years: parseInt(v('ep-yr')) || 0,
+    area: v('ep-ar').trim(),
+    freq: v('ep-fq').trim(),
+    win: parseInt(v('ep-w')) || 0,
+    lose: parseInt(v('ep-l')) || 0,
+    bio: v('ep-bio').trim(),
+    ntrp: v('ep-ntrp'),
+    division: v('ep-div'),
+    updatedAt: Date.now()
+  };
+  if (!p.nick) { toast('⚠️ 닉네임을 입력해주세요!'); return; }
+  db.ref('users/' + uid + '/profile').update(p).then(() => {
+    closeModal('ep');
+    toast('✅ 프로필 저장 완료!');
+  });
+}
+
+// ── 라켓 추가/렌더 ──
+function addRacket() {
+  if (!currentUser) { toast('⚠️ 로그인 필요!'); return; }
+  const nm = v('rk-nm').trim();
+  if (!nm) { toast('⚠️ 라켓 이름을 입력해주세요!'); return; }
+  const uid = currentUser.uid;
+  db.ref('users/' + uid + '/rackets').push({
+    name: nm,
+    sport: v('rk-sp'),
+    weight: v('rk-wt'),
+    grip: v('rk-gr'),
+    date: v('rk-dt'),
+    memo: v('rk-memo').trim(),
+    createdAt: Date.now()
+  }).then(() => {
+    ['rk-nm','rk-wt','rk-gr','rk-dt','rk-memo'].forEach(i => sv(i,''));
+    closeModal('add-racket');
+    toast('✅ 라켓 추가됐어요!');
+  });
+}
+function renderRacketList(data) {
+  const el = document.getElementById('racket-list');
+  if (!data) { el.innerHTML = '<div style="font-size:12px;color:var(--tl);padding:4px 0;margin-bottom:6px">아직 라켓이 없어요!</div>'; return; }
+  el.innerHTML = '';
+  Object.entries(data).reverse().forEach(([k, r]) => {
+    const icon = r.sport === 'badminton' ? '🏸' : '🎾';
+    const detail = [r.weight ? r.weight+'g' : '', r.grip || '', r.date || '', r.memo || ''].filter(Boolean).join(' · ');
     const d = document.createElement('div');
-    d.className = 'rkc ' + rc; d.dataset.sport = m.sport;
-    d.innerHTML = `<div class="rnum">${n}</div><div class="rav" style="background:${bg}">${av}</div><div class="rif"><div class="rnm">${esc(m.nick)}</div><div class="rdt">${si} 구력${m.years||0}년 · ${esc(m.freq||'')} · ${esc(m.area||'')} · ${esc(m.level||'')}</div></div><div class="rsc"><div class="rw">${m.wr}%</div><div class="rlb">${m.win||0}승 ${m.lose||0}패</div></div><button class="db2" onclick="delRank('${k}')" style="font-size:14px">🗑️</button>`;
+    d.className = 'racket-card';
+    d.innerHTML = `<div class="racket-icon">${icon}</div><div class="racket-info"><div class="racket-name">${esc(r.name)}</div><div class="racket-detail">${esc(detail)}</div></div><button class="racket-del" onclick="delRacket('${k}')">🗑️</button>`;
     el.appendChild(d);
   });
-  if (!shown) el.innerHTML = '<div class="eb"><div class="ei">🔍</div><p>해당 종목 회원이 없어요!</p></div>';
 }
-function updateRH(list) {
-  document.getElementById('r-tot').textContent = list.length;
-  document.getElementById('r-ten').textContent = list.filter(m => m.sport === 'tennis').length;
-  document.getElementById('r-bad').textContent = list.filter(m => m.sport === 'badminton').length;
+function delRacket(k) {
+  if (!currentUser) return;
+  db.ref('users/' + currentUser.uid + '/rackets/' + k).remove();
+  toast('🗑️ 삭제됐어요!');
 }
-function addRank() {
-  if (!isReady) { toast('⚠️ Firebase 연결 중이에요!'); return; }
-  const nk = v('r-nk'); if (!nk) { toast('⚠️ 닉네임 입력!'); return; }
-  rRanks.push({ nick: nk, sport: v('r-sp'), level: v('r-lv'), win: parseInt(v('r-w')) || 0, lose: parseInt(v('r-l')) || 0, years: parseInt(v('r-yr')) || 0, area: v('r-ar'), freq: v('r-fq'), createdAt: Date.now() });
-  ['r-nk','r-w','r-l','r-yr','r-ar','r-fq'].forEach(i => sv(i, ''));
-  tp('pr'); toast('✅ 랭킹 등록!');
+
+// ── 스트링 추가/렌더 ──
+function addStringRecord() {
+  if (!currentUser) { toast('⚠️ 로그인 필요!'); return; }
+  const nm = v('st-nm').trim();
+  const dt = v('st-dt');
+  if (!nm) { toast('⚠️ 스트링 이름을 입력해주세요!'); return; }
+  if (!dt) { toast('⚠️ 교체일을 선택해주세요!'); return; }
+  const uid = currentUser.uid;
+  db.ref('users/' + uid + '/strings').push({
+    name: nm,
+    sport: v('st-sp'),
+    tension: v('st-tn'),
+    date: dt,
+    cycle: parseInt(v('st-cy')) || 8,
+    memo: v('st-memo').trim(),
+    createdAt: Date.now()
+  }).then(() => {
+    ['st-nm','st-tn','st-dt','st-cy','st-memo'].forEach(i => sv(i,''));
+    closeModal('add-string');
+    toast('✅ 스트링 기록 저장됐어요!');
+  });
 }
-function delRank(k) { if (confirm('삭제할까요?')) { rRanks.child(k).remove(); toast('🗑️ 삭제됐어요!'); } }
-function fr2(el, f) {
-  flt.rank = f;
-  setChip(el);
-  if (!isReady) return;
-  rRanks.once('value', s => rRankList(s.val()));
+function renderStringList(data) {
+  const el = document.getElementById('string-list');
+  if (!data) { el.innerHTML = '<div style="font-size:12px;color:var(--tl);padding:4px 0;margin-bottom:6px">스트링 교체 기록이 없어요!</div>'; return; }
+  el.innerHTML = '';
+  Object.entries(data).sort((a,b) => (b[1].date||'').localeCompare(a[1].date||'')).forEach(([k, s]) => {
+    const changeDate = new Date(s.date);
+    const today = new Date();
+    const diffDays = Math.floor((today - changeDate) / (1000*60*60*24));
+    const cycleDays = (s.cycle || 8) * 7;
+    const remain = cycleDays - diffDays;
+    let ddayClass = 'dday-ok', ddayText = 'D-' + remain;
+    if (remain <= 0) { ddayClass = 'dday-over'; ddayText = '교체 필요!'; }
+    else if (remain <= 14) { ddayClass = 'dday-warn'; ddayText = 'D-' + remain; }
+    const info = [s.tension ? s.tension+'lbs' : '', s.date || '', '교체주기: ' + (s.cycle||8) + '주', s.memo || ''].filter(Boolean).join(' · ');
+    const d = document.createElement('div');
+    d.className = 'string-card' + (s.sport === 'badminton' ? ' badminton' : '');
+    d.innerHTML = `<div class="string-card-top"><span class="string-card-name">${esc(s.name)}</span><span class="string-dday ${ddayClass}">${ddayText}</span></div><div class="string-info"><span>${esc(info)}</span></div><button onclick="delString('${k}')" style="background:none;border:none;font-size:11px;color:#e57373;cursor:pointer;margin-top:4px;padding:0">🗑️ 삭제</button>`;
+    el.appendChild(d);
+  });
 }
+function delString(k) {
+  if (!currentUser) return;
+  db.ref('users/' + currentUser.uid + '/strings/' + k).remove();
+  toast('🗑️ 삭제됐어요!');
+}
+
+// ── 랭킹 관련 (하위 호환용 빈 함수) ──
+function rRankList() {}
+function updateRH() {}
 
 // ── 샵 ──
 function toggleAdmin() {
