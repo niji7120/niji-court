@@ -991,6 +991,7 @@ function init() {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('prof-wrap').style.display = 'block';
         loadUserProfile(user);
+        showTab('rank'); // 로그인 후 프로필 탭으로 이동
       } else {
         document.getElementById('login-screen').style.display = 'flex';
         document.getElementById('prof-wrap').style.display = 'none';
