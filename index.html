@@ -1110,7 +1110,42 @@ function fm(el, f) {
 }
 
 // ── 구글 로그인 / 로그아웃 ──
+function isInAppBrowser() {
+  const ua = navigator.userAgent.toLowerCase();
+  return /kakaotalk|line|instagram|fbav|fban|naver|daum|whale\/1|snapchat|twitter|wechat|micromessenger/.test(ua);
+}
+
 function signInGoogle() {
+  // 인앱 브라우저 감지 → 크롬으로 열도록 안내
+  if (isInAppBrowser()) {
+    const errDiv = document.getElementById('login-error');
+    if (errDiv) {
+      errDiv.innerHTML = '⚠️ 카카오톡·인스타 등 앱 내부 브라우저에서는 구글 로그인이 차단돼요!<br><br>👉 <b>크롬(Chrome) 브라우저</b>로 열어주세요.<br><br>주소창에 직접 입력하거나,<br>아래 버튼을 눌러보세요 👇';
+      errDiv.style.display = 'block';
+    }
+    // 크롬으로 열기 버튼 추가
+    const existing = document.getElementById('open-chrome-btn');
+    if (!existing) {
+      const btn = document.createElement('button');
+      btn.id = 'open-chrome-btn';
+      btn.textContent = '🌐 크롬으로 열기';
+      btn.style.cssText = 'margin-top:10px;width:100%;max-width:300px;padding:12px;background:#1a73e8;color:#fff;border:none;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:Noto Sans KR,sans-serif;';
+      btn.onclick = () => {
+        const url = location.href;
+        // 안드로이드: intent scheme으로 크롬 강제 실행
+        const intentUrl = 'intent://' + url.replace(/^https?:\/\//, '') + '#Intent;scheme=https;package=com.android.chrome;end';
+        location.href = intentUrl;
+        // iOS / 실패 시 그냥 주소 복사 안내
+        setTimeout(() => {
+          alert('크롬 앱을 설치 후 다시 눌러주세요.\n\n또는 주소를 복사해서 크롬에 붙여넣기 하세요:\n' + url);
+        }, 1500);
+      };
+      const loginScreen = document.getElementById('login-screen');
+      if (loginScreen) loginScreen.appendChild(btn);
+    }
+    return;
+  }
+
   if (!auth) {
     const errDiv = document.getElementById('login-error');
     if (errDiv) { errDiv.textContent = '❌ Firebase Auth가 초기화되지 않았어요. 페이지를 새로고침해주세요.'; errDiv.style.display = 'block'; }
@@ -2257,7 +2292,17 @@ function closeConfirm() { document.getElementById('modal-confirm').classList.rem
 function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2600); }
 
 // 페이지 로드 완료 후 init 실행
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', function() {
+  init();
+  // 인앱 브라우저면 로그인 버튼 누르기 전에 미리 경고 표시
+  if (isInAppBrowser()) {
+    const errDiv = document.getElementById('login-error');
+    if (errDiv) {
+      errDiv.innerHTML = '⚠️ 현재 앱 내부 브라우저로 접속 중이에요.<br>구글 로그인은 <b>크롬 브라우저</b>에서만 가능해요!<br><br>주소를 복사해서 크롬에 붙여넣기 해주세요 👇<br><b style="color:#1a3d1a;word-break:break-all">' + location.href + '</b>';
+      errDiv.style.display = 'block';
+    }
+  }
+});
 
 </script>
 </body>
