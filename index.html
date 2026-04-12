@@ -372,6 +372,14 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
     </button>
     <div id="login-loading" style="display:none;margin-top:18px;color:var(--tl);font-size:13px">⏳ 로그인 중... 팝업창을 확인해주세요!</div>
     <div id="login-error" style="display:none;margin-top:14px;background:#ffebee;border-radius:10px;padding:11px 14px;font-size:12px;color:#c62828;text-align:center;max-width:300px;line-height:1.6"></div>
+    <!-- 자가진단 패널 -->
+    <div id="diag-panel" style="margin-top:22px;width:100%;max-width:320px;background:#f0f4f0;border-radius:12px;padding:13px 14px;font-size:12px;line-height:1.8;color:#4a6b4a">
+      <div style="font-weight:700;margin-bottom:6px;color:#1a3d1a">🔍 연결 상태 진단</div>
+      <div>🌐 프로토콜: <b id="diag-protocol">확인 중...</b></div>
+      <div>🔥 Firebase: <b id="diag-firebase">확인 중...</b></div>
+      <div>🔐 Auth: <b id="diag-auth">확인 중...</b></div>
+      <div>🌍 도메인: <b id="diag-domain">확인 중...</b></div>
+    </div>
   </div>
 
   <!-- 프로필 화면 (로그인 후) -->
@@ -924,10 +932,21 @@ let currentUser = null;
 
 // ── 초기화 ──
 function init() {
+  // 진단 패널 업데이트
+  function diag(id, val, ok) {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = val; el.style.color = ok ? '#2e6b2e' : '#c62828'; }
+  }
+  const proto = location.protocol;
+  diag('diag-protocol', proto, proto === 'https:' || proto === 'http:');
+  diag('diag-domain', location.hostname, true);
+  diag('diag-firebase', typeof firebase !== 'undefined' ? '로드됨 ✅' : '로드 실패 ❌', typeof firebase !== 'undefined');
+
   try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.database();
     auth = firebase.auth();
+    diag('diag-auth', 'Auth 초기화 완료 ✅', true);
     rMeets = db.ref('meets');
     rShop  = db.ref('shop');
     rChat  = db.ref('chat/global');
@@ -958,6 +977,7 @@ function init() {
       if (loginBtn) { loginBtn.disabled = false; loginBtn.style.opacity = '1'; }
       if (e.code && e.code !== 'auth/null-user' && e.code !== 'auth/no-current-user') {
         console.warn('redirect login error:', e.code, e.message);
+        diag('diag-auth', 'Redirect 오류: ' + e.code, false);
         toast('⚠️ 로그인 오류: ' + e.code);
       }
     });
@@ -975,6 +995,7 @@ function init() {
     });
   } catch(e) {
     console.error(e);
+    diag('diag-auth', '초기화 오류: ' + e.message, false);
     setFbs('er', '연결 오류');
   }
   loadNickUI();
@@ -1090,6 +1111,11 @@ function fm(el, f) {
 
 // ── 구글 로그인 / 로그아웃 ──
 function signInGoogle() {
+  if (!auth) {
+    const errDiv = document.getElementById('login-error');
+    if (errDiv) { errDiv.textContent = '❌ Firebase Auth가 초기화되지 않았어요. 페이지를 새로고침해주세요.'; errDiv.style.display = 'block'; }
+    return;
+  }
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' });
   const loginBtn = document.querySelector('.google-btn');
@@ -1102,7 +1128,8 @@ function signInGoogle() {
     document.getElementById('login-loading').style.display = 'none';
     if (loginBtn) { loginBtn.disabled = false; loginBtn.style.opacity = '1'; }
     if (errDiv) { errDiv.textContent = msg; errDiv.style.display = 'block'; }
-    toast('⚠️ ' + msg);
+    const diagAuth = document.getElementById('diag-auth');
+    if (diagAuth) { diagAuth.textContent = msg; diagAuth.style.color = '#c62828'; }
   }
 
   auth.signInWithPopup(provider)
@@ -1111,21 +1138,28 @@ function signInGoogle() {
       if (loginBtn) { loginBtn.disabled = false; loginBtn.style.opacity = '1'; }
     })
     .catch(e => {
+      console.error('popup error:', e.code, e.message);
       if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') {
         document.getElementById('login-loading').style.display = 'none';
         if (loginBtn) { loginBtn.disabled = false; loginBtn.style.opacity = '1'; }
         return;
       }
       if (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment') {
-        toast('팝업이 차단됐어요. 리다이렉트로 전환 중...');
-        auth.signInWithRedirect(provider);
+        document.getElementById('login-loading').style.display = 'none';
+        if (loginBtn) { loginBtn.disabled = false; loginBtn.style.opacity = '1'; }
+        showLoginErr('팝업이 차단됐어요. 브라우저 주소창 오른쪽 팝업 허용 버튼을 눌러주세요.\n또는 리다이렉트로 재시도 중...');
+        setTimeout(() => auth.signInWithRedirect(provider), 1500);
         return;
       }
       if (e.code === 'auth/unauthorized-domain') {
-        showLoginErr('이 도메인이 Firebase에 등록되지 않았어요.\nFirebase Console → Authentication → 승인된 도메인에 현재 주소를 추가해주세요.');
+        showLoginErr('❌ 도메인 미등록!\nFirebase Console → Authentication → 승인된 도메인에\n현재 주소(' + location.hostname + ')를 추가해주세요.');
         return;
       }
-      showLoginErr('로그인 실패: ' + (e.code || e.message));
+      if (e.code === 'auth/network-request-failed') {
+        showLoginErr('❌ 네트워크 오류! 인터넷 연결을 확인해주세요.');
+        return;
+      }
+      showLoginErr('❌ 로그인 실패: ' + (e.code || e.message));
     });
 }
 function signOutUser() {
