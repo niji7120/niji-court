@@ -926,7 +926,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 </script>
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyBZ0nWZ1Y21q43M1K1WrZ3CM3DNQu-YHYc",
+  apiKey: "AIzaSyB2BnWZ1Y2Iq43M1KlWrZ3CM3DNQu-YHYc",
   authDomain: "niji-court.firebaseapp.com",
   databaseURL: "https://niji-court-default-rtdb.firebaseio.com",
   projectId: "niji-court",
@@ -991,7 +991,6 @@ function init() {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('prof-wrap').style.display = 'block';
         loadUserProfile(user);
-        showTab('rank'); // 로그인 후 프로필 탭으로 이동
       } else {
         document.getElementById('login-screen').style.display = 'flex';
         document.getElementById('prof-wrap').style.display = 'none';
@@ -1099,28 +1098,7 @@ function addMeet() {
   sv('m-t', ''); sv('m-pl', ''); sv('m-ti', '');
   tp('pm'); toast('✅ 번개 모임 등록!');
 }
-function delMeet(k) {
-  const card = document.querySelector('.mc[data-key="' + k + '"]');
-  const area = card || document.getElementById('ml');
-  // 인앱 확인 토스트 방식
-  const confirmDiv = document.createElement('div');
-  confirmDiv.style = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#fff;border:2px solid var(--or);border-radius:14px;padding:13px 16px;z-index:500;box-shadow:0 4px 24px rgba(0,0,0,0.18);min-width:260px;text-align:center';
-  confirmDiv.innerHTML =
-    '<div style="font-size:13px;font-weight:700;margin-bottom:10px">🗑️ 이 모임을 삭제할까요?</div>' +
-    '<div style="display:flex;gap:9px;justify-content:center">' +
-      '<button id="del-meet-yes" style="padding:8px 20px;border-radius:9px;border:none;background:#c62828;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:Noto Sans KR,sans-serif">삭제</button>' +
-      '<button id="del-meet-no" style="padding:8px 20px;border-radius:9px;border:2px solid var(--g2);background:#fff;color:var(--tm);font-size:13px;font-weight:700;cursor:pointer;font-family:Noto Sans KR,sans-serif">취소</button>' +
-    '</div>';
-  document.body.appendChild(confirmDiv);
-  document.getElementById('del-meet-yes').onclick = function() {
-    rMeets.child(k).remove();
-    toast('🗑️ 삭제됐어요!');
-    document.body.removeChild(confirmDiv);
-  };
-  document.getElementById('del-meet-no').onclick = function() {
-    document.body.removeChild(confirmDiv);
-  };
-}
+function delMeet(k) { if (confirm('삭제할까요?')) { rMeets.child(k).remove(); toast('🗑️ 삭제됐어요!'); } }
 function fm(el, f) {
   flt.meet = f;
   setChip(el);
@@ -1534,25 +1512,7 @@ function shopCancelEdit() {
   if (document.getElementById('s-submit-btn')) document.getElementById('s-submit-btn').textContent = '✅ 등록';
   tp('ps');
 }
-function delShop(k) {
-  const confirmDiv = document.createElement('div');
-  confirmDiv.style = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#fff;border:2px solid var(--or);border-radius:14px;padding:13px 16px;z-index:500;box-shadow:0 4px 24px rgba(0,0,0,0.18);min-width:260px;text-align:center';
-  confirmDiv.innerHTML =
-    '<div style="font-size:13px;font-weight:700;margin-bottom:10px">🗑️ 이 상품을 삭제할까요?</div>' +
-    '<div style="display:flex;gap:9px;justify-content:center">' +
-      '<button id="del-shop-yes" style="padding:8px 20px;border-radius:9px;border:none;background:#c62828;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:Noto Sans KR,sans-serif">삭제</button>' +
-      '<button id="del-shop-no" style="padding:8px 20px;border-radius:9px;border:2px solid var(--g2);background:#fff;color:var(--tm);font-size:13px;font-weight:700;cursor:pointer;font-family:Noto Sans KR,sans-serif">취소</button>' +
-    '</div>';
-  document.body.appendChild(confirmDiv);
-  document.getElementById('del-shop-yes').onclick = function() {
-    rShop.child(k).remove();
-    toast('🗑️ 삭제됐어요!');
-    document.body.removeChild(confirmDiv);
-  };
-  document.getElementById('del-shop-no').onclick = function() {
-    document.body.removeChild(confirmDiv);
-  };
-}
+function delShop(k) { if (confirm('상품을 삭제할까요?')) { rShop.child(k).remove(); toast('🗑️ 삭제됐어요!'); } }
 function fs2(el, f) {
   flt.shop = f;
   setChip(el);
@@ -1749,6 +1709,24 @@ function scb() {
   rChat.push({ nickname: nick, text, timestamp: Date.now() });
 }
 
+// ── 프로필 (랭킹 탭 연동) ──
+let profile = JSON.parse(localStorage.getItem('niji_profile') || '{}');
+function loadProfileModal() {
+  sv('ep-nm', profile.name || '');
+  sv('ep-yr', profile.years || 0);
+  sv('ep-ar', profile.area || '');
+  sv('ep-w', profile.win || 0);
+  sv('ep-l', profile.lose || 0);
+  if (profile.level) document.getElementById('ep-lv').value = profile.level;
+  if (profile.sport) document.getElementById('ep-sp').value = profile.sport;
+}
+function saveProfile() {
+  profile = { name: v('ep-nm') || '나', sport: v('ep-sp'), level: v('ep-lv'), years: parseInt(v('ep-yr')) || 0, area: v('ep-ar'), win: parseInt(v('ep-w')) || 0, lose: parseInt(v('ep-l')) || 0 };
+  localStorage.setItem('niji_profile', JSON.stringify(profile));
+  closeModal('ep');
+  toast('✅ 프로필 저장됐어요!');
+}
+
 // ── 대진표 ──
 let drPlayers = [];   // 단식: 선수 이름 배열 / 복식: 팀 이름 배열 (자동생성 or 입력)
 let drMatches = [];
@@ -1784,27 +1762,7 @@ function drSelectMeet(idx) {
   if (!m) return;
   sv('dr-title', m.title);
   document.getElementById('dr-sport').value = m.sport === 'badminton' ? 'badminton' : 'tennis';
-
-  // 번개 참가자 자동 불러오기
-  if (m._key && isReady) {
-    db.ref('meets/' + m._key + '/joins').once('value', function(snap) {
-      const joins = snap.val() || {};
-      const names = Object.values(joins).map(function(j){ return j.nick; }).filter(Boolean);
-      if (!names.length) {
-        toast('✅ 모임 정보 불러왔어요! (참가자 없음)');
-        return;
-      }
-      // 기존 선수 초기화 후 참가자 추가
-      drPlayers = [];
-      names.forEach(function(n) {
-        if (n && !drPlayers.includes(n)) drPlayers.push(n);
-      });
-      drRenderPlayers();
-      toast('✅ 참가자 ' + drPlayers.length + '명을 불러왔어요!');
-    });
-  } else {
-    toast('✅ 모임 정보 불러왔어요!');
-  }
+  toast('✅ 모임 정보 불러왔어요!');
 }
 
 function drAddPlayer() {
