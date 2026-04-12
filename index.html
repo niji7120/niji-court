@@ -356,7 +356,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 </div>
 
 <!-- PROFILE -->
-<div class="pg" id="pg-rank">
+<div class="pg" id="pg-profile">
 
   <!-- 로그인 화면 -->
   <div class="login-screen" id="login-screen">
@@ -619,7 +619,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
 </div>
 
 <nav class="nav">
-  <button class="tb" id="tab-rank" onclick="showTab('rank')"><span class="ti">👤</span><span class="tl">프로필</span></button>
+  <button class="tb" id="tab-profile" onclick="showTab('profile')"><span class="ti">👤</span><span class="tl">프로필</span></button>
   <button class="tb active" id="tab-home" onclick="showTab('home')"><span class="ti">🏠</span><span class="tl">홈/피드</span></button>
   <button class="tb" id="tab-chat" onclick="showTab('home');setTimeout(()=>{document.getElementById('cmsg').scrollTop=99999},100)"><span class="ti">💬</span><span class="tl">채팅</span></button>
   <button class="tb" id="tab-shop" onclick="showTab('shop')"><span class="ti">🛍️</span><span class="tl">테니스 샵</span></button>
@@ -880,6 +880,18 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--ow);color:var(--td);
   </div>
 </div>
 
+<!-- MODAL: 확인 (confirm 대체) -->
+<div class="mo" id="modal-confirm" onclick="closeConfirm()">
+  <div class="msh" onclick="event.stopPropagation()" style="padding-bottom:28px">
+    <div class="mh"></div>
+    <div class="mtt" id="confirm-msg">정말 삭제할까요?</div>
+    <div class="br2" style="margin-top:4px">
+      <button class="btn" id="confirm-ok-btn" style="flex:1;padding:12px;border-radius:11px;background:#c62828;color:#fff">🗑️ 삭제</button>
+      <button class="btn bgr" style="padding:12px 13px;border-radius:11px" onclick="closeConfirm()">취소</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -936,7 +948,7 @@ const firebaseConfig = {
 };
 
 let db = null, auth = null;
-let rMeets = null, rRanks = null, rShop = null, rChat = null;
+let rMeets = null, rShop = null, rChat = null;
 let isReady = false;
 let flt = {meet:'all', rank:'all', shop:'all'};
 let meetList = [];
@@ -944,7 +956,7 @@ let gameResult = null;
 let isAdminMode = false;
 let notifOn = localStorage.getItem('niji_notif') !== 'off';
 let savedNick = localStorage.getItem('niji_nick') || '';
-let adminPw = localStorage.getItem('niji_adm_pw') || '1234';
+let adminPw = '1234'; // Firebase에서 불러옴
 let currentUser = null;
 
 
@@ -955,15 +967,17 @@ function init() {
     db = firebase.database();
     auth = firebase.auth();
     rMeets = db.ref('meets');
-    rRanks = db.ref('ranks');
     rShop  = db.ref('shop');
     rChat  = db.ref('chat/global');
     isReady = true;
     setFbs('ok', '🟢 실시간 연결됨');
     document.getElementById('oc').textContent = '실시간 연결됨';
+    // 관리자 비밀번호 Firebase에서 로드
+    db.ref('admin/pw').once('value', snap => {
+      if (snap.val()) adminPw = snap.val();
+    });
     // 리스너 등록
     rMeets.on('value', s => rMeetList(s.val()));
-    rRanks.on('value', s => rRankList(s.val()));
     rShop.on('value',  s => rShopList(s.val()));
     rChat.limitToLast(50).on('child_added', s => { const m=s.val(); if(m) rMsg(m); });
     // 알림 권한 요청
@@ -1098,7 +1112,12 @@ function addMeet() {
   sv('m-t', ''); sv('m-pl', ''); sv('m-ti', '');
   tp('pm'); toast('✅ 번개 모임 등록!');
 }
-function delMeet(k) { if (confirm('삭제할까요?')) { rMeets.child(k).remove(); toast('🗑️ 삭제됐어요!'); } }
+function delMeet(k) {
+  showConfirm('번개 모임을 삭제할까요?', function() {
+    rMeets.child(k).remove();
+    toast('🗑️ 삭제됐어요!');
+  });
+}
 function fm(el, f) {
   flt.meet = f;
   setChip(el);
@@ -1138,6 +1157,11 @@ function signOutUser() {
     document.getElementById('racket-list').innerHTML = '';
     document.getElementById('string-list').innerHTML = '';
     document.getElementById('prof-avatar-wrap').innerHTML = '<span id="prof-avatar-emoji">😄</span>';
+    // 기본 정보 필드 초기화
+    ['pf-nick','pf-sport','pf-level','pf-ntrp','pf-years','pf-area','pf-freq','pf-bio'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = '—';
+    });
   }).catch(e => {
     toast('⚠️ 로그아웃 실패: ' + e.message);
   });
@@ -1162,8 +1186,9 @@ function loadUserProfile(user) {
     const name = p.nick || user.displayName || '닉네임 없음';
     document.getElementById('prof-disp-name').textContent = name;
     document.getElementById('pf-nick').textContent = name;
-    // savedNick 동기화 (채팅 닉네임)
-    if (p.nick) { savedNick = p.nick; localStorage.setItem('niji_nick', p.nick); loadNickUI(); }
+    // savedNick 동기화 (채팅 닉네임) — 프로필 닉네임 우선, 없으면 구글 이름
+    const chatNick = p.nick || user.displayName || '';
+    if (chatNick) { savedNick = chatNick; localStorage.setItem('niji_nick', chatNick); loadNickUI(); }
     // 배지
     const badges = [];
     if (p.sport === 'tennis') badges.push('🎾 테니스');
@@ -1324,10 +1349,6 @@ function delString(k) {
   toast('🗑️ 삭제됐어요!');
 }
 
-// ── 랭킹 관련 (하위 호환용 빈 함수) ──
-function rRankList() {}
-function updateRH() {}
-
 // ── 샵 ──
 function toggleAdmin() {
   if (isAdminMode) {
@@ -1363,7 +1384,8 @@ function changePw() {
   if (!nw) { toast('⚠️ 새 비밀번호를 입력해주세요!'); return; }
   if (nw !== con) { toast('⚠️ 새 비밀번호가 일치하지 않아요!'); return; }
   adminPw = nw;
-  localStorage.setItem('niji_adm_pw', nw);
+  // Firebase에 저장 (암호화 없이 저장 — 보안 규칙으로 보호)
+  if (isReady) db.ref('admin/pw').set(nw);
   ['pw-cur','pw-new','pw-con'].forEach(i => sv(i, ''));
   tp('ppw'); toast('✅ 비밀번호 변경 완료!');
 }
@@ -1512,7 +1534,12 @@ function shopCancelEdit() {
   if (document.getElementById('s-submit-btn')) document.getElementById('s-submit-btn').textContent = '✅ 등록';
   tp('ps');
 }
-function delShop(k) { if (confirm('상품을 삭제할까요?')) { rShop.child(k).remove(); toast('🗑️ 삭제됐어요!'); } }
+function delShop(k) {
+  showConfirm('상품을 삭제할까요?', function() {
+    rShop.child(k).remove();
+    toast('🗑️ 삭제됐어요!');
+  });
+}
 function fs2(el, f) {
   flt.shop = f;
   setChip(el);
@@ -1707,24 +1734,6 @@ function scb() {
     loadNickUI();
   }
   rChat.push({ nickname: nick, text, timestamp: Date.now() });
-}
-
-// ── 프로필 (랭킹 탭 연동) ──
-let profile = JSON.parse(localStorage.getItem('niji_profile') || '{}');
-function loadProfileModal() {
-  sv('ep-nm', profile.name || '');
-  sv('ep-yr', profile.years || 0);
-  sv('ep-ar', profile.area || '');
-  sv('ep-w', profile.win || 0);
-  sv('ep-l', profile.lose || 0);
-  if (profile.level) document.getElementById('ep-lv').value = profile.level;
-  if (profile.sport) document.getElementById('ep-sp').value = profile.sport;
-}
-function saveProfile() {
-  profile = { name: v('ep-nm') || '나', sport: v('ep-sp'), level: v('ep-lv'), years: parseInt(v('ep-yr')) || 0, area: v('ep-ar'), win: parseInt(v('ep-w')) || 0, lose: parseInt(v('ep-l')) || 0 };
-  localStorage.setItem('niji_profile', JSON.stringify(profile));
-  closeModal('ep');
-  toast('✅ 프로필 저장됐어요!');
 }
 
 // ── 대진표 ──
@@ -2150,6 +2159,13 @@ function v(id) { return document.getElementById(id).value; }
 function sv(id, val) { document.getElementById(id).value = val; }
 function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function hc(s) { let h = 0; for (let i = 0; i < s.length; i++) h = Math.imul(31, h) + s.charCodeAt(i) | 0; return h; }
+function showConfirm(msg, onOk) {
+  document.getElementById('confirm-msg').textContent = msg;
+  const okBtn = document.getElementById('confirm-ok-btn');
+  okBtn.onclick = function() { closeConfirm(); onOk(); };
+  document.getElementById('modal-confirm').classList.add('open');
+}
+function closeConfirm() { document.getElementById('modal-confirm').classList.remove('open'); }
 function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2600); }
 
 </script>
