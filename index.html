@@ -2038,10 +2038,62 @@ function drShowChamp(name) {
   el.appendChild(d);
 }
 
+// ── 대진표 승패 → 내 프로필 자동 반영 ──
+function drUpdateMyRecord(winner, loser, prevWinner) {
+  if (!currentUser || !savedNick) return; // 로그인 안 됐거나 닉네임 없으면 패스
+  const uid = currentUser.uid;
+  const myNick = savedNick;
+
+  // 이름(팀명)에 내 닉네임이 포함되어 있는지 확인 (복식 "A / B" 형식 대응)
+  function isMe(name) {
+    if (!name) return false;
+    // 단식: 정확히 일치 / 복식: 팀명 안에 내 닉네임 포함
+    return name === myNick || name.split(' / ').includes(myNick);
+  }
+
+  // 이전 결과 취소 (같은 경기를 다시 누른 경우)
+  if (prevWinner && prevWinner !== winner) {
+    const prevLoser = prevWinner === winner ? loser : (isMe(prevWinner) ? loser : winner);
+    if (isMe(prevWinner)) {
+      // 이전에 내가 이겼었는데 취소
+      db.ref('users/' + uid + '/profile').once('value', snap => {
+        const p = snap.val() || {};
+        db.ref('users/' + uid + '/profile').update({ win: Math.max(0, (p.win||0) - 1) });
+      });
+    } else if (isMe(prevLoser)) {
+      // 이전에 내가 졌었는데 취소
+      db.ref('users/' + uid + '/profile').once('value', snap => {
+        const p = snap.val() || {};
+        db.ref('users/' + uid + '/profile').update({ lose: Math.max(0, (p.lose||0) - 1) });
+      });
+    }
+  }
+
+  // 새 결과 반영
+  if (isMe(winner)) {
+    db.ref('users/' + uid + '/profile').once('value', snap => {
+      const p = snap.val() || {};
+      db.ref('users/' + uid + '/profile').update({ win: (p.win||0) + 1 });
+      toast('🏆 승리! 내 프로필 승 +1 반영됐어요!');
+    });
+  } else if (isMe(loser)) {
+    db.ref('users/' + uid + '/profile').once('value', snap => {
+      const p = snap.val() || {};
+      db.ref('users/' + uid + '/profile').update({ lose: (p.lose||0) + 1 });
+      toast('😔 패배. 내 프로필 패 +1 반영됐어요.');
+    });
+  }
+}
+
 function drSetWinner(matchId, who, firstRound, totalRounds) {
   const m = drMatches[matchId];
   if (!m) return;
-  m.winner = who === 'p1' ? m.p1 : m.p2;
+  const prevWinner = m.winner;
+  const newWinner = who === 'p1' ? m.p1 : m.p2;
+  const newLoser  = who === 'p1' ? m.p2 : m.p1;
+  if (prevWinner === newWinner) return; // 같은 걸 또 누르면 무시
+  m.winner = newWinner;
+  drUpdateMyRecord(newWinner, newLoser, prevWinner);
   drRenderTournament(firstRound, 1, totalRounds);
   toast('✅ ' + m.winner + ' 승!');
 }
@@ -2150,19 +2202,21 @@ function drBuildLeague(entries) {
 function drLeagueWin(mi, who, rerender) {
   const m = drMatches[mi];
   const prev = m.winner;
+  const newWinner = who === 'p1' ? m.p1 : m.p2;
+  const newLoser  = who === 'p1' ? m.p2 : m.p1;
+  if (prev === newWinner) return; // 같은 걸 또 누르면 무시
   if (prev) {
-    const loser = prev === m.p1 ? m.p2 : m.p1;
+    const prevLoser = prev === m.p1 ? m.p2 : m.p1;
     drLeagueData[prev].win--;
     drLeagueData[prev].pts -= 2;
-    drLeagueData[loser].lose--;
+    drLeagueData[prevLoser].lose--;
   }
-  const winner = who === 'p1' ? m.p1 : m.p2;
-  const loser  = who === 'p1' ? m.p2 : m.p1;
-  m.winner = winner;
-  drLeagueData[winner].win++;
-  drLeagueData[winner].pts += 2;
-  drLeagueData[loser].lose++;
-  toast('✅ ' + winner + ' 승!');
+  m.winner = newWinner;
+  drLeagueData[newWinner].win++;
+  drLeagueData[newWinner].pts += 2;
+  drLeagueData[newLoser].lose++;
+  drUpdateMyRecord(newWinner, newLoser, prev);
+  toast('✅ ' + newWinner + ' 승!');
   if (rerender) rerender();
 }
 
