@@ -1281,10 +1281,19 @@ function saveProfile() {
     updatedAt: Date.now()
   };
   if (!p.nick) { toast('⚠️ 닉네임을 입력해주세요!'); return; }
-  db.ref('users/' + uid + '/profile').update(p).then(() => {
-    closeModal('ep');
-    toast('✅ 프로필 저장 완료!');
-  });
+  db.ref('users/' + uid + '/profile').update(p)
+    .then(() => {
+      closeModal('ep');
+      toast('✅ 프로필 저장 완료!');
+    })
+    .catch(e => {
+      console.error('프로필 저장 실패:', e);
+      toast('❌ 저장 실패: ' + e.message);
+      // 보안 규칙 오류일 가능성 안내
+      if (e.code === 'PERMISSION_DENIED') {
+        alert('저장 권한이 없어요!\nFirebase Console → Realtime Database → 규칙(Rules) 탭에서\n아래 내용으로 바꿔주세요:\n\n{\n  "rules": {\n    ".read": true,\n    ".write": true\n  }\n}\n\n(임시 규칙 — 나중에 보안 강화 필요)');
+      }
+    });
 }
 
 // ── 라켓 추가/렌더 ──
